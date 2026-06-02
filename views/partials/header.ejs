@@ -1,0 +1,29 @@
+<header class="main-header">
+  <div class="container nav-container">
+    <a href="/" class="logo">☣ SurvivalZ</a>
+
+    <nav class="navbar">
+      <a href="/">Início</a>
+      <a href="/sobre">Sobre</a>
+      <a href="/gestao">Gestão</a>
+      <a href="#">Guia</a>
+      <a href="/loja">Loja Beta</a>
+      <a href="/loja/consultar">Consultar Pedido</a>
+
+      <% if (isAdminLogged) { %>
+        <a href="/admin">Admin</a>
+        <a href="/admin/pedidos">Pedidos</a>
+        <a href="/admin/logout" class="logout-link">Sair</a>
+      <% } %>
+
+      <a href="#" class="btn-nav">Discord</a>
+    </nav>
+  </div>
+</header>
+
+
+<!--<a href="/denuncias">Denúncias</a> 
+      <a href="/staff">Staff</a>
+      <a href="/admin">Admin</a>
+      <a href="/login">Entrar</a>
+      <a href="/painel">Painel</a>| Temporariamente Desativado--> 

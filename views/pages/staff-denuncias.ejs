@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/denuncias.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="reports-section">
+      <div class="container">
+
+        <div class="staff-reports-header">
+          <div>
+            <span class="section-tag">Painel da staff</span>
+
+            <h1>Gerenciamento de denúncias</h1>
+
+            <p>
+              Acompanhe denúncias abertas, analise provas, responda jogadores
+              e organize os casos da Central SurvivalZ.
+            </p>
+          </div>
+
+          <div class="staff-header-badge">
+            Acesso Staff
+          </div>
+        </div>
+
+        <section class="reports-status-grid">
+          <div class="report-status-card">
+            <span>Abertas</span>
+            <strong>3</strong>
+          </div>
+
+          <div class="report-status-card">
+            <span>Em análise</span>
+            <strong>1</strong>
+          </div>
+
+          <div class="report-status-card">
+            <span>Fechadas hoje</span>
+            <strong>2</strong>
+          </div>
+        </section>
+
+        <section class="staff-filter-box">
+          <button class="filter-btn active">Todas</button>
+          <button class="filter-btn">Abertas</button>
+          <button class="filter-btn">Em análise</button>
+          <button class="filter-btn">Aguardando provas</button>
+          <button class="filter-btn">Fechadas</button>
+        </section>
+
+        <section class="staff-report-list">
+
+          <article class="staff-report-card">
+            <div class="staff-report-main">
+              <div>
+                <span class="report-id">#001</span>
+                <h2>Abuso em safezone</h2>
+
+                <p>
+                  Denúncia contra <strong>Player_Suspeito</strong> aberta por
+                  <strong>Dybala_Survivor</strong>.
+                </p>
+              </div>
+
+              <span class="status-pill analysis">Em análise</span>
+            </div>
+
+            <div class="staff-report-meta">
+              <span>Motivo: Safezone</span>
+              <span>Data: 01/06/2026</span>
+              <span>Provas: 1 link</span>
+            </div>
+
+            <div class="staff-report-actions">
+              <a href="/denuncias/1" class="btn-secondary">Ver detalhes</a>
+              <button class="staff-small-btn">Assumir caso</button>
+              <button class="staff-small-btn danger">Fechar</button>
+            </div>
+          </article>
+
+          <article class="staff-report-card">
+            <div class="staff-report-main">
+              <div>
+                <span class="report-id">#002</span>
+                <h2>Suspeita de cheat</h2>
+
+                <p>
+                  Denúncia contra <strong>Sniper_Fantasma</strong> aberta por
+                  <strong>Sobrevivente_23</strong>.
+                </p>
+              </div>
+
+              <span class="status-pill open">Aberta</span>
+            </div>
+
+            <div class="staff-report-meta">
+              <span>Motivo: Cheat</span>
+              <span>Data: 01/06/2026</span>
+              <span>Provas: vídeo</span>
+            </div>
+
+            <div class="staff-report-actions">
+              <a href="/denuncias/1" class="btn-secondary">Ver detalhes</a>
+              <button class="staff-small-btn">Assumir caso</button>
+              <button class="staff-small-btn danger">Fechar</button>
+            </div>
+          </article>
+
+          <article class="staff-report-card">
+            <div class="staff-report-main">
+              <div>
+                <span class="report-id">#003</span>
+                <h2>Ofensa no chat</h2>
+
+                <p>
+                  Denúncia contra <strong>Player_Toxico</strong> aberta por
+                  <strong>Rookie_Survivor</strong>.
+                </p>
+              </div>
+
+              <span class="status-pill waiting">Aguardando provas</span>
+            </div>
+
+            <div class="staff-report-meta">
+              <span>Motivo: Toxicidade</span>
+              <span>Data: 31/05/2026</span>
+              <span>Provas: pendente</span>
+            </div>
+
+            <div class="staff-report-actions">
+              <a href="/denuncias/1" class="btn-secondary">Ver detalhes</a>
+              <button class="staff-small-btn">Assumir caso</button>
+              <button class="staff-small-btn danger">Fechar</button>
+            </div>
+          </article>
+
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/admin.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="admin-home-section">
+      <div class="container">
+
+        <div class="admin-home-header">
+          <div>
+            <span class="section-tag">Painel administrativo</span>
+
+            <h1>Pedidos da Loja Beta</h1>
+
+            <p>
+              Acompanhe os pedidos enviados pelos jogadores, confira dados do comprador,
+              produtos, valores, cupom aplicado e status da entrega manual.
+            </p>
+          </div>
+
+          <div class="admin-access-card">
+            <span>Total de pedidos</span>
+            <strong><%= orders.length %></strong>
+          </div>
+        </div>
+
+        <section class="admin-orders-box">
+          <div class="admin-box-header">
+            <h2>Pedidos recebidos</h2>
+            <span>Loja Beta</span>
+          </div>
+          <div class="admin-order-filters">
+  <a href="/admin/pedidos" class="<%= filter === 'todos' ? 'active' : '' %>">
+    Todos <span><%= counters.todos %></span>
+  </a>
+
+  <a href="/admin/pedidos?status=pendente" class="<%= filter === 'pendente' ? 'active' : '' %>">
+    Pendentes <span><%= counters.pendente %></span>
+  </a>
+
+  <a href="/admin/pedidos?status=pago" class="<%= filter === 'pago' ? 'active' : '' %>">
+    Pagos <span><%= counters.pago %></span>
+  </a>
+
+  <a href="/admin/pedidos?status=entregue" class="<%= filter === 'entregue' ? 'active' : '' %>">
+    Entregues <span><%= counters.entregue %></span>
+  </a>
+
+  <a href="/admin/pedidos?status=recusado" class="<%= filter === 'recusado' ? 'active' : '' %>">
+    Recusados <span><%= counters.recusado %></span>
+  </a>
+</div>
+
+<form action="/admin/pedidos" method="GET" class="admin-order-search" autocomplete="off">
+  <% if (filter && filter !== "todos") { %>
+    <input type="hidden" name="status" value="<%= filter %>">
+  <% } %>
+
+  <input
+    type="search"
+    name="q"
+    value="<%= search || '' %>"
+    placeholder="Buscar por código, nome, Discord ou nick..."
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+  >
+
+  <button type="submit">Buscar</button>
+
+  <% if (search) { %>
+    <a href="/admin/pedidos<%= filter !== 'todos' ? '?status=' + filter : '' %>">
+      Limpar
+    </a>
+  <% } %>
+</form>
+          <% if (orders.length === 0) { %>
+            <div class="admin-empty-state">
+              <h3>Nenhum pedido recebido ainda</h3>
+              <p>
+                Quando um jogador finalizar uma compra na Loja Beta, o pedido aparecerá aqui.
+              </p>
+            </div>
+          <% } else { %>
+
+            <div class="admin-orders-list">
+              <% orders.forEach((order) => { %>
+                <article class="admin-order-card">
+                  <div class="admin-order-main">
+                    <div>
+                      <span class="order-code"><%= order.code %></span>
+
+                      <h2><%= order.customer.name %></h2>
+
+                      <p>
+                        Discord: <strong><%= order.customer.discord %></strong> •
+                        Nick: <strong><%= order.customer.sampNick %></strong>
+                      </p>
+                    </div>
+
+                        <div class="admin-order-status-group">
+                            <div class="order-status-pill">
+                                <span>Status</span>
+                                <strong><%= order.status %></strong>
+                            </div>
+
+                            <div class="order-status-pill">
+                                <span>Pagamento</span>
+                                <strong>
+  <%= String(order.paymentStatus || "aguardando").replace(/_/g, " ") %>
+</strong>
+                            </div>
+
+                            <div class="order-status-pill">
+                                <span>Entrega</span>
+                                <strong>
+  <%= String(order.deliveryStatus || "pendente").replace(/_/g, " ") %>
+</strong>
+                            </div>
+                    </div>
+                  </div>
+
+                  <div class="admin-order-meta">
+                    <span>Total: <strong><%= formatPrice(order.total) %></strong></span>
+                    <span>Cupom: <strong><%= order.coupon || "Nenhum" %></strong></span>
+                    <span>Itens: <strong><%= order.items.length %></strong></span>
+                    <span>Pagamento: <strong><%= order.paymentStatus || "aguardando" %></strong></span>
+                    <span>Entrega: <strong><%= order.deliveryStatus || "pendente" %></strong></span>
+                    <span>
+                      Data:
+                      <strong>
+                        <%= new Date(order.createdAt).toLocaleDateString("pt-BR") %>
+                      </strong>
+                    </span>
+                  </div>
+
+                  <div class="admin-order-actions">
+                    <a href="/admin/pedidos/<%= order.id %>" class="btn-secondary">
+                      Ver detalhes
+                    </a>
+                  </div>
+                </article>
+              <% }) %>
+            </div>
+
+          <% } %>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/shop.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="product-detail-section">
+      <div class="container product-detail-grid">
+
+        <div class="product-detail-image">
+          <img
+            src="/images/products/default.png"
+            alt="<%= product.name %>"
+          >
+        </div>
+
+        <div class="product-detail-content">
+          <span class="section-tag"><%= product.type %></span>
+
+          <h1><%= product.name %></h1>
+
+          <p>
+            <%= product.description %>
+          </p>
+
+          <div class="product-detail-price">
+            <span>Valor Beta</span>
+
+            <strong><%= formatPrice(product.priceCents) %></strong>
+
+            <% if (product.originalPriceCents && product.originalPriceCents > product.priceCents) { %>
+              <small>Valor original: <%= formatPrice(product.originalPriceCents) %></small>
+            <% } %>
+          </div>
+
+          <% if (product.stock !== null) { %>
+            <div class="product-detail-stock">
+              <span>Vagas disponíveis</span>
+              <strong><%= product.stock %></strong>
+            </div>
+          <% } %>
+
+          <div class="product-detail-actions">
+            <button
+              class="btn-primary add-cart-btn"
+              data-id="<%= product.id %>"
+              data-name="<%= product.name %>"
+              data-price="<%= product.priceCents %>"
+              data-category="<%= product.category %>"
+            >
+              Adicionar ao carrinho
+            </button>
+
+            <a href="/loja" class="btn-secondary">
+              Voltar para loja
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="product-detail-info-section">
+      <div class="container product-detail-info-grid">
+
+        <div class="product-detail-box">
+          <h2>Benefícios</h2>
+
+          <ul>
+            <% product.benefits.forEach((benefit) => { %>
+              <li><%= benefit %></li>
+            <% }) %>
+          </ul>
+        </div>
+
+        <div class="product-detail-box">
+          <h2>Informações do Beta</h2>
+
+          <ul>
+            <li>Pedido analisado manualmente pela gestão.</li>
+            <li>Pagamento e entrega não são automáticos nesta fase.</li>
+            <li>Itens, moedas e veículos podem ser resetados ao fim do Beta.</li>
+            <li>Compras não dão imunidade contra regras ou punições.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+  <script src="/js/cart.js"></script>
+
+</body>
+</html>

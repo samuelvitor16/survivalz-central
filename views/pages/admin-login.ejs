@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/admin.css">
+</head>
+<body>
+
+  <main>
+    <section class="admin-login-section">
+      <div class="admin-login-card">
+
+        <span class="section-tag">Acesso restrito</span>
+
+        <h1>Login Admin</h1>
+
+        <p>
+          Área protegida da gestão SurvivalZ. Entre com a senha administrativa
+          para acessar pedidos, status e painel interno.
+        </p>
+
+        <% if (error) { %>
+          <div class="admin-login-error">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <form action="/admin/login" method="POST" class="admin-login-form">
+          <div class="form-group">
+            <label for="password">Senha de administrador</label>
+
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Digite a senha"
+              autocomplete="current-password"
+            >
+          </div>
+
+          <button type="submit" class="btn-primary admin-login-btn">
+            Entrar no painel
+          </button>
+        </form>
+
+        <a href="/" class="admin-login-back">
+          Voltar para o site
+        </a>
+
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

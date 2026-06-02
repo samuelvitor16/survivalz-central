@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/shop.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="order-success-section">
+      <div class="container order-success-container">
+
+        <div class="order-success-card">
+          <div class="success-icon">✓</div>
+
+          <span class="section-tag">Pedido enviado</span>
+
+          <h1>Seu pedido foi criado com sucesso</h1>
+
+          <p>
+            A gestão do SurvivalZ recebeu seu pedido. Agora realize o pagamento via Pix
+            e envie o comprovante no Discord junto com o código do pedido.
+          </p>
+
+          <% if (orderCode) { %>
+            <div class="success-order-code">
+              <span>Código do pedido</span>
+              <strong><%= orderCode %></strong>
+            </div>
+          <% } %>
+
+          <% if (order) { %>
+            <div class="success-payment-box">
+              <h2>Pagamento via Pix</h2>
+
+              <div class="success-payment-total">
+                <span>Valor total do pedido</span>
+                <strong><%= formatPrice(order.total) %></strong>
+              </div>
+
+              <% if (pix) { %>
+                <div class="pix-qrcode-box">
+                  <img src="<%= pix.qrCodeImage %>" alt="QR Code Pix do pedido <%= order.code %>">
+                </div>
+
+                <div class="pix-copy-box">
+                  <label for="pixPayload">Pix Copia e Cola</label>
+
+                  <textarea id="pixPayload" readonly><%= pix.payload %></textarea>
+
+                  <button type="button" class="btn-primary pix-copy-btn" id="copyPixButton">
+                    Copiar Pix
+                  </button>
+                </div>
+              <% } else { %>
+                <div class="success-warning">
+                  <strong>⚠ Pix não configurado:</strong>
+                  <span>
+                    A chave Pix ainda não foi configurada no servidor. Entre em contato com a gestão
+                    informando o código do pedido.
+                  </span>
+                </div>
+              <% } %>
+            </div>
+          <% } %>
+
+          <div class="success-warning">
+            <strong>⚠ Importante:</strong>
+            <span>
+              Após pagar, envie o comprovante no Discord junto com o código
+              <b><%= orderCode || "do pedido" %></b>. A liberação será feita manualmente pela gestão.
+            </span>
+          </div>
+
+          <div class="success-actions">
+            <a href="/loja/consultar" class="btn-primary">Consultar meu pedido</a>
+            <a href="/loja" class="btn-secondary">Voltar para loja</a>
+            <a href="/" class="btn-secondary">Ir para o início</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+  <script src="/js/pixCopy.js"></script>
+
+</body>
+</html>

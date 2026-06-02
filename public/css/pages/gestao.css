@@ -1,0 +1,85 @@
+/* ================= MANAGEMENT PAGE ================= */
+
+.management-section,
+.principles-section {
+  padding: 80px 0;
+}
+
+.management-section {
+  background-color: #080808;
+}
+
+.management-section h2,
+.principles-section h2 {
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+.management-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.manager-card {
+  background: rgba(17, 17, 17, 0.95);
+  border: 1px solid rgba(255, 43, 43, 0.28);
+  border-radius: 18px;
+  padding: 28px;
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+  box-shadow: 0 0 35px rgba(255, 0, 0, 0.06);
+  transition: 0.2s ease;
+}
+
+.manager-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 43, 43, 0.55);
+}
+
+.manager-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background-color: #c40000;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.manager-info h3 {
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+
+.manager-info span {
+  display: inline-block;
+  color: #ff2b2b;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+.manager-info p {
+  color: #cfcfcf;
+}
+
+.principles-section {
+  background: linear-gradient(180deg, #050505 0%, #0d0d0d 100%);
+}
+
+/* ================= RESPONSIVE MANAGEMENT ================= */
+
+@media (max-width: 900px) {
+  .management-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .manager-card {
+    flex-direction: column;
+  }
+}

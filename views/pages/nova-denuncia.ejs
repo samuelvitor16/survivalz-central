@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/denuncias.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="reports-section">
+      <div class="container report-form-container">
+
+        <div class="report-form-info">
+          <span class="section-tag">Nova denúncia</span>
+
+          <h1>Relate um problema para a staff</h1>
+
+          <p>
+            Preencha as informações com calma. Denúncias falsas, incompletas ou sem provas
+            podem ser recusadas pela equipe.
+          </p>
+
+          <div class="report-guidelines">
+            <h3>Antes de enviar</h3>
+
+            <ul>
+              <li>Explique o ocorrido com detalhes.</li>
+              <li>Informe o nick do denunciado corretamente.</li>
+              <li>Envie links de provas, prints ou vídeos.</li>
+              <li>Evite xingamentos e mensagens provocativas.</li>
+              <li>Aguarde a análise da staff.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="report-form-card">
+          <h2>Formulário de denúncia</h2>
+
+          <p>
+            Esta versão ainda é visual. O envio real será feito na etapa do back-end.
+          </p>
+
+          <form action="#" method="POST">
+            <div class="form-group">
+              <label for="accusedNick">Nick do denunciado</label>
+              <input
+                type="text"
+                id="accusedNick"
+                name="accusedNick"
+                placeholder="Ex: Player_Suspeito"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="reason">Motivo</label>
+
+              <select id="reason" name="reason">
+                <option value="">Selecione um motivo</option>
+                <option value="cheat">Uso de cheat</option>
+                <option value="bug">Abuso de bug</option>
+                <option value="safezone">Abuso em safezone</option>
+                <option value="toxicidade">Toxicidade/ofensa</option>
+                <option value="golpe">Golpe</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="date">Data aproximada</label>
+              <input
+                type="text"
+                id="date"
+                name="date"
+                placeholder="Ex: 01/06/2026 às 20h"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="evidence">Link das provas</label>
+              <input
+                type="text"
+                id="evidence"
+                name="evidence"
+                placeholder="YouTube, Imgur, Discord, Google Drive..."
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="description">Descrição do ocorrido</label>
+
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Conte o que aconteceu com detalhes..."
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary report-submit-btn">
+              Enviar denúncia
+            </button>
+          </form>
+
+          <div class="report-back-link">
+            <a href="/denuncias">Voltar para denúncias</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

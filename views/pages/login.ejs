@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/pages/auth.css"> 
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="auth-section">
+      <div class="container auth-container">
+
+        <div class="auth-info">
+          <span class="section-tag">Área do sobrevivente</span>
+          <h1>Acesse sua conta SurvivalZ</h1>
+
+          <p>
+            Entre na sua conta para acompanhar sua área de jogador, denúncias,
+            histórico e futuros recursos integrados ao servidor.
+          </p>
+
+          <div class="auth-warning">
+            <strong>☣ Aviso:</strong>
+            <span>Esta área ainda está em desenvolvimento.</span>
+          </div>
+        </div>
+
+        <div class="auth-card">
+          <h2>Login</h2>
+          <p>Entre com seus dados para acessar a central.</p>
+
+          <form action="#" method="POST">
+            <div class="form-group">
+              <label for="email">E-mail ou usuário</label>
+              <input type="text" id="email" name="email" placeholder="Digite seu e-mail ou usuário">
+            </div>
+
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input type="password" id="password" name="password" placeholder="Digite sua senha">
+            </div>
+
+            <button type="submit" class="btn-primary auth-btn">Entrar</button>
+          </form>
+
+          <div class="auth-links">
+            <p>Ainda não tem conta?</p>
+            <a href="/cadastro">Criar conta</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

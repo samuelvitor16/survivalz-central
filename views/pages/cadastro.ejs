@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/pages/auth.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="auth-section">
+      <div class="container auth-container">
+
+        <div class="auth-info">
+          <span class="section-tag">Novo sobrevivente</span>
+          <h1>Crie sua conta na Central SurvivalZ</h1>
+
+          <p>
+            Cadastre-se para acessar sua área de jogador, abrir denúncias,
+            acompanhar informações e futuramente conectar sua conta ao servidor.
+          </p>
+
+          <div class="auth-warning">
+            <strong>⚠ Importante:</strong>
+            <span>Use o mesmo nick que você pretende usar no servidor.</span>
+          </div>
+        </div>
+
+        <div class="auth-card">
+          <h2>Cadastro</h2>
+          <p>Preencha os dados para criar sua conta.</p>
+
+          <form action="#" method="POST">
+            <div class="form-group">
+              <label for="username">Nome de usuário</label>
+              <input type="text" id="username" name="username" placeholder="Ex: Dybala">
+            </div>
+
+            <div class="form-group">
+              <label for="sampNick">Nick no servidor</label>
+              <input type="text" id="sampNick" name="sampNick" placeholder="Ex: Dybala_Survivor">
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" name="email" placeholder="Digite seu e-mail">
+            </div>
+
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input type="password" id="password" name="password" placeholder="Crie uma senha">
+            </div>
+
+            <button type="submit" class="btn-primary auth-btn">Criar conta</button>
+          </form>
+
+          <div class="auth-links">
+            <p>Já tem uma conta?</p>
+            <a href="/login">Fazer login</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

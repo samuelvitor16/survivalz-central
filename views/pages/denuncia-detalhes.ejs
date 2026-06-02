@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/denuncias.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="reports-section">
+      <div class="container">
+
+        <div class="report-detail-header">
+          <div>
+            <span class="section-tag">Denúncia #001</span>
+            <h1>Abuso em safezone</h1>
+
+            <p>
+              Caso aberto para análise da staff. As informações abaixo são apenas
+              uma prévia visual do sistema.
+            </p>
+          </div>
+
+          <div class="report-status-badge">
+            Em análise
+          </div>
+        </div>
+
+        <section class="report-detail-grid">
+
+          <div class="report-main-box">
+            <div class="report-box-header">
+              <h2>Informações da denúncia</h2>
+              <span>Aberta em 01/06/2026</span>
+            </div>
+
+            <div class="report-info-list">
+              <div>
+                <span>Denunciante</span>
+                <strong>Dybala_Survivor</strong>
+              </div>
+
+              <div>
+                <span>Denunciado</span>
+                <strong>Player_Suspeito</strong>
+              </div>
+
+              <div>
+                <span>Motivo</span>
+                <strong>Abuso em safezone</strong>
+              </div>
+
+              <div>
+                <span>Status</span>
+                <strong>Em análise</strong>
+              </div>
+            </div>
+
+            <div class="report-description">
+              <h3>Descrição do ocorrido</h3>
+
+              <p>
+                O jogador denunciado atacou dentro da safezone e tentou fugir após
+                ser avisado. A situação foi registrada em vídeo e enviada para análise.
+              </p>
+            </div>
+
+            <div class="report-evidence">
+              <h3>Provas enviadas</h3>
+
+              <a href="#" target="_blank">
+                https://exemplo.com/prova-video
+              </a>
+            </div>
+          </div>
+
+          <aside class="report-side-box">
+            <h2>Ações da staff</h2>
+
+            <button class="staff-action-btn">Marcar como em análise</button>
+            <button class="staff-action-btn">Solicitar mais provas</button>
+            <button class="staff-action-btn danger">Fechar denúncia</button>
+
+            <p>
+              Futuramente, esses botões só aparecerão para staff autorizada.
+            </p>
+          </aside>
+
+        </section>
+
+        <section class="report-chat-box">
+          <div class="report-box-header">
+            <h2>Histórico do caso</h2>
+            <span>Ticket visual</span>
+          </div>
+
+          <div class="ticket-message">
+            <div class="message-avatar">D</div>
+
+            <div class="message-content">
+              <div class="message-header">
+                <strong>Dybala_Survivor</strong>
+                <span>01/06/2026 às 20:15</span>
+              </div>
+
+              <p>
+                Estou abrindo essa denúncia porque o player me atacou dentro da safezone.
+                Segue o link da prova em vídeo.
+              </p>
+            </div>
+          </div>
+
+          <div class="ticket-message staff">
+            <div class="message-avatar">S</div>
+
+            <div class="message-content">
+              <div class="message-header">
+                <strong>Staff SurvivalZ</strong>
+                <span>01/06/2026 às 20:30</span>
+              </div>
+
+              <p>
+                Denúncia recebida. A equipe irá analisar as provas e, se necessário,
+                solicitar mais informações.
+              </p>
+            </div>
+          </div>
+
+          <form class="ticket-reply-form" action="#" method="POST">
+            <textarea placeholder="Escreva uma resposta para o caso..."></textarea>
+
+            <button type="submit" class="btn-primary">
+              Enviar resposta
+            </button>
+          </form>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

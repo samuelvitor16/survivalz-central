@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/shop.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="shop-hero">
+      <div class="container shop-hero-grid">
+
+        <div class="shop-hero-content">
+          <span class="section-tag">Loja Beta SurvivalZ</span>
+
+          <h1>Monte seu pedido e entre no Beta preparado</h1>
+
+          <p>
+            Durante o Beta, VIPs, ZCoins, veículos e pacotes estarão com valores promocionais.
+            Todos os pedidos serão confirmados manualmente pela gestão do SurvivalZ.
+          </p>
+
+          <div class="shop-hero-actions">
+            <a href="#pacotes-beta" class="btn-primary">Ver pacotes Beta</a>
+            <a href="#vips" class="btn-secondary">Ver loja completa</a>
+            <a href="/loja/consultar" class="btn-secondary">Consultar pedido</a>
+          </div>
+
+          <div class="shop-hero-warning">
+            <strong>⚠ Fase Beta:</strong>
+            <span>
+              Itens, moedas, veículos e benefícios adquiridos durante o Beta poderão ser resetados
+              ao final da fase de testes. A entrega será manual após confirmação da gestão.
+            </span>
+          </div>
+        </div>
+
+        <div class="shop-status-card beta-highlight-card">
+          <span>Promoção Beta</span>
+          <strong>Loja Manual</strong>
+
+          <p>
+            Adicione produtos ao carrinho, aplique o cupom de primeira compra e finalize o pedido
+            para análise da equipe.
+          </p>
+
+          <div class="beta-highlight-list">
+            <div>
+              <span>Produtos</span>
+              <strong>VIPs, ZCoins e veículos</strong>
+            </div>
+
+            <div>
+              <span>Cupom</span>
+              <strong>25% na 1ª compra</strong>
+            </div>
+
+            <div>
+              <span>Entrega</span>
+              <strong>Manual</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="shop-products-section" id="pacotes-beta">
+      <div class="container">
+
+        <div class="shop-section-header">
+          <span class="section-tag">Pacotes Beta</span>
+
+          <h2>Escolha seu acesso ao Beta</h2>
+
+          <p>
+            Os pacotes de acesso Beta não entram na promoção de metade do preço.
+            Eles são pacotes especiais de entrada e apoio inicial ao projeto.
+          </p>
+        </div>
+
+        <div class="shop-products-grid beta-packages-grid">
+          <% betaPackages.forEach((product) => { %>
+            <article class="product-card <%= product.highlight ? 'featured' : '' %>">
+              <% if (product.highlight) { %>
+                <div class="product-badge">Destaque</div>
+              <% } %>
+
+              <div class="product-image-box">
+                <img
+                  src="/images/products/default.png"
+                  alt="<%= product.name %>"
+                >
+              </div>
+
+              <span class="product-type"><%= product.type %></span>
+
+              <h3><%= product.name %></h3>
+
+              <p><%= product.description %></p>
+
+              <ul>
+                <% product.benefits.forEach((benefit) => { %>
+                  <li><%= benefit %></li>
+                <% }) %>
+              </ul>
+
+              <div class="product-price">
+                <span>Valor</span>
+                <strong><%= formatPrice(product.priceCents) %></strong>
+
+                <% if (product.stock !== null) { %>
+                  <small><%= product.stock %> vagas disponíveis</small>
+                <% } %>
+              </div>
+
+              <div class="product-card-actions">
+            <button
+                class="btn-primary product-btn add-cart-btn"
+                data-id="<%= product.id %>"
+                data-name="<%= product.name %>"
+                data-price="<%= product.priceCents %>"
+                data-category="<%= product.category %>"
+            >
+                Adicionar
+            </button>
+
+            <a href="/loja/produto/<%= product.id %>" class="btn-secondary product-details-btn">
+                Ver detalhes
+            </a>
+            </div>
+            </article>
+          <% }) %>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="shop-products-section shop-alt-section" id="vips">
+      <div class="container">
+
+        <div class="shop-section-header">
+          <span class="section-tag">VIPs</span>
+
+          <h2>VIPs com valor promocional de Beta</h2>
+
+          <p>
+            Os VIPs estarão disponíveis com valores reduzidos durante o Beta.
+            A ativação será feita manualmente após aprovação do pedido.
+          </p>
+        </div>
+
+        <div class="shop-products-grid">
+          <% vips.forEach((product) => { %>
+            <article class="product-card <%= product.highlight ? 'featured' : '' %>">
+              <% if (product.highlight) { %>
+                <div class="product-badge">Popular</div>
+              <% } %>
+
+              <div class="product-image-box">
+                <img
+                  src="/images/products/default.png"
+                  alt="<%= product.name %>"
+                >
+              </div>
+
+              <span class="product-type"><%= product.type %></span>
+
+              <h3><%= product.name %></h3>
+
+              <p><%= product.description %></p>
+
+              <ul>
+                <% product.benefits.forEach((benefit) => { %>
+                  <li><%= benefit %></li>
+                <% }) %>
+              </ul>
+
+              <div class="product-price">
+                <span>Valor Beta</span>
+                <strong><%= formatPrice(product.priceCents) %></strong>
+
+                <% if (product.originalPriceCents && product.originalPriceCents > product.priceCents) { %>
+                  <small>De <%= formatPrice(product.originalPriceCents) %></small>
+                <% } %>
+              </div>
+
+              <div class="product-card-actions">
+                <button
+                    class="btn-secondary product-btn add-cart-btn"
+                    data-id="<%= product.id %>"
+                    data-name="<%= product.name %>"
+                    data-price="<%= product.priceCents %>"
+                    data-category="<%= product.category %>"
+                >
+                    Adicionar
+                </button>
+
+                <a href="/loja/produto/<%= product.id %>" class="btn-secondary product-details-btn">
+                    Ver detalhes
+                </a>
+                </div>
+            </article>
+          <% }) %>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="shop-products-section" id="zcoins">
+      <div class="container">
+
+        <div class="shop-section-header">
+          <span class="section-tag">ZCoins</span>
+
+          <h2>ZCoins pela metade do preço no Beta</h2>
+
+          <p>
+            Pacotes de ZCoins com valor promocional durante a fase Beta.
+            As moedas serão entregues manualmente após aprovação do pedido.
+          </p>
+        </div>
+
+        <div class="shop-products-grid zcoins-grid">
+          <% zcoins.forEach((product) => { %>
+            <article class="product-card <%= product.highlight ? 'featured' : '' %>">
+              <% if (product.highlight) { %>
+                <div class="product-badge">Custo-benefício</div>
+              <% } %>
+
+              <div class="product-image-box">
+                <img
+                  src="/images/products/default.png"
+                  alt="<%= product.name %>"
+                >
+              </div>
+
+              <span class="product-type"><%= product.type %></span>
+
+              <h3><%= product.name %></h3>
+
+              <p><%= product.description %></p>
+
+              <ul>
+                <% product.benefits.forEach((benefit) => { %>
+                  <li><%= benefit %></li>
+                <% }) %>
+              </ul>
+
+              <div class="product-price">
+                <span>Valor Beta</span>
+                <strong><%= formatPrice(product.priceCents) %></strong>
+
+                <% if (product.originalPriceCents && product.originalPriceCents > product.priceCents) { %>
+                  <small>De <%= formatPrice(product.originalPriceCents) %></small>
+                <% } %>
+              </div>
+
+              <div class="product-card-actions">
+                    <button
+                        class="btn-secondary product-btn add-cart-btn"
+                        data-id="<%= product.id %>"
+                        data-name="<%= product.name %>"
+                        data-price="<%= product.priceCents %>"
+                        data-category="<%= product.category %>"
+                    >
+                        Adicionar
+                    </button>
+
+                    <a href="/loja/produto/<%= product.id %>" class="btn-secondary product-details-btn">
+                        Ver detalhes
+                    </a>
+                    </div>
+            </article>
+          <% }) %>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="shop-products-section shop-alt-section" id="vehicles">
+      <div class="container">
+
+        <div class="shop-section-header">
+          <span class="section-tag">Veículos</span>
+
+          <h2>Veículos disponíveis no Beta</h2>
+
+          <p>
+            Todos os veículos estão temporariamente por R$ 50,00 durante o Beta.
+            Os valores poderão ser ajustados depois pela gestão.
+          </p>
+        </div>
+
+        <div class="vehicle-products-grid">
+          <% vehicles.forEach((product) => { %>
+            <article class="vehicle-card">
+
+              <div class="vehicle-image-box">
+                <img
+                  src="/images/products/default.png"
+                  alt="<%= product.name %>"
+                >
+              </div>
+
+              <div>
+                <span class="product-type"><%= product.type %></span>
+
+                <h3><%= product.name %></h3>
+
+                <p>
+                  Modelo <%= product.modelId %>
+                  <% if (product.capacity) { %>
+                    • <%= product.capacity %>
+                  <% } %>
+                  <% if (product.armor) { %>
+                    • <%= product.armor %>
+                  <% } %>
+                  <% if (product.collection) { %>
+                    • <%= product.collection %>
+                  <% } %>
+                </p>
+              </div>
+
+              <div class="vehicle-card-bottom">
+                <div class="vehicle-price">
+                  <span>Valor Beta</span>
+                  <strong><%= formatPrice(product.priceCents) %></strong>
+                </div>
+
+                <div class="vehicle-card-actions">
+                <button
+                    class="btn-secondary vehicle-btn add-cart-btn"
+                    data-id="<%= product.id %>"
+                    data-name="<%= product.name %>"
+                    data-price="<%= product.priceCents %>"
+                    data-category="<%= product.category %>"
+                >
+                    Adicionar
+                </button>
+
+                <a href="/loja/produto/<%= product.id %>" class="vehicle-details-btn">
+                    Ver
+                </a>
+                </div>
+              </div>
+
+            </article>
+          <% }) %>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="shop-info-section">
+      <div class="container shop-info-grid">
+
+        <div class="shop-info-box">
+          <h2>Como funciona a compra?</h2>
+
+          <div class="shop-step">
+            <span>1</span>
+            <p>Você adiciona os produtos ao carrinho temporário.</p>
+          </div>
+
+          <div class="shop-step">
+            <span>2</span>
+            <p>Aplica o cupom de primeira compra, se estiver disponível.</p>
+          </div>
+
+          <div class="shop-step">
+            <span>3</span>
+            <p>Preenche seus dados e envia o pedido para análise.</p>
+          </div>
+
+          <div class="shop-step">
+            <span>4</span>
+            <p>A gestão confirma o pagamento e libera os itens manualmente.</p>
+          </div>
+        </div>
+
+        <div class="shop-info-box">
+          <h2>Avisos do Beta</h2>
+
+          <ul class="shop-warning-list">
+            <li>O servidor estará em fase de testes.</li>
+            <li>Itens, veículos e moedas poderão ser resetados ao fim do Beta.</li>
+            <li>Compras não dão imunidade contra regras ou punições.</li>
+            <li>Todos os pedidos serão analisados manualmente pela gestão.</li>
+            <li>Valores e produtos poderão ser ajustados antes do lançamento oficial.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+  <script src="/js/cart.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/denuncias.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="reports-section">
+      <div class="container">
+
+        <div class="reports-header">
+          <div>
+            <span class="section-tag">Central de denúncias</span>
+            <h1>Denúncias SurvivalZ</h1>
+            <p>
+              Abra denúncias, envie provas e acompanhe o andamento dos casos analisados pela staff.
+            </p>
+          </div>
+
+          <a href="/denuncias/nova" class="btn-primary">Nova denúncia</a>
+        </div>
+
+        <section class="reports-status-grid">
+          <div class="report-status-card">
+            <span>Abertas</span>
+            <strong>0</strong>
+          </div>
+
+          <div class="report-status-card">
+            <span>Em análise</span>
+            <strong>0</strong>
+          </div>
+
+          <div class="report-status-card">
+            <span>Fechadas</span>
+            <strong>0</strong>
+          </div>
+        </section>
+
+        <section class="reports-list-box">
+          <div class="reports-list-header">
+            <h2>Minhas denúncias</h2>
+            <span>Área em desenvolvimento</span>
+          </div>
+
+          <div class="empty-report-state">
+            <h3>Nenhuma denúncia registrada</h3>
+
+            <p>
+              Quando você abrir uma denúncia, ela aparecerá aqui com status, data,
+              motivo e histórico de respostas.
+            </p>
+
+            <a href="/denuncias/nova" class="btn-secondary">Abrir primeira denúncia</a>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

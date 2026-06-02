@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/error.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="error-section">
+      <div class="container error-container">
+
+        <div class="error-code">404</div>
+
+        <span class="section-tag">Área contaminada</span>
+
+        <h1>Essa rota não foi encontrada</h1>
+
+        <p>
+          Parece que você tentou acessar uma área inexistente da Central SurvivalZ.
+          Talvez essa página ainda esteja em desenvolvimento ou o caminho digitado esteja errado.
+        </p>
+
+        <div class="error-actions">
+          <a href="/" class="btn-primary">Voltar para o início</a>
+          <a href="/denuncias" class="btn-secondary">Ir para denúncias</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

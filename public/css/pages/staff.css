@@ -1,0 +1,238 @@
+.staff-home-section {
+  min-height: 85vh;
+  padding: 80px 0;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.96)),
+    radial-gradient(circle at top right, rgba(255, 0, 0, 0.16), transparent 42%);
+}
+
+.staff-home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  margin-bottom: 34px;
+}
+
+.staff-home-header h1 {
+  font-size: 46px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.staff-home-header p {
+  color: #cfcfcf;
+  max-width: 780px;
+  font-size: 17px;
+}
+
+.staff-access-card {
+  min-width: 210px;
+  background-color: #111;
+  border: 1px solid rgba(255, 43, 43, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: right;
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.06);
+}
+
+.staff-access-card span {
+  display: block;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.staff-access-card strong {
+  color: #ff2b2b;
+  font-size: 22px;
+}
+
+.staff-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.staff-overview-card {
+  background-color: #111;
+  border: 1px solid rgba(255, 0, 0, 0.18);
+  border-radius: 16px;
+  padding: 22px;
+  transition: 0.2s ease;
+}
+
+.staff-overview-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 43, 43, 0.5);
+  box-shadow: 0 0 26px rgba(255, 0, 0, 0.08);
+}
+
+.staff-overview-card span {
+  display: block;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.staff-overview-card strong {
+  display: block;
+  color: #ff2b2b;
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.staff-overview-card p {
+  color: #cfcfcf;
+  font-size: 14px;
+}
+
+.staff-panel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 26px;
+}
+
+.staff-panel-card {
+  background-color: #111;
+  border: 1px solid rgba(255, 0, 0, 0.18);
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  transition: 0.2s ease;
+}
+
+.staff-panel-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 43, 43, 0.5);
+  box-shadow: 0 0 26px rgba(255, 0, 0, 0.08);
+}
+
+.staff-panel-card.disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.staff-panel-card.disabled:hover {
+  transform: none;
+  border-color: rgba(255, 0, 0, 0.18);
+  box-shadow: none;
+}
+
+.staff-panel-icon {
+  width: 56px;
+  height: 56px;
+  background-color: #c40000;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.staff-panel-card h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.staff-panel-card p {
+  color: #cfcfcf;
+}
+
+.staff-activity-box {
+  background-color: #111;
+  border: 1px solid rgba(255, 0, 0, 0.18);
+  border-radius: 18px;
+  padding: 26px;
+}
+
+.staff-activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.staff-activity-header h2 {
+  font-size: 24px;
+}
+
+.staff-activity-header span {
+  color: #ff2b2b;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.staff-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.staff-activity-item {
+  background-color: #080808;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.activity-dot {
+  width: 12px;
+  height: 12px;
+  background-color: #ff2b2b;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px rgba(255, 0, 0, 0.7);
+}
+
+.staff-activity-item strong {
+  color: #f2f2f2;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.staff-activity-item p {
+  color: #aaa;
+  font-size: 14px;
+}
+
+@media (max-width: 1000px) {
+  .staff-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .staff-panel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .staff-home-header {
+    flex-direction: column;
+  }
+
+  .staff-home-header h1 {
+    font-size: 36px;
+  }
+
+  .staff-access-card {
+    width: 100%;
+    text-align: left;
+  }
+
+  .staff-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-panel-card {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/staff.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="staff-home-section">
+      <div class="container">
+
+        <div class="staff-home-header">
+          <div>
+            <span class="section-tag">Painel interno</span>
+
+            <h1>Central da Staff</h1>
+
+            <p>
+              Área reservada para organização interna da equipe SurvivalZ.
+              Aqui a staff poderá acompanhar denúncias, jogadores, atividades,
+              compras futuras e informações importantes do servidor.
+            </p>
+          </div>
+
+          <div class="staff-access-card">
+            <span>Nível de acesso</span>
+            <strong>Staff</strong>
+          </div>
+        </div>
+
+        <section class="staff-overview-grid">
+          <div class="staff-overview-card">
+            <span>Denúncias abertas</span>
+            <strong>3</strong>
+            <p>Casos aguardando análise da equipe.</p>
+          </div>
+
+          <div class="staff-overview-card">
+            <span>Em análise</span>
+            <strong>1</strong>
+            <p>Denúncias assumidas por membros da staff.</p>
+          </div>
+
+          <div class="staff-overview-card">
+            <span>Jogadores monitorados</span>
+            <strong>0</strong>
+            <p>Área futura para acompanhamento de contas.</p>
+          </div>
+
+          <div class="staff-overview-card">
+            <span>Compras pendentes</span>
+            <strong>0</strong>
+            <p>Função planejada para a loja do servidor.</p>
+          </div>
+        </section>
+
+        <section class="staff-panel-grid">
+
+          <a href="/staff/denuncias" class="staff-panel-card">
+            <div class="staff-panel-icon">⚠</div>
+
+            <div>
+              <h2>Gerenciar denúncias</h2>
+              <p>
+                Ver denúncias abertas, analisar provas, responder jogadores
+                e fechar casos com transcript.
+              </p>
+            </div>
+          </a>
+
+          <a href="#" class="staff-panel-card disabled">
+            <div class="staff-panel-icon">👥</div>
+
+            <div>
+              <h2>Gerenciar jogadores</h2>
+              <p>
+                Futuramente, a staff poderá consultar informações básicas dos players,
+                histórico e status da conta.
+              </p>
+            </div>
+          </a>
+
+          <a href="#" class="staff-panel-card disabled">
+            <div class="staff-panel-icon">🛒</div>
+
+            <div>
+              <h2>Compras e loja</h2>
+              <p>
+                Área futura para acompanhar pedidos, entregas pendentes
+                e histórico de compras.
+              </p>
+            </div>
+          </a>
+
+          <a href="#" class="staff-panel-card disabled">
+            <div class="staff-panel-icon">📋</div>
+
+            <div>
+              <h2>Logs administrativos</h2>
+              <p>
+                Futuramente, ações importantes da staff e da gestão serão registradas
+                para segurança do servidor.
+              </p>
+            </div>
+          </a>
+
+          <a href="#" class="staff-panel-card disabled">
+            <div class="staff-panel-icon">📢</div>
+
+            <div>
+              <h2>Avisos internos</h2>
+              <p>
+                Espaço planejado para comunicados, orientações e informações
+                importantes para a equipe.
+              </p>
+            </div>
+          </a>
+
+          <a href="#" class="staff-panel-card disabled">
+            <div class="staff-panel-icon">☣</div>
+
+            <div>
+              <h2>Configurações da central</h2>
+              <p>
+                Área futura para configurações avançadas, permissões e ajustes
+                internos da Central SurvivalZ.
+              </p>
+            </div>
+          </a>
+
+        </section>
+
+        <section class="staff-activity-box">
+          <div class="staff-activity-header">
+            <h2>Atividade recente</h2>
+            <span>Prévia visual</span>
+          </div>
+
+          <div class="staff-activity-list">
+            <div class="staff-activity-item">
+              <span class="activity-dot"></span>
+
+              <div>
+                <strong>Denúncia #001 marcada como em análise</strong>
+                <p>Staff SurvivalZ • 01/06/2026 às 20:30</p>
+              </div>
+            </div>
+
+            <div class="staff-activity-item">
+              <span class="activity-dot"></span>
+
+              <div>
+                <strong>Nova denúncia recebida</strong>
+                <p>Dybala_Survivor abriu uma denúncia contra Player_Suspeito.</p>
+              </div>
+            </div>
+
+            <div class="staff-activity-item">
+              <span class="activity-dot"></span>
+
+              <div>
+                <strong>Sistema de loja planejado</strong>
+                <p>Área ainda em desenvolvimento para versões futuras da central.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

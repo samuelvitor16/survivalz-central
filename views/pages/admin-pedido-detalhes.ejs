@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/admin.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="admin-home-section">
+      <div class="container">
+
+        <div class="admin-home-header">
+          <div>
+            <span class="section-tag">Detalhes do pedido</span>
+
+            <h1>Pedido <%= order.code %></h1>
+
+            <p>
+              Confira os dados completos do comprador, produtos escolhidos,
+              valores, cupom aplicado e status da entrega manual.
+            </p>
+          </div>
+
+          <div class="admin-access-card admin-detail-status-card">
+            <div>
+              <span>Status</span>
+              <strong>
+                <%= String(order.status || "pendente").replace(/_/g, " ") %>
+              </strong>
+            </div>
+
+            <div>
+              <span>Pagamento</span>
+              <strong>
+                <%= String(order.paymentStatus || "aguardando pagamento").replace(/_/g, " ") %>
+              </strong>
+            </div>
+
+            <div>
+              <span>Entrega</span>
+              <strong>
+                <%= String(order.deliveryStatus || "pendente").replace(/_/g, " ") %>
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        <section class="admin-order-detail-grid">
+
+          <div class="admin-order-detail-box">
+            <div class="admin-box-header">
+              <h2>Dados do comprador</h2>
+              <span>Cliente</span>
+            </div>
+
+            <div class="admin-detail-list">
+              <div>
+                <span>Nome</span>
+                <strong><%= order.customer.name %></strong>
+              </div>
+
+              <div>
+                <span>Discord</span>
+                <strong><%= order.customer.discord %></strong>
+              </div>
+
+              <div>
+                <span>E-mail</span>
+                <strong><%= order.customer.email %></strong>
+              </div>
+
+              <div>
+                <span>Nick no servidor</span>
+                <strong><%= order.customer.sampNick %></strong>
+              </div>
+
+              <div>
+                <span>Observação</span>
+                <strong><%= order.customer.notes || "Nenhuma" %></strong>
+              </div>
+
+              <div>
+                <span>Data do pedido</span>
+                <strong>
+                  <%= new Date(order.createdAt).toLocaleString("pt-BR") %>
+                </strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-order-detail-box">
+            <div class="admin-box-header">
+              <h2>Resumo financeiro</h2>
+              <span>Valores</span>
+            </div>
+
+            <div class="admin-price-summary">
+              <div>
+                <span>Subtotal</span>
+                <strong><%= formatPrice(order.subtotal) %></strong>
+              </div>
+
+              <div>
+                <span>Cupom</span>
+                <strong><%= order.coupon || "Nenhum" %></strong>
+              </div>
+
+              <div>
+                <span>Desconto</span>
+                <strong>- <%= formatPrice(order.discount) %></strong>
+              </div>
+
+              <div class="admin-price-total">
+                <span>Total final</span>
+                <strong><%= formatPrice(order.total) %></strong>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <section class="admin-order-detail-box">
+          <div class="admin-box-header">
+            <h2>Produtos do pedido</h2>
+            <span><%= order.items.length %> item(ns)</span>
+          </div>
+
+          <div class="admin-order-items-list">
+            <% order.items.forEach((item) => { %>
+              <div class="admin-order-item">
+                <div>
+                  <strong><%= item.name %></strong>
+                  <span>ID: <%= item.id %></span>
+                </div>
+
+                <div>
+                  <span>Quantidade</span>
+                  <strong><%= item.quantity %></strong>
+                </div>
+
+                <div>
+                  <span>Valor unitário</span>
+                  <strong><%= formatPrice(item.priceCents) %></strong>
+                </div>
+
+                <div>
+                  <span>Total</span>
+                  <strong><%= formatPrice(item.totalCents) %></strong>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </section>
+
+        <section class="admin-order-actions-box">
+          <div>
+            <h2>Ações do pedido</h2>
+
+            <p>
+              Use os botões abaixo para atualizar o status do pedido.
+              As alterações serão salvas no arquivo <strong>orders.json</strong>.
+            </p>
+          </div>
+
+          <div class="admin-order-action-buttons">
+
+  <% if (order.status !== "pago" && order.status !== "entregue" && order.status !== "recusado") { %>
+    <form action="/admin/pedidos/<%= order.id %>/status" method="POST">
+      <input type="hidden" name="action" value="pago">
+
+      <button type="submit" class="admin-action-btn">
+        Marcar como pago
+      </button>
+    </form>
+  <% } %>
+
+  <% if (order.paymentStatus === "pago" && order.deliveryStatus !== "entregue" && order.status !== "recusado") { %>
+    <form action="/admin/pedidos/<%= order.id %>/status" method="POST">
+      <input type="hidden" name="action" value="entregue">
+
+      <button type="submit" class="admin-action-btn">
+        Marcar como entregue
+      </button>
+    </form>
+  <% } %>
+
+  <% if (order.status !== "entregue" && order.status !== "recusado") { %>
+    <form action="/admin/pedidos/<%= order.id %>/status" method="POST">
+      <input type="hidden" name="action" value="recusado">
+
+      <button type="submit" class="admin-action-btn danger">
+        Recusar pedido
+      </button>
+    </form>
+  <% } %>
+
+  <% if (order.status === "entregue") { %>
+    <div class="admin-order-finished">
+      Pedido entregue com sucesso.
+    </div>
+  <% } %>
+
+  <% if (order.status === "recusado") { %>
+    <div class="admin-order-finished danger">
+      Pedido recusado.
+    </div>
+  <% } %>
+    <button type="button" class="admin-action-btn" id="copyOrderButton">
+  Copiar resumo
+    </button>
+  <a href="/admin/pedidos" class="btn-secondary">
+    Voltar
+  </a>
+
+</div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+    <textarea id="orderCopyText" class="copy-order-textarea" readonly>
+    ☣️ PEDIDO SURVIVALZ - <%= order.code %>
+
+    👤 Cliente: <%= order.customer.name %>
+    💬 Discord: <%= order.customer.discord %>
+    🎮 Nick: <%= order.customer.sampNick %>
+    📧 E-mail: <%= order.customer.email %>
+
+    📦 Produtos:
+    <% order.items.forEach((item) => { %>
+    - <%= item.quantity %>x <%= item.name %> — <%= formatPrice(item.totalCents) %>
+    <% }) %>
+
+    💰 Subtotal: <%= formatPrice(order.subtotal) %>
+    🎁 Cupom: <%= order.coupon || "Nenhum" %>
+    📉 Desconto: <%= formatPrice(order.discount) %>
+    ✅ Total: <%= formatPrice(order.total) %>
+
+    📌 Status: <%= String(order.status || "pendente").replace(/_/g, " ") %>
+    💳 Pagamento: <%= String(order.paymentStatus || "aguardando pagamento").replace(/_/g, " ") %>
+    🚚 Entrega: <%= String(order.deliveryStatus || "pendente").replace(/_/g, " ") %>
+    </textarea>
+
+<script src="/js/adminOrder.js"></script>
+  <%- include("../partials/footer") %>
+
+</body>
+</html>
