@@ -288,7 +288,7 @@
   {
     "id": 8,
     "code": "SZ-0008",
-    "status": "entregue",
+    "status": "pendente",
     "createdAt": "2026-06-02T02:35:31.173Z",
     "customer": {
       "name": "a",
@@ -312,9 +312,9 @@
     "discount": 0,
     "total": 3000,
     "coupon": null,
-    "paymentStatus": "pago",
-    "deliveryStatus": "entregue",
+    "paymentStatus": "aguardando_pagamento",
+    "deliveryStatus": "pendente",
     "internalNotes": "a",
-    "updatedAt": "2026-06-02T02:36:58.649Z"
+    "updatedAt": "2026-06-02T02:36:42.860Z"
   }
 ]

@@ -203,12 +203,13 @@ const renderSuccess = async (req, res) => {
   }
 
   res.render("pages/pedido-sucesso", {
-    title: "Pedido Enviado - Central SurvivalZ",
-    orderCode,
-    order,
-    pix,
-    formatPrice
-  });
+  title: "Pedido Enviado - Central SurvivalZ",
+  orderCode,
+  order,
+  pix,
+  formatPrice,
+  discordInvite: process.env.DISCORD_INVITE || "#"
+});
 };
 
 const renderOrderConsult = (req, res) => {

@@ -142,3 +142,140 @@
     font-size: 38px;
   }
 }
+
+/* ================= HOME - LOJA BETA ================= */
+
+.home-beta-store-section {
+  padding: 85px 0;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.90), rgba(0, 0, 0, 0.96)),
+    radial-gradient(circle at top right, rgba(255, 0, 0, 0.16), transparent 45%);
+  border-top: 1px solid rgba(255, 43, 43, 0.14);
+  border-bottom: 1px solid rgba(255, 43, 43, 0.14);
+}
+
+.home-beta-store-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 42px;
+  align-items: center;
+}
+
+.home-beta-store-content h2 {
+  font-size: 44px;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+
+.home-beta-store-content p {
+  color: #cfcfcf;
+  font-size: 17px;
+  max-width: 780px;
+  margin-bottom: 24px;
+}
+
+.home-beta-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.home-beta-highlights div {
+  background-color: #111;
+  border: 1px solid rgba(255, 0, 0, 0.18);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.home-beta-highlights strong {
+  display: block;
+  color: #ff2b2b;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.home-beta-highlights span {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.home-beta-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.home-beta-store-card {
+  background-color: #111;
+  border: 1px solid rgba(255, 43, 43, 0.28);
+  border-radius: 22px;
+  padding: 30px;
+  box-shadow: 0 0 35px rgba(255, 0, 0, 0.08);
+}
+
+.home-beta-store-card > span {
+  color: #aaa;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.home-beta-store-card h3 {
+  color: #ff2b2b;
+  font-size: 32px;
+  margin-bottom: 14px;
+}
+
+.home-beta-store-card p {
+  color: #cfcfcf;
+  margin-bottom: 20px;
+}
+
+.home-beta-store-card ul {
+  list-style: none;
+}
+
+.home-beta-store-card li {
+  color: #d0d0d0;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.home-beta-store-card li:last-child {
+  border-bottom: none;
+}
+
+.home-beta-store-card li::before {
+  content: "☣";
+  color: #ff2b2b;
+  margin-right: 8px;
+}
+
+@media (max-width: 900px) {
+  .home-beta-store-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-beta-highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .home-beta-store-content h2 {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 650px) {
+  .home-beta-store-section {
+    padding: 55px 0;
+  }
+
+  .home-beta-actions a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .home-beta-store-card {
+    padding: 22px;
+  }
+}

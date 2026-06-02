@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const ordersPath = path.join(__dirname, "..", "data", "orders.json");
+const backupsDir = path.join(__dirname, "..", "data", "backups");
 
 const readOrders = () => {
   if (!fs.existsSync(ordersPath)) {
@@ -12,7 +13,23 @@ const readOrders = () => {
   return JSON.parse(data);
 };
 
+const createOrdersBackup = (orders) => {
+  if (!fs.existsSync(backupsDir)) {
+    fs.mkdirSync(backupsDir, { recursive: true });
+  }
+
+  const timestamp = new Date()
+    .toISOString()
+    .replace(/:/g, "-")
+    .replace(/\./g, "-");
+
+  const backupPath = path.join(backupsDir, `orders-backup-${timestamp}.json`);
+
+  fs.writeFileSync(backupPath, JSON.stringify(orders, null, 2));
+};
+
 const saveOrders = (orders) => {
+  createOrdersBackup(orders);
   fs.writeFileSync(ordersPath, JSON.stringify(orders, null, 2));
 };
 
@@ -70,10 +87,31 @@ const getOrderByCode = (code) => {
   });
 };
 
+const updateOrderNotes = (id, internalNotes) => {
+  const orders = readOrders();
+
+  const orderIndex = orders.findIndex((order) => order.id === Number(id));
+
+  if (orderIndex === -1) {
+    return null;
+  }
+
+  orders[orderIndex] = {
+    ...orders[orderIndex],
+    internalNotes,
+    updatedAt: new Date().toISOString()
+  };
+
+  saveOrders(orders);
+
+  return orders[orderIndex];
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
   getOrderById,
   getOrderByCode,
-  updateOrderStatus
+  updateOrderStatus,
+  updateOrderNotes
 };

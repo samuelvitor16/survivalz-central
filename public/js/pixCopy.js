@@ -1,24 +1,59 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const copyButton = document.getElementById("copyPixButton");
+  const copyPixButton = document.getElementById("copyPixButton");
   const pixPayload = document.getElementById("pixPayload");
 
-  if (!copyButton || !pixPayload) return;
+  const copyOrderCodeButton = document.getElementById("copyOrderCodeButton");
+  const orderCodeText = document.getElementById("orderCodeText");
 
-  copyButton.addEventListener("click", async () => {
+  const copyDiscordMessageButton = document.getElementById("copyDiscordMessageButton");
+  const discordMessageText = document.getElementById("discordMessageText");
+
+  async function copyText(text, button, originalText, successText) {
     try {
-      await navigator.clipboard.writeText(pixPayload.value.trim());
+      await navigator.clipboard.writeText(text.trim());
 
-      copyButton.textContent = "Pix copiado!";
-      copyButton.classList.add("copied");
+      button.textContent = successText;
+      button.classList.add("copied");
 
       setTimeout(() => {
-        copyButton.textContent = "Copiar Pix";
-        copyButton.classList.remove("copied");
+        button.textContent = originalText;
+        button.classList.remove("copied");
       }, 2000);
     } catch (error) {
-      pixPayload.select();
-      document.execCommand("copy");
-      alert("Pix copiado.");
+      alert("Não foi possível copiar automaticamente. Copie manualmente.");
     }
-  });
+  }
+
+  if (copyPixButton && pixPayload) {
+    copyPixButton.addEventListener("click", () => {
+      copyText(
+        pixPayload.value,
+        copyPixButton,
+        "Copiar Pix",
+        "Pix copiado!"
+      );
+    });
+  }
+
+  if (copyOrderCodeButton && orderCodeText) {
+    copyOrderCodeButton.addEventListener("click", () => {
+      copyText(
+        orderCodeText.value,
+        copyOrderCodeButton,
+        "Copiar código",
+        "Código copiado!"
+      );
+    });
+  }
+
+  if (copyDiscordMessageButton && discordMessageText) {
+    copyDiscordMessageButton.addEventListener("click", () => {
+      copyText(
+        discordMessageText.value,
+        copyDiscordMessageButton,
+        "Copiar mensagem",
+        "Mensagem copiada!"
+      );
+    });
+  }
 });

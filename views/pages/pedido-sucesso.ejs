@@ -25,8 +25,8 @@
           <h1>Seu pedido foi criado com sucesso</h1>
 
           <p>
-            A gestão do SurvivalZ recebeu seu pedido. Agora realize o pagamento via Pix
-            e envie o comprovante no Discord junto com o código do pedido.
+            A gestão do SurvivalZ recebeu seu pedido. Agora realize o pagamento via Pix,
+            copie a mensagem pronta e envie o comprovante no Discord junto com o código do pedido.
           </p>
 
           <% if (orderCode) { %>
@@ -72,23 +72,56 @@
           <% } %>
 
           <div class="success-warning">
-            <strong>⚠ Importante:</strong>
+            <strong>⚠ Próximo passo:</strong>
             <span>
-              Após pagar, envie o comprovante no Discord junto com o código
-              <b><%= orderCode || "do pedido" %></b>. A liberação será feita manualmente pela gestão.
+              Após pagar o Pix, clique em <b>Copiar mensagem</b>, depois em <b>Abrir Discord</b>
+              e envie a mensagem junto com o comprovante. Sem o comprovante, o pedido continuará
+              como aguardando pagamento.
             </span>
           </div>
 
           <div class="success-actions">
-            <a href="/loja/consultar" class="btn-primary">Consultar meu pedido</a>
-            <a href="/loja" class="btn-secondary">Voltar para loja</a>
-            <a href="/" class="btn-secondary">Ir para o início</a>
+            <% if (orderCode) { %>
+              <button type="button" class="btn-primary success-copy-btn" id="copyOrderCodeButton">
+                Copiar código
+              </button>
+
+              <button type="button" class="btn-secondary success-copy-btn" id="copyDiscordMessageButton">
+                Copiar mensagem
+              </button>
+            <% } %>
+
+            <a href="<%= discordInvite %>" target="_blank" class="btn-primary">
+              Abrir Discord
+            </a>
+
+            <a href="/loja/consultar" class="btn-secondary">
+              Consultar pedido
+            </a>
+
+            <a href="/loja" class="btn-secondary">
+              Voltar para loja
+            </a>
           </div>
         </div>
 
       </div>
     </section>
   </main>
+
+  <% if (order) { %>
+    <textarea id="discordMessageText" class="success-hidden-copy-text" readonly>
+Olá! Fiz um pedido na Loja Beta SurvivalZ.
+
+Código do pedido: <%= order.code %>
+Valor total: <%= formatPrice(order.total) %>
+
+Já realizei o pagamento via Pix.
+Segue o comprovante para conferência da gestão.
+    </textarea>
+
+    <textarea id="orderCodeText" class="success-hidden-copy-text" readonly><%= order.code %></textarea>
+  <% } %>
 
   <%- include("../partials/footer") %>
 

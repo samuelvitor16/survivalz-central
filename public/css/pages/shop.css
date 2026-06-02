@@ -2079,3 +2079,24 @@
     max-width: 240px;
   }
 }
+
+/* ================= COPIAR DADOS DO PEDIDO ================= */
+
+.success-copy-btn {
+  border: none;
+  cursor: pointer;
+}
+
+.success-copy-btn.copied,
+.pix-copy-btn.copied {
+  background-color: #ff2b2b !important;
+  color: white !important;
+}
+
+.success-hidden-copy-text {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}

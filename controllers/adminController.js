@@ -1,7 +1,8 @@
 const {
   getAllOrders,
   getOrderById,
-  updateOrderStatus
+  updateOrderStatus,
+  updateOrderNotes
 } = require("../models/orderModel");
 
 const { formatPrice } = require("../data/products");
@@ -167,11 +168,105 @@ const logoutAdmin = (req, res) => {
   });
 };
 
+const updateAdminOrderNotes = (req, res) => {
+  const { internalNotes } = req.body;
+
+  const updatedOrder = updateOrderNotes(req.params.id, internalNotes || "");
+
+  if (!updatedOrder) {
+    return res.status(404).render("pages/404", {
+      title: "Pedido não encontrado - Central SurvivalZ"
+    });
+  }
+
+  res.redirect(`/admin/pedidos/${req.params.id}`);
+};
+
+const escapeCsv = (value) => {
+  const stringValue = String(value ?? "");
+  return `"${stringValue.replace(/"/g, '""')}"`;
+};
+
+const exportOrdersJson = (req, res) => {
+  const orders = getAllOrders();
+
+  const fileName = `survivalz-pedidos-${new Date().toISOString().slice(0, 10)}.json`;
+
+  res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+  return res.send(JSON.stringify(orders, null, 2));
+};
+
+const exportOrdersCsv = (req, res) => {
+  const orders = getAllOrders();
+
+  const headers = [
+    "codigo",
+    "status",
+    "pagamento",
+    "entrega",
+    "nome",
+    "discord",
+    "email",
+    "nick_servidor",
+    "cupom",
+    "subtotal_centavos",
+    "desconto_centavos",
+    "total_centavos",
+    "total_formatado",
+    "itens",
+    "observacoes_cliente",
+    "observacoes_internas",
+    "criado_em",
+    "atualizado_em"
+  ];
+
+  const rows = orders.map((order) => {
+    const items = order.items
+      .map((item) => `${item.quantity}x ${item.name}`)
+      .join(" | ");
+
+    return [
+      order.code,
+      order.status,
+      order.paymentStatus,
+      order.deliveryStatus,
+      order.customer.name,
+      order.customer.discord,
+      order.customer.email,
+      order.customer.sampNick,
+      order.coupon || "",
+      order.subtotal,
+      order.discount,
+      order.total,
+      formatPrice(order.total),
+      items,
+      order.customer.notes || "",
+      order.internalNotes || "",
+      order.createdAt,
+      order.updatedAt || ""
+    ].map(escapeCsv).join(";");
+  });
+
+  const csv = [headers.join(";"), ...rows].join("\n");
+
+  const fileName = `survivalz-pedidos-${new Date().toISOString().slice(0, 10)}.csv`;
+
+  res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
+
+  return res.send("\uFEFF" + csv);
+};
+
 module.exports = {
   renderAdminHome,
   renderAdminOrders,
   renderAdminOrderDetails,
   updateAdminOrderStatus,
+  updateAdminOrderNotes,
+  exportOrdersJson,
+  exportOrdersCsv,
   renderAdminLogin,
   loginAdmin,
   logoutAdmin

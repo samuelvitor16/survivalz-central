@@ -62,6 +62,16 @@
   </a>
 </div>
 
+<div class="admin-export-actions">
+  <a href="/admin/pedidos/export/csv" class="btn-secondary">
+    Exportar CSV
+  </a>
+
+  <a href="/admin/pedidos/export/json" class="btn-secondary">
+    Exportar JSON
+  </a>
+</div>
+
 <form action="/admin/pedidos" method="GET" class="admin-order-search" autocomplete="off">
   <% if (filter && filter !== "todos") { %>
     <input type="hidden" name="status" value="<%= filter %>">

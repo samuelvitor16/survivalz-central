@@ -6,6 +6,9 @@ const {
   renderAdminOrders,
   renderAdminOrderDetails,
   updateAdminOrderStatus,
+  updateAdminOrderNotes,
+  exportOrdersJson,
+  exportOrdersCsv,
   renderAdminLogin,
   loginAdmin,
   logoutAdmin
@@ -29,7 +32,13 @@ router.use(requireAdmin);
 // Painel admin
 router.get("/", renderAdminHome);
 router.get("/pedidos", renderAdminOrders);
+
+// Exportação precisa vir ANTES de /pedidos/:id
+router.get("/pedidos/export/json", exportOrdersJson);
+router.get("/pedidos/export/csv", exportOrdersCsv);
+
 router.get("/pedidos/:id", renderAdminOrderDetails);
 router.post("/pedidos/:id/status", updateAdminOrderStatus);
+router.post("/pedidos/:id/notes", updateAdminOrderNotes);
 
 module.exports = router;

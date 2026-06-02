@@ -160,6 +160,24 @@
           </div>
         </section>
 
+        <section class="admin-order-detail-box admin-internal-notes-box">
+  <div class="admin-box-header">
+    <h2>Observações internas</h2>
+    <span>Gestão</span>
+  </div>
+
+  <form action="/admin/pedidos/<%= order.id %>/notes" method="POST" class="admin-notes-form">
+    <textarea
+      name="internalNotes"
+      placeholder="Ex: Comprovante recebido, pagamento conferido, entregue por LEAD..."
+    ><%= order.internalNotes || "" %></textarea>
+
+    <button type="submit" class="admin-action-btn">
+      Salvar observações
+    </button>
+  </form>
+</section>
+
         <section class="admin-order-actions-box">
           <div>
             <h2>Ações do pedido</h2>
@@ -173,7 +191,12 @@
           <div class="admin-order-action-buttons">
 
   <% if (order.status !== "pago" && order.status !== "entregue" && order.status !== "recusado") { %>
-    <form action="/admin/pedidos/<%= order.id %>/status" method="POST">
+    <form
+      action="/admin/pedidos/<%= order.id %>/status"
+      method="POST"
+      class="admin-status-form"
+      data-confirm="Tem certeza que deseja marcar este pedido como PAGO?"
+    >
       <input type="hidden" name="action" value="pago">
 
       <button type="submit" class="admin-action-btn">
@@ -183,7 +206,12 @@
   <% } %>
 
   <% if (order.paymentStatus === "pago" && order.deliveryStatus !== "entregue" && order.status !== "recusado") { %>
-    <form action="/admin/pedidos/<%= order.id %>/status" method="POST">
+    <form
+      action="/admin/pedidos/<%= order.id %>/status"
+      method="POST"
+      class="admin-status-form"
+      data-confirm="Tem certeza que deseja marcar este pedido como ENTREGUE?"
+    >
       <input type="hidden" name="action" value="entregue">
 
       <button type="submit" class="admin-action-btn">
@@ -193,7 +221,12 @@
   <% } %>
 
   <% if (order.status !== "entregue" && order.status !== "recusado") { %>
-    <form action="/admin/pedidos/<%= order.id %>/status" method="POST">
+    <form
+      action="/admin/pedidos/<%= order.id %>/status"
+      method="POST"
+      class="admin-status-form"
+      data-confirm="Tem certeza que deseja RECUSAR este pedido? Essa ação deve ser usada com cuidado."
+    >
       <input type="hidden" name="action" value="recusado">
 
       <button type="submit" class="admin-action-btn danger">
@@ -213,9 +246,11 @@
       Pedido recusado.
     </div>
   <% } %>
-    <button type="button" class="admin-action-btn" id="copyOrderButton">
-  Copiar resumo
-    </button>
+
+  <button type="button" class="admin-action-btn" id="copyOrderButton">
+    Copiar resumo
+  </button>
+
   <a href="/admin/pedidos" class="btn-secondary">
     Voltar
   </a>
