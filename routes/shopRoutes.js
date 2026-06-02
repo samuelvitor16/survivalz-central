@@ -9,7 +9,8 @@ const {
   renderSuccess,
   createCheckoutOrder,
   renderOrderConsult,
-  searchOrderConsult
+  searchOrderConsult,
+  renderShopTerms
 } = require("../controllers/shopController");
 
 router.get("/", renderShop);
@@ -19,6 +20,7 @@ router.get("/sucesso", renderSuccess);
 
 router.get("/consultar", renderOrderConsult);
 router.post("/consultar", searchOrderConsult);
+router.get("/termos", renderShopTerms);
 
 router.get("/produto/:id", renderProduct);
 router.get("/comprar/:id", renderCheckout);

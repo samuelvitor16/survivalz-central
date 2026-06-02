@@ -75,10 +75,23 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCheckout();
 
   document.getElementById("sendOrderButton").addEventListener("click", async () => {
+  const sendButton = document.getElementById("sendOrderButton");
+
+  const resetButton = () => {
+    sendButton.disabled = false;
+    sendButton.textContent = "Enviar pedido e gerar Pix";
+    sendButton.classList.remove("loading");
+  };
+
+  sendButton.disabled = true;
+  sendButton.textContent = "Gerando pedido...";
+  sendButton.classList.add("loading");
+
   const cart = getCart();
 
   if (cart.length === 0) {
     alert("Seu carrinho está vazio.");
+    resetButton();
     return;
   }
 
@@ -91,11 +104,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!name || !discord || !email || !sampNick) {
     alert("Preencha nome, Discord, e-mail e nick no servidor.");
+    resetButton();
     return;
   }
 
   if (!terms.checked) {
     alert("Você precisa confirmar que entendeu as condições do Beta.");
+    resetButton();
     return;
   }
 
@@ -141,19 +156,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!result.success) {
       alert(result.message || "Erro ao criar pedido.");
+      resetButton();
       return;
     }
 
     localStorage.removeItem(CART_KEY);
     localStorage.removeItem(COUPON_KEY);
 
-    alert(`Pedido criado com sucesso! Código: ${result.order.code}`);
-
     window.location.href = `/loja/sucesso?pedido=${result.order.code}`;
 
   } catch (error) {
     console.log("Erro ao enviar pedido:", error);
     alert("Erro ao enviar pedido. Tente novamente.");
+    resetButton();
   }
 });
 });

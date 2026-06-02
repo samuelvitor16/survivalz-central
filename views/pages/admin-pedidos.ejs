@@ -72,6 +72,15 @@
   </a>
 </div>
 
+<% if (counters.pendente > 0) { %>
+  <div class="admin-pending-alert">
+    <strong>⚠ Pedidos pendentes:</strong>
+    <span>
+      Existem <%= counters.pendente %> pedido(s) aguardando análise da gestão.
+    </span>
+  </div>
+<% } %>
+
 <form action="/admin/pedidos" method="GET" class="admin-order-search" autocomplete="off">
   <% if (filter && filter !== "todos") { %>
     <input type="hidden" name="status" value="<%= filter %>">
@@ -106,7 +115,7 @@
 
             <div class="admin-orders-list">
               <% orders.forEach((order) => { %>
-                <article class="admin-order-card">
+                <article class="admin-order-card order-card-<%= order.status || 'pendente' %>">
                   <div class="admin-order-main">
                     <div>
                       <span class="order-code"><%= order.code %></span>
@@ -119,26 +128,28 @@
                       </p>
                     </div>
 
-                        <div class="admin-order-status-group">
-                            <div class="order-status-pill">
-                                <span>Status</span>
-                                <strong><%= order.status %></strong>
-                            </div>
+                       <div class="admin-order-status-group">
+  <div class="order-status-pill status-<%= order.status || 'pendente' %>">
+    <span>Status</span>
+    <strong>
+      <%= String(order.status || "pendente").replace(/_/g, " ") %>
+    </strong>
+  </div>
 
-                            <div class="order-status-pill">
-                                <span>Pagamento</span>
-                                <strong>
-  <%= String(order.paymentStatus || "aguardando").replace(/_/g, " ") %>
-</strong>
-                            </div>
+  <div class="order-status-pill status-<%= order.paymentStatus || 'aguardando_pagamento' %>">
+    <span>Pagamento</span>
+    <strong>
+      <%= String(order.paymentStatus || "aguardando pagamento").replace(/_/g, " ") %>
+    </strong>
+  </div>
 
-                            <div class="order-status-pill">
-                                <span>Entrega</span>
-                                <strong>
-  <%= String(order.deliveryStatus || "pendente").replace(/_/g, " ") %>
-</strong>
-                            </div>
-                    </div>
+  <div class="order-status-pill status-<%= order.deliveryStatus || 'pendente' %>">
+    <span>Entrega</span>
+    <strong>
+      <%= String(order.deliveryStatus || "pendente").replace(/_/g, " ") %>
+    </strong>
+  </div>
+</div>
                   </div>
 
                   <div class="admin-order-meta">

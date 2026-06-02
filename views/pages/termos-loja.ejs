@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/shop.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="shop-terms-section">
+      <div class="container shop-terms-container">
+
+        <div class="shop-terms-header">
+          <span class="section-tag">Loja Beta SurvivalZ</span>
+
+          <h1>Termos e avisos da Loja Beta</h1>
+
+          <p>
+            Antes de realizar qualquer compra, leia com atenção as condições da fase Beta.
+            A loja funciona de forma manual e os produtos serão liberados pela gestão após conferência.
+          </p>
+        </div>
+
+        <div class="shop-terms-box">
+          <h2>1. Fase Beta</h2>
+          <p>
+            O SurvivalZ estará em fase de testes. Durante esse período, sistemas, valores,
+            produtos, benefícios e regras poderão ser ajustados pela gestão conforme necessidade.
+          </p>
+        </div>
+
+        <div class="shop-terms-box">
+          <h2>2. Possível reset</h2>
+          <p>
+            Itens, veículos, moedas, VIPs, benefícios e demais vantagens adquiridas durante
+            o Beta poderão ser resetados ao final da fase de testes. A compra durante o Beta
+            não garante permanência definitiva dos itens no lançamento oficial.
+          </p>
+        </div>
+
+        <div class="shop-terms-box">
+          <h2>3. Pagamento manual</h2>
+          <p>
+            O pagamento é feito via Pix. O site gera QR Code e Pix Copia e Cola com o valor
+            do pedido, mas a confirmação ainda é feita manualmente pela gestão.
+          </p>
+        </div>
+
+        <div class="shop-terms-box">
+          <h2>4. Envio de comprovante</h2>
+          <p>
+            Após realizar o pagamento, o jogador deve enviar o comprovante no Discord junto
+            com o código do pedido. Sem comprovante, o pedido continuará aguardando pagamento.
+          </p>
+        </div>
+
+        <div class="shop-terms-box">
+          <h2>5. Entrega manual</h2>
+          <p>
+            A entrega dos produtos não é automática. A gestão irá conferir o pagamento e liberar
+            os produtos manualmente no servidor ou no Discord.
+          </p>
+        </div>
+
+        <div class="shop-terms-box">
+          <h2>6. Regras do servidor</h2>
+          <p>
+            Compras na loja não dão imunidade contra regras, punições, banimentos ou decisões
+            administrativas. Todos os jogadores continuam sujeitos às regras do SurvivalZ.
+          </p>
+        </div>
+
+        <div class="shop-terms-actions">
+          <a href="/loja" class="btn-primary">Voltar para loja</a>
+          <a href="/loja/consultar" class="btn-secondary">Consultar pedido</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

@@ -104,6 +104,36 @@ const createCheckoutOrder = (req, res) => {
       );
     });
 
+    const isSameCustomer = (order) => {
+  if (!order.customer) return false;
+
+  const orderEmail = String(order.customer.email || "").trim().toLowerCase();
+  const orderDiscord = String(order.customer.discord || "").trim().toLowerCase();
+  const orderNick = String(order.customer.sampNick || "").trim().toLowerCase();
+
+  return (
+    orderEmail === normalizedEmail ||
+    orderDiscord === normalizedDiscord ||
+    orderNick === normalizedNick
+  );
+};
+
+const customerAlreadyHasCategory = (category) => {
+  return allOrders.some((order) => {
+    if (order.status === "recusado") return false;
+    if (!isSameCustomer(order)) return false;
+
+    return order.items.some((item) => {
+      if (item.category) {
+        return item.category === category;
+      }
+
+      const oldProduct = getProductById(item.id);
+      return oldProduct && oldProduct.category === category;
+    });
+  });
+};
+
     const shouldApplyCoupon = coupon === "BETA25";
 
     if (shouldApplyCoupon && alreadyUsedCoupon) {
@@ -113,37 +143,115 @@ const createCheckoutOrder = (req, res) => {
       });
     }
 
-    const validatedItems = [];
+    const requestedItems = {};
 
-    for (const item of items) {
-      const product = getProductById(item.id);
+for (const item of items) {
+  const quantity = Number(item.quantity);
 
-      if (!product || !product.available) {
-        return res.status(400).json({
-          success: false,
-          message: `Produto inválido ou indisponível: ${item.name || item.id}`
-        });
-      }
+  if (!item.id || !quantity || quantity < 1) {
+    return res.status(400).json({
+      success: false,
+      message: "Quantidade inválida no carrinho."
+    });
+  }
 
-      const quantity = Number(item.quantity);
+  requestedItems[item.id] = (requestedItems[item.id] || 0) + quantity;
+}
 
-      if (!quantity || quantity < 1) {
-        return res.status(400).json({
-          success: false,
-          message: "Quantidade inválida no carrinho."
-        });
-      }
+const getAlreadyReservedQuantity = (productId) => {
+  return allOrders
+    .filter((order) => order.status !== "recusado")
+    .reduce((total, order) => {
+      const productQuantity = order.items
+        .filter((item) => item.id === productId)
+        .reduce((sum, item) => sum + Number(item.quantity || 0), 0);
 
-      validatedItems.push({
-        id: product.id,
-        name: product.name,
-        category: product.category,
-        type: product.type,
-        priceCents: product.priceCents,
-        quantity,
-        totalCents: product.priceCents * quantity
+      return total + productQuantity;
+    }, 0);
+};
+
+const restrictedCategoriesInCart = {
+  beta: 0,
+  vip: 0
+};
+
+const validatedItems = [];
+
+for (const productId of Object.keys(requestedItems)) {
+  const product = getProductById(productId);
+
+  if (!product || !product.available) {
+    return res.status(400).json({
+      success: false,
+      message: `Produto inválido ou indisponível: ${productId}`
+    });
+  }
+
+  const quantity = requestedItems[productId];
+
+  if (quantity > 20) {
+    return res.status(400).json({
+      success: false,
+      message: `Quantidade muito alta para o produto ${product.name}.`
+    });
+  }
+
+  if (product.category === "beta" || product.category === "vip") {
+  const categoryLabel = product.category === "beta" ? "pacote Beta" : "VIP";
+
+  if (quantity > 1) {
+    return res.status(400).json({
+      success: false,
+      message: `Você só pode comprar 1 ${categoryLabel} por pedido.`
+    });
+  }
+
+  restrictedCategoriesInCart[product.category] += quantity;
+
+  if (restrictedCategoriesInCart[product.category] > 1) {
+    return res.status(400).json({
+      success: false,
+      message: `Você só pode comprar 1 ${categoryLabel}. Remova os outros do carrinho.`
+    });
+  }
+
+  if (customerAlreadyHasCategory(product.category)) {
+    return res.status(400).json({
+      success: false,
+      message: `Este comprador já possui um ${categoryLabel} registrado em outro pedido.`
+    });
+  }
+}
+
+  if (product.stock !== null && product.stock !== undefined) {
+    const alreadyReserved = getAlreadyReservedQuantity(product.id);
+    const availableStock = product.stock - alreadyReserved;
+
+    if (availableStock <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: `${product.name} está sem vagas disponíveis no momento.`
       });
     }
+
+    if (quantity > availableStock) {
+      return res.status(400).json({
+        success: false,
+        message: `${product.name} possui apenas ${availableStock} vaga(s) disponível(is).`
+      });
+    }
+  }
+
+  validatedItems.push({
+    id: product.id,
+    name: product.name,
+    category: product.category,
+    type: product.type,
+    priceCents: product.priceCents,
+    quantity,
+    totalCents: product.priceCents * quantity
+  });
+}
 
     const subtotal = validatedItems.reduce((total, item) => {
       return total + item.totalCents;
@@ -270,6 +378,12 @@ const searchOrderConsult = (req, res) => {
   });
 };
 
+const renderShopTerms = (req, res) => {
+  res.render("pages/termos-loja", {
+    title: "Termos da Loja Beta - SurvivalZ"
+  });
+};
+
 module.exports = {
   renderShop,
   renderProduct,
@@ -278,5 +392,6 @@ module.exports = {
   createCheckoutOrder,
   renderSuccess,
   renderOrderConsult,
-  searchOrderConsult
+  searchOrderConsult,
+  renderShopTerms
 };

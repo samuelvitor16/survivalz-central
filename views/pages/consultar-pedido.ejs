@@ -89,6 +89,38 @@
                 <span>Pedido</span>
                 <strong><%= order.code %></strong>
               </div>
+              <div class="consult-status-message status-message-<%= order.status || 'pendente' %>">
+  <% if (order.status === "pendente") { %>
+    <strong>⚠ Aguardando pagamento</strong>
+    <p>
+      Seu pedido foi criado, mas ainda está aguardando o pagamento via Pix e o envio
+      do comprovante no Discord.
+    </p>
+  <% } %>
+
+  <% if (order.status === "pago") { %>
+    <strong>💳 Pagamento confirmado</strong>
+    <p>
+      A gestão confirmou o pagamento. Agora seu pedido está aguardando a entrega manual
+      dos produtos no servidor.
+    </p>
+  <% } %>
+
+  <% if (order.status === "entregue") { %>
+    <strong>✅ Pedido entregue</strong>
+    <p>
+      Seus produtos foram liberados pela gestão. Caso algo esteja errado, entre em contato
+      pelo Discord informando o código do pedido.
+    </p>
+  <% } %>
+
+  <% if (order.status === "recusado") { %>
+    <strong>❌ Pedido recusado</strong>
+    <p>
+      Este pedido foi recusado pela gestão. Entre em contato pelo Discord para mais informações.
+    </p>
+  <% } %>
+</div>
 
               <div class="consult-status-list">
                 <div>

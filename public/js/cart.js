@@ -1,4 +1,5 @@
 console.log("cart.js carregou na loja");
+
 const CART_KEY = "survivalz_cart";
 const COUPON_KEY = "survivalz_coupon";
 
@@ -29,6 +30,20 @@ function subtotal(cart) {
 
 function discount(value) {
   return hasCoupon() ? Math.round(value * 0.25) : 0;
+}
+
+function isRestrictedCategory(category) {
+  return category === "beta" || category === "vip";
+}
+
+function getCategoryLabel(category) {
+  if (category === "beta") return "pacote Beta";
+  if (category === "vip") return "VIP";
+  return "produto";
+}
+
+function cartHasCategory(cart, category) {
+  return cart.some((item) => item.category === category);
 }
 
 function createCartHTML() {
@@ -106,6 +121,16 @@ function addToCart(product) {
   const cart = getCart();
   const item = cart.find((cartItem) => cartItem.id === product.id);
 
+  if (isRestrictedCategory(product.category)) {
+    const categoryLabel = getCategoryLabel(product.category);
+
+    if (item || cartHasCategory(cart, product.category)) {
+      alert(`Você só pode adicionar 1 ${categoryLabel} ao carrinho.`);
+      openCart();
+      return;
+    }
+  }
+
   if (item) {
     item.quantity++;
   } else {
@@ -113,6 +138,7 @@ function addToCart(product) {
       id: product.id,
       name: product.name,
       price: product.price,
+      category: product.category,
       quantity: 1
     });
   }
@@ -127,6 +153,12 @@ function changeQuantity(id, amount) {
 
   const item = cart.find((cartItem) => cartItem.id === id);
   if (!item) return;
+
+  if (amount > 0 && isRestrictedCategory(item.category)) {
+    const categoryLabel = getCategoryLabel(item.category);
+    alert(`Você só pode comprar 1 ${categoryLabel}.`);
+    return;
+  }
 
   item.quantity += amount;
 
@@ -214,7 +246,8 @@ function setupCart() {
       addToCart({
         id: button.dataset.id,
         name: button.dataset.name,
-        price: Number(button.dataset.price)
+        price: Number(button.dataset.price),
+        category: button.dataset.category
       });
     });
   });

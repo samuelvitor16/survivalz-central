@@ -6,7 +6,7 @@
       <a href="/">Início</a>
       <a href="/sobre">Sobre</a>
       <a href="/gestao">Gestão</a>
-      <a href="#">Guia</a>
+      <a href="<%= guideLink %>" target="_blank">Guia</a>
       <a href="/loja">Loja Beta</a>
       <a href="/loja/consultar">Consultar Pedido</a>
 
@@ -16,7 +16,9 @@
         <a href="/admin/logout" class="logout-link">Sair</a>
       <% } %>
 
-      <a href="#" class="btn-nav">Discord</a>
+      <a href="<%= discordInvite %>" target="_blank" class="btn-nav">
+  Discord
+</a>
     </nav>
   </div>
 </header>

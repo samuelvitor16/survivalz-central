@@ -917,3 +917,85 @@
     width: 100%;
   }
 }
+
+/* ================= ADMIN STATUS FINAL ================= */
+
+.admin-pending-alert {
+  background-color: rgba(196, 0, 0, 0.14);
+  border: 1px solid rgba(255, 43, 43, 0.35);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  color: #ddd;
+}
+
+.admin-pending-alert strong {
+  color: #ff2b2b;
+  margin-right: 6px;
+}
+
+.admin-order-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-order-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background-color: rgba(255, 43, 43, 0.45);
+}
+
+.admin-order-card.order-card-pendente::before {
+  background-color: #ff2b2b;
+}
+
+.admin-order-card.order-card-pago::before {
+  background-color: #f5b942;
+}
+
+.admin-order-card.order-card-entregue::before {
+  background-color: #35d06f;
+}
+
+.admin-order-card.order-card-recusado::before {
+  background-color: #8b0000;
+}
+
+.order-status-pill.status-pendente,
+.order-status-pill.status-aguardando_pagamento {
+  background-color: rgba(255, 43, 43, 0.12);
+  border-color: rgba(255, 43, 43, 0.35);
+}
+
+.order-status-pill.status-pago {
+  background-color: rgba(245, 185, 66, 0.12);
+  border-color: rgba(245, 185, 66, 0.4);
+}
+
+.order-status-pill.status-pago strong {
+  color: #f5b942 !important;
+}
+
+.order-status-pill.status-entregue {
+  background-color: rgba(53, 208, 111, 0.12);
+  border-color: rgba(53, 208, 111, 0.4);
+}
+
+.order-status-pill.status-entregue strong {
+  color: #35d06f !important;
+}
+
+.order-status-pill.status-recusado,
+.order-status-pill.status-cancelado {
+  background-color: rgba(139, 0, 0, 0.20);
+  border-color: rgba(255, 43, 43, 0.35);
+}
+
+.order-status-pill.status-recusado strong,
+.order-status-pill.status-cancelado strong {
+  color: #ff5555 !important;
+}

@@ -2100,3 +2100,396 @@
   opacity: 0;
   pointer-events: none;
 }
+
+
+/* ================= ANTES DE COMPRAR ================= */
+
+.shop-before-buy-section {
+  padding: 70px 0;
+  background: linear-gradient(180deg, #050505 0%, #090909 100%);
+  border-top: 1px solid rgba(255, 43, 43, 0.14);
+  border-bottom: 1px solid rgba(255, 43, 43, 0.14);
+}
+
+.shop-before-buy-header {
+  max-width: 850px;
+  margin-bottom: 30px;
+}
+
+.shop-before-buy-header h2 {
+  font-size: 38px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.shop-before-buy-header p {
+  color: #cfcfcf;
+  font-size: 16px;
+}
+
+.shop-before-buy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.shop-before-buy-card {
+  background-color: #111;
+  border: 1px solid rgba(255, 0, 0, 0.18);
+  border-radius: 18px;
+  padding: 22px;
+}
+
+.shop-before-buy-card strong {
+  width: 38px;
+  height: 38px;
+  background-color: #c40000;
+  color: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.shop-before-buy-card h3 {
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+
+.shop-before-buy-card p {
+  color: #aaa;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.shop-beta-alert {
+  background-color: rgba(196, 0, 0, 0.12);
+  border: 1px solid rgba(255, 43, 43, 0.28);
+  border-radius: 16px;
+  padding: 16px;
+  color: #d0d0d0;
+}
+
+.shop-beta-alert strong {
+  color: #ff2b2b;
+  margin-right: 6px;
+}
+
+@media (max-width: 1000px) {
+  .shop-before-buy-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .shop-before-buy-section {
+    padding: 45px 0;
+  }
+
+  .shop-before-buy-header h2 {
+    font-size: 28px;
+  }
+
+  .shop-before-buy-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .shop-before-buy-card {
+    padding: 16px;
+  }
+}
+
+/* ================= PASSO A PASSO PÓS-PEDIDO ================= */
+
+.success-next-steps {
+  background-color: #080808;
+  border: 1px solid rgba(255, 43, 43, 0.22);
+  border-radius: 18px;
+  padding: 22px;
+  margin: 24px 0;
+  text-align: left;
+}
+
+.success-next-steps h2 {
+  font-size: 26px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.success-step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.success-step-list div {
+  background-color: #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.success-step-list strong {
+  min-width: 32px;
+  height: 32px;
+  background-color: #c40000;
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-step-list span {
+  color: #d0d0d0;
+  line-height: 1.45;
+}
+
+.success-step-list b {
+  color: #ff2b2b;
+}
+
+@media (max-width: 650px) {
+  .success-next-steps {
+    padding: 18px;
+  }
+
+  .success-next-steps h2 {
+    font-size: 22px;
+  }
+
+  .success-step-list div {
+    padding: 12px;
+  }
+}
+
+/* ================= MENSAGEM DE STATUS DA CONSULTA ================= */
+
+.consult-status-message {
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.consult-status-message strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.consult-status-message p {
+  color: #d0d0d0;
+  line-height: 1.5;
+}
+
+.consult-status-message.status-message-pendente {
+  background-color: rgba(255, 43, 43, 0.12);
+  border: 1px solid rgba(255, 43, 43, 0.32);
+}
+
+.consult-status-message.status-message-pendente strong {
+  color: #ff2b2b;
+}
+
+.consult-status-message.status-message-pago {
+  background-color: rgba(245, 185, 66, 0.12);
+  border: 1px solid rgba(245, 185, 66, 0.35);
+}
+
+.consult-status-message.status-message-pago strong {
+  color: #f5b942;
+}
+
+.consult-status-message.status-message-entregue {
+  background-color: rgba(53, 208, 111, 0.12);
+  border: 1px solid rgba(53, 208, 111, 0.35);
+}
+
+.consult-status-message.status-message-entregue strong {
+  color: #35d06f;
+}
+
+.consult-status-message.status-message-recusado {
+  background-color: rgba(139, 0, 0, 0.18);
+  border: 1px solid rgba(255, 43, 43, 0.35);
+}
+
+.consult-status-message.status-message-recusado strong {
+  color: #ff5555;
+}
+
+@media (max-width: 650px) {
+  .consult-status-message {
+    padding: 14px;
+  }
+
+  .consult-status-message strong {
+    font-size: 16px;
+  }
+
+  .consult-status-message p {
+    font-size: 14px;
+  }
+}
+
+/* ================= TERMOS DA LOJA ================= */
+
+.shop-terms-section {
+  min-height: 85vh;
+  padding: 80px 0;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.90), rgba(0, 0, 0, 0.96)),
+    radial-gradient(circle at top right, rgba(255, 0, 0, 0.16), transparent 45%);
+}
+
+.shop-terms-container {
+  max-width: 950px;
+}
+
+.shop-terms-header {
+  margin-bottom: 30px;
+}
+
+.shop-terms-header h1 {
+  font-size: 46px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.shop-terms-header p {
+  color: #cfcfcf;
+  font-size: 17px;
+  max-width: 850px;
+}
+
+.shop-terms-box {
+  background-color: #111;
+  border: 1px solid rgba(255, 0, 0, 0.18);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 18px;
+}
+
+.shop-terms-box h2 {
+  color: #ff2b2b;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.shop-terms-box p {
+  color: #d0d0d0;
+  line-height: 1.6;
+}
+
+.shop-terms-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+@media (max-width: 650px) {
+  .shop-terms-section {
+    padding: 50px 0;
+  }
+
+  .shop-terms-header h1 {
+    font-size: 34px;
+  }
+
+  .shop-terms-box {
+    padding: 18px;
+  }
+
+  .shop-terms-actions a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.shop-beta-alert a,
+.success-warning a {
+  color: #ff2b2b;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.shop-beta-alert a:hover,
+.success-warning a:hover {
+  color: #ff5555;
+}
+
+/* ================= AVISO DE PAGAMENTO NO CHECKOUT ================= */
+
+.checkout-payment-warning {
+  background-color: rgba(196, 0, 0, 0.12);
+  border: 1px solid rgba(255, 43, 43, 0.28);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.checkout-payment-warning strong {
+  display: block;
+  color: #ff2b2b;
+  margin-bottom: 8px;
+}
+
+.checkout-payment-warning p {
+  color: #d0d0d0;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.checkout-checkbox a {
+  color: #ff2b2b;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.checkout-checkbox a:hover {
+  color: #ff5555;
+}
+
+/* ================= BOTÃO CHECKOUT CARREGANDO ================= */
+
+.checkout-submit-btn:disabled,
+.checkout-submit-btn.loading {
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: grayscale(0.25);
+}
+
+/* ================= AVISO DE LIMITE DE COMPRA ================= */
+
+.shop-limit-alert {
+  background-color: rgba(196, 0, 0, 0.12);
+  border: 1px solid rgba(255, 43, 43, 0.28);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-top: 16px;
+  color: #d0d0d0;
+}
+
+.shop-limit-alert strong {
+  color: #ff2b2b;
+  margin-right: 6px;
+}
+
+.shop-limit-alert span {
+  color: #d0d0d0;
+}
+
+@media (max-width: 650px) {
+  .shop-limit-alert {
+    font-size: 13px;
+    padding: 12px;
+  }
+}

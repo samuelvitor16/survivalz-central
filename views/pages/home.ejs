@@ -14,205 +14,322 @@
   <%- include("../partials/header") %>
 
   <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-content">
-          <span class="tag">Servidor SAMP • Sobrevivência • Pós-apocalipse</span>
 
-          <h1>Bem-vindo à Central SurvivalZ</h1>
+    <section class="home-v2-hero">
+      <div class="home-v2-overlay"></div>
 
-          <p>
-            A central oficial dos sobreviventes. Acesse informações do servidor,
-            acompanhe novidades, entre no Beta, consulte pedidos e prepare-se para
-            sobreviver em um mundo devastado.
-          </p>
+      <div class="container home-v2-hero-grid">
 
-          <div class="hero-buttons">
-            <a href="/loja" class="btn-primary">Acessar Loja Beta</a>
-            <a href="/loja/consultar" class="btn-secondary">Consultar Pedido</a>
-          </div>
-        </div>
+        <div class="home-v2-hero-content">
+          <span class="home-v2-badge">
+            ☣ SERVIDOR SAMP • SOBREVIVÊNCIA • BETA
+          </span>
 
-        <div class="status-panel">
-          <div class="status-header">
-            <span class="status-icon">☣</span>
-            <div>
-              <h3>Central SurvivalZ</h3>
-              <p>Sistema oficial do servidor</p>
-            </div>
-          </div>
-
-          <div class="status-list">
-            <div class="status-item">
-              <span>Servidor</span>
-              <strong>Em desenvolvimento</strong>
-            </div>
-
-            <div class="status-item">
-              <span>Beta</span>
-              <strong>Loja aberta</strong>
-            </div>
-
-            <div class="status-item">
-              <span>Pagamentos</span>
-              <strong>Pix por pedido</strong>
-            </div>
-
-            <div class="status-item">
-              <span>Entrega</span>
-              <strong>Manual pela gestão</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="home-beta-store-section">
-      <div class="container home-beta-store-grid">
-
-        <div class="home-beta-store-content">
-          <span class="section-tag">Loja Beta aberta</span>
-
-          <h2>Entre no Beta preparado para sobreviver</h2>
+          <h1>
+            Sobreviva ao fim do mundo.
+            <strong>Entre no Beta SurvivalZ.</strong>
+          </h1>
 
           <p>
-            A Loja Beta do SurvivalZ já está disponível com acesso Beta, VIPs,
-            ZCoins, veículos e pacotes especiais. Durante a fase Beta, produtos
-            selecionados estarão com valores promocionais.
+            Um servidor SA-MP pós-apocalíptico com sobrevivência, progressão,
+            veículos, economia, comunidade e uma experiência criada para quem
+            quer algo diferente no universo de GTA San Andreas.
           </p>
 
-          <div class="home-beta-highlights">
+          <div class="home-v2-hero-actions">
+            <a href="/loja" class="btn-primary">
+              Acessar Loja Beta
+            </a>
+
+            <a href="<%= discordInvite %>" target="_blank" class="btn-secondary">
+              Entrar no Discord
+            </a>
+          </div>
+
+          <div class="home-v2-quick-info">
             <div>
-              <strong>50% OFF</strong>
-              <span>em produtos selecionados durante o Beta</span>
+              <strong>Beta</strong>
+              <span>Loja aberta</span>
             </div>
 
             <div>
               <strong>BETA25</strong>
-              <span>25% de desconto na primeira compra</span>
+              <span>25% na 1ª compra</span>
             </div>
 
             <div>
               <strong>Pix</strong>
-              <span>QR Code e Pix Copia e Cola por pedido</span>
+              <span>QR Code por pedido</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-v2-status-card">
+          <div class="home-v2-status-header">
+            <span>☣</span>
+
+            <div>
+              <h2>SurvivalZ Central</h2>
+              <p>Operação Beta Manual</p>
             </div>
           </div>
 
-          <div class="home-beta-actions">
-            <a href="/loja" class="btn-primary">
-              Comprar na Loja Beta
-            </a>
+          <div class="home-v2-status-list">
+            <div>
+              <span>Status do servidor</span>
+              <strong>Em desenvolvimento</strong>
+            </div>
 
-            <a href="/loja/consultar" class="btn-secondary">
-              Consultar meu pedido
-            </a>
+            <div>
+              <span>Loja Beta</span>
+              <strong>Disponível</strong>
+            </div>
+
+            <div>
+              <span>Pagamento</span>
+              <strong>Pix dinâmico</strong>
+            </div>
+
+            <div>
+              <span>Entrega</span>
+              <strong>Manual pela gestão</strong>
+            </div>
           </div>
+
+          <a href="/loja/consultar" class="home-v2-status-link">
+            Consultar pedido →
+          </a>
         </div>
 
-        <div class="home-beta-store-card">
-          <span>Promoção de lançamento</span>
+      </div>
+    </section>
 
-          <h3>Loja Beta Manual</h3>
+    <section class="home-v2-about">
+      <div class="container">
+
+        <div class="home-v2-section-header">
+          <span class="section-tag">O que é o SurvivalZ?</span>
+
+          <h2>Uma nova experiência de sobrevivência dentro do SA-MP</h2>
 
           <p>
-            Monte seu carrinho, aplique o cupom, pague via Pix e envie o comprovante
-            no Discord para a gestão confirmar manualmente.
+            O SurvivalZ nasce com a proposta de transformar o SA-MP em uma
+            experiência pós-apocalíptica mais imersiva, organizada e moderna,
+            unindo sobrevivência, comunidade, progressão e sistemas pensados
+            para evoluir junto com os jogadores.
+          </p>
+        </div>
+
+        <div class="home-v2-feature-grid">
+          <div class="home-v2-feature-card">
+            <span>☣</span>
+            <h3>Sobrevivência</h3>
+            <p>
+              Um mundo devastado onde cada recurso, veículo e decisão pode fazer diferença.
+            </p>
+          </div>
+
+          <div class="home-v2-feature-card">
+            <span>🚗</span>
+            <h3>Veículos e exploração</h3>
+            <p>
+              Veículos, rotas, áreas perigosas e exploração fazem parte da jornada dos sobreviventes.
+            </p>
+          </div>
+
+          <div class="home-v2-feature-card">
+            <span>🪙</span>
+            <h3>Economia e progressão</h3>
+            <p>
+              Sistemas planejados para dar propósito, evolução e recompensa dentro do servidor.
+            </p>
+          </div>
+
+          <div class="home-v2-feature-card">
+            <span>🛡</span>
+            <h3>Gestão organizada</h3>
+            <p>
+              Painéis, loja, pedidos e processos internos pensados para manter tudo controlado.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="home-v2-beta">
+      <div class="container home-v2-beta-grid">
+
+        <div class="home-v2-beta-content">
+          <span class="section-tag">Como funciona o Beta?</span>
+
+          <h2>Entre, apoie o projeto e acompanhe a evolução</h2>
+
+          <p>
+            A fase Beta serve para testar sistemas, balancear recursos, ouvir a comunidade
+            e preparar o SurvivalZ para uma abertura mais forte e organizada.
           </p>
 
-          <ul>
-            <li>Acesso Beta</li>
-            <li>VIPs promocionais</li>
-            <li>ZCoins com desconto</li>
-            <li>Veículos no Beta</li>
-            <li>Entrega manual pela gestão</li>
-          </ul>
+          <div class="home-v2-beta-alert">
+            <strong>⚠ Aviso importante:</strong>
+            <span>
+              Itens, moedas, veículos e benefícios adquiridos durante o Beta poderão ser
+              resetados ao fim da fase de testes. Leia os termos antes de comprar.
+            </span>
+          </div>
+        </div>
+
+        <div class="home-v2-steps">
+          <div class="home-v2-step">
+            <strong>1</strong>
+            <div>
+              <h3>Acesse a Loja Beta</h3>
+              <p>Escolha pacotes Beta, VIPs, ZCoins ou veículos disponíveis.</p>
+            </div>
+          </div>
+
+          <div class="home-v2-step">
+            <strong>2</strong>
+            <div>
+              <h3>Monte seu pedido</h3>
+              <p>Adicione produtos ao carrinho e aplique o cupom, se disponível.</p>
+            </div>
+          </div>
+
+          <div class="home-v2-step">
+            <strong>3</strong>
+            <div>
+              <h3>Pague via Pix</h3>
+              <p>O site gera QR Code e Pix Copia e Cola com o valor exato.</p>
+            </div>
+          </div>
+
+          <div class="home-v2-step">
+            <strong>4</strong>
+            <div>
+              <h3>Envie o comprovante</h3>
+              <p>A gestão confirma manualmente e libera os produtos.</p>
+            </div>
+          </div>
         </div>
 
       </div>
     </section>
 
-    <section class="features">
+    <section class="home-v2-store">
+      <div class="container home-v2-store-grid">
+
+        <div class="home-v2-store-card">
+          <span>🎫</span>
+          <h3>Pacotes Beta</h3>
+          <p>
+            Garanta seu acesso ao Beta fechado e participe da construção inicial do SurvivalZ.
+          </p>
+        </div>
+
+        <div class="home-v2-store-card featured">
+          <span>🔥</span>
+          <h3>Loja Beta aberta</h3>
+          <p>
+            VIPs, ZCoins, veículos e pacotes especiais com valores promocionais durante o Beta.
+          </p>
+
+          <a href="/loja" class="btn-primary">
+            Comprar agora
+          </a>
+        </div>
+
+        <div class="home-v2-store-card">
+          <span>🪙</span>
+          <h3>Cupom BETA25</h3>
+          <p>
+            Use o cupom de primeira compra e receba 25% de desconto no pedido.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="home-v2-differentials">
       <div class="container">
-        <span class="section-tag">Central oficial</span>
 
-        <h2>Uma base criada para organizar o apocalipse</h2>
+        <div class="home-v2-section-header center">
+          <span class="section-tag">Diferenciais</span>
 
-        <p class="section-description">
-          A Central SurvivalZ foi criada para conectar jogadores, staff e gestão em um só lugar,
-          mantendo informações importantes, loja, pedidos, denúncias e futuros sistemas sempre organizados.
-        </p>
+          <h2>Um projeto criado para crescer com a comunidade</h2>
 
-        <div class="cards">
-          <div class="card">
-            <h3>🛒 Loja Beta</h3>
-            <p>
-              A Loja Beta já permite montar carrinho, aplicar cupom, gerar pedido,
-              pagar via Pix e acompanhar o status da compra.
-            </p>
-          </div>
+          <p>
+            A Central SurvivalZ foi construída para organizar a experiência dos jogadores
+            e dar suporte para uma evolução real do servidor.
+          </p>
+        </div>
 
-          <div class="card">
-            <h3>🎫 Acesso Beta</h3>
-            <p>
-              Garanta sua entrada na fase Beta do SurvivalZ e participe dos testes iniciais
-              do servidor junto com a comunidade.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>🪙 ZCoins e VIPs</h3>
-            <p>
-              Durante o Beta, produtos selecionados estarão com valores promocionais,
-              incluindo VIPs, ZCoins, veículos e pacotes especiais.
-            </p>
-          </div>
-
-          <div class="card">
+        <div class="home-v2-diff-grid">
+          <div class="home-v2-diff-card">
             <h3>📖 Guia do Sobrevivente</h3>
-            <p>
-              As regras e guias completos ficarão disponíveis no GitBook oficial, facilitando a
-              leitura e evitando informações espalhadas.
-            </p>
+            <p>Regras, tutoriais e informações organizadas para novos jogadores.</p>
           </div>
 
-          <div class="card">
-            <h3>⚠ Sistema de Denúncias</h3>
-            <p>
-              Em fase futura, denúncias serão feitas de forma organizada, com provas,
-              respostas, análise da staff e fechamento com transcript salvo.
-            </p>
+          <div class="home-v2-diff-card">
+            <h3>🛒 Loja organizada</h3>
+            <p>Pedidos com código, Pix dinâmico, consulta e painel administrativo.</p>
           </div>
 
-          <div class="card">
-            <h3>🛡 Gestão Transparente</h3>
-            <p>
-              A administração terá ferramentas para acompanhar pedidos, denúncias,
-              histórico, jogadores e decisões importantes do servidor.
-            </p>
+          <div class="home-v2-diff-card">
+            <h3>⚠ Denúncias futuras</h3>
+            <p>Processo planejado para denúncias com provas, respostas e análise staff.</p>
+          </div>
+
+          <div class="home-v2-diff-card">
+            <h3>🛡 Gestão transparente</h3>
+            <p>Ferramentas internas para acompanhar pedidos, histórico e decisões.</p>
+          </div>
+
+          <div class="home-v2-diff-card">
+            <h3>🚧 Projeto por fases</h3>
+            <p>A Central começa pelo essencial e evolui para sistemas mais avançados.</p>
+          </div>
+
+          <div class="home-v2-diff-card">
+            <h3>☣ Identidade própria</h3>
+            <p>Um servidor pós-apocalíptico com foco em imersão, organização e evolução.</p>
           </div>
         </div>
+
       </div>
     </section>
 
-    <section class="cta-section">
-      <div class="container cta-box">
+    <section class="home-v2-final-cta">
+      <div class="container home-v2-final-box">
+
         <div>
           <span class="section-tag">Prepare-se</span>
 
-          <h2>O mundo acabou. A sobrevivência começou.</h2>
+          <h2>O mundo acabou. Sua sobrevivência começa agora.</h2>
 
           <p>
-            Entre no Discord oficial, acompanhe o desenvolvimento, acesse a Loja Beta
-            e fique pronto para a abertura do SurvivalZ.
+            Entre no Discord, acompanhe o desenvolvimento e acesse a Loja Beta
+            para apoiar o projeto desde o início.
           </p>
         </div>
 
-        <div class="cta-buttons">
-          <a href="/loja" class="btn-primary">Acessar Loja Beta</a>
-          <a href="#" class="btn-secondary">Entrar no Discord</a>
+        <div class="home-v2-final-actions">
+          <a href="/loja" class="btn-primary">
+            Acessar Loja Beta
+          </a>
+
+          <a href="<%= discordInvite %>" target="_blank" class="btn-secondary">
+            Entrar no Discord
+          </a>
+
+          <a href="<%= guideLink %>" target="_blank" class="btn-secondary">
+            Ver Guia
+          </a>
         </div>
+
       </div>
     </section>
+
   </main>
 
   <%- include("../partials/footer") %>

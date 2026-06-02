@@ -1,10 +1,18 @@
 const fs = require("fs");
 const path = require("path");
 
-const ordersPath = path.join(__dirname, "..", "data", "orders.json");
-const backupsDir = path.join(__dirname, "..", "data", "backups");
+const dataDir = process.env.ORDERS_DATA_DIR
+  ? process.env.ORDERS_DATA_DIR
+  : path.join(__dirname, "..", "data");
+
+const ordersPath = path.join(dataDir, "orders.json");
+const backupsDir = path.join(dataDir, "backups");
 
 const readOrders = () => {
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+
   if (!fs.existsSync(ordersPath)) {
     fs.writeFileSync(ordersPath, "[]");
   }
