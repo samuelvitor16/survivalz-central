@@ -33,12 +33,11 @@ function discount(value) {
 }
 
 function isRestrictedCategory(category) {
-  return category === "beta" || category === "vip";
+  return category === "beta";
 }
 
 function getCategoryLabel(category) {
   if (category === "beta") return "pacote Beta";
-  if (category === "vip") return "VIP";
   return "produto";
 }
 

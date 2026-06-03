@@ -171,8 +171,7 @@ const getAlreadyReservedQuantity = (productId) => {
 };
 
 const restrictedCategoriesInCart = {
-  beta: 0,
-  vip: 0
+  beta: 0
 };
 
 const validatedItems = [];
@@ -196,8 +195,8 @@ for (const productId of Object.keys(requestedItems)) {
     });
   }
 
-  if (product.category === "beta" || product.category === "vip") {
-  const categoryLabel = product.category === "beta" ? "pacote Beta" : "VIP";
+  if (product.category === "beta") {
+  const categoryLabel = "pacote Beta";
 
   if (quantity > 1) {
     return res.status(400).json({
@@ -206,16 +205,16 @@ for (const productId of Object.keys(requestedItems)) {
     });
   }
 
-  restrictedCategoriesInCart[product.category] += quantity;
+  restrictedCategoriesInCart.beta += quantity;
 
-  if (restrictedCategoriesInCart[product.category] > 1) {
+  if (restrictedCategoriesInCart.beta > 1) {
     return res.status(400).json({
       success: false,
       message: `Você só pode comprar 1 ${categoryLabel}. Remova os outros do carrinho.`
     });
   }
 
-  if (customerAlreadyHasCategory(product.category)) {
+  if (customerAlreadyHasCategory("beta")) {
     return res.status(400).json({
       success: false,
       message: `Este comprador já possui um ${categoryLabel} registrado em outro pedido.`

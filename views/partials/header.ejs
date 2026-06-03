@@ -1,6 +1,17 @@
 <header class="main-header">
   <div class="container nav-container">
-    <a href="/" class="logo">☣ SurvivalZ</a>
+
+    <a href="/" class="logo logo-image-link">
+  <img src="/images/logo/survivalz-logo.png" alt="SurvivalZ">
+</a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-checkbox">
+
+    <label for="nav-toggle" class="nav-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
 
     <nav class="navbar">
       <a href="/">Início</a>
@@ -17,9 +28,10 @@
       <% } %>
 
       <a href="<%= discordInvite %>" target="_blank" class="btn-nav">
-  Discord
-</a>
+        Discord
+      </a>
     </nav>
+
   </div>
 </header>
 

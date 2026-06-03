@@ -8,10 +8,9 @@
   padding: 110px 0 80px;
   overflow: hidden;
   background:
-    linear-gradient(rgba(0, 0, 0, 0.74), rgba(0, 0, 0, 0.95)),
-    radial-gradient(circle at 20% 20%, rgba(255, 43, 43, 0.20), transparent 35%),
-    radial-gradient(circle at 90% 40%, rgba(196, 0, 0, 0.18), transparent 35%),
-    linear-gradient(135deg, #050505 0%, #101010 55%, #050505 100%);
+    linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.52) 48%, rgba(0, 0, 0, 0.72) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.82) 100%),
+    url("/images/home/hero-bg.png") center center / cover no-repeat;
 }
 
 .home-v2-hero::before {
@@ -42,7 +41,8 @@
 .home-v2-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.88) 100%);
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.72) 100%);
   pointer-events: none;
 }
 
@@ -611,5 +611,45 @@
 
   .home-v2-status-header h2 {
     font-size: 23px;
+  }
+}
+
+/* ================= HOME V2 - ANIMAÇÕES ================= */
+
+.reveal-item {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.home-v2-hero-content.reveal-item {
+  transform: translateX(-28px);
+}
+
+.home-v2-hero-content.reveal-item.visible {
+  transform: translateX(0);
+}
+
+.home-v2-status-card.reveal-item {
+  transform: translateX(28px);
+}
+
+.home-v2-status-card.reveal-item.visible {
+  transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-item,
+  .reveal-item.visible,
+  .home-v2-hero-content.reveal-item,
+  .home-v2-status-card.reveal-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
