@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum UserRole {
+  PLAYER
+  STAFF
+  ADMIN
+  OWNER
+}
+
+enum TopicStatus {
+  OPEN
+  CLOSED
+  PINNED
+  ARCHIVED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  discord      String?
+  sampNick     String?  @unique
+  avatarUrl    String?
+  role         UserRole @default(PLAYER)
+  isBanned     Boolean  @default(false)
+
+  topics ForumTopic[]
+  posts  ForumPost[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model ForumCategory {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+  icon        String?
+  color       String?
+  position    Int     @default(0)
+  isLocked    Boolean @default(false)
+
+  topics ForumTopic[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("forum_categories")
+}
+
+model ForumTopic {
+  id      String      @id @default(cuid())
+  title   String
+  slug    String
+  content String      @db.Text
+  status  TopicStatus @default(OPEN)
+  views   Int         @default(0)
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  categoryId String
+  category   ForumCategory @relation(fields: [categoryId], references: [id])
+
+  posts ForumPost[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([categoryId, slug])
+  @@map("forum_topics")
+}
+
+model ForumPost {
+  id      String @id @default(cuid())
+  content String @db.Text
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  topicId String
+  topic   ForumTopic @relation(fields: [topicId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("forum_posts")
+}

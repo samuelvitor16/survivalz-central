@@ -1,0 +1,156 @@
+const bcrypt = require("bcrypt");
+const prisma = require("../config/prisma");
+
+const renderRegister = (req, res) => {
+  res.render("pages/player-register", {
+    title: "Criar Conta - SurvivalZ",
+    error: null,
+    old: {}
+  });
+};
+
+const registerPlayer = async (req, res) => {
+  try {
+    const { name, email, password, discord, sampNick } = req.body;
+
+    if (!name || !email || !password || !discord || !sampNick) {
+      return res.render("pages/player-register", {
+        title: "Criar Conta - SurvivalZ",
+        error: "Preencha todos os campos obrigatórios.",
+        old: req.body
+      });
+    }
+
+    if (password.length < 6) {
+      return res.render("pages/player-register", {
+        title: "Criar Conta - SurvivalZ",
+        error: "A senha precisa ter pelo menos 6 caracteres.",
+        old: req.body
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedNick = sampNick.trim();
+
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: normalizedEmail },
+          { sampNick: normalizedNick }
+        ]
+      }
+    });
+
+    if (existingUser) {
+      return res.render("pages/player-register", {
+        title: "Criar Conta - SurvivalZ",
+        error: "Já existe uma conta com esse e-mail ou nick.",
+        old: req.body
+      });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        name: name.trim(),
+        email: normalizedEmail,
+        passwordHash,
+        discord: discord.trim(),
+        sampNick: normalizedNick
+      }
+    });
+
+    req.session.playerId = user.id;
+    req.session.playerName = user.name;
+    req.session.playerRole = user.role;
+
+    res.redirect("/painel");
+  } catch (error) {
+    console.log("Erro ao cadastrar jogador:", error);
+
+    res.render("pages/player-register", {
+      title: "Criar Conta - SurvivalZ",
+      error: "Erro ao criar conta. Tente novamente.",
+      old: req.body
+    });
+  }
+};
+
+const renderLogin = (req, res) => {
+  res.render("pages/player-login", {
+    title: "Entrar - SurvivalZ",
+    error: null
+  });
+};
+
+const loginPlayer = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.render("pages/player-login", {
+        title: "Entrar - SurvivalZ",
+        error: "Informe e-mail e senha."
+      });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email.trim().toLowerCase()
+      }
+    });
+
+    if (!user) {
+      return res.render("pages/player-login", {
+        title: "Entrar - SurvivalZ",
+        error: "E-mail ou senha incorretos."
+      });
+    }
+
+    if (user.isBanned) {
+      return res.render("pages/player-login", {
+        title: "Entrar - SurvivalZ",
+        error: "Esta conta está bloqueada."
+      });
+    }
+
+    const passwordMatches = await bcrypt.compare(password, user.passwordHash);
+
+    if (!passwordMatches) {
+      return res.render("pages/player-login", {
+        title: "Entrar - SurvivalZ",
+        error: "E-mail ou senha incorretos."
+      });
+    }
+
+    req.session.playerId = user.id;
+    req.session.playerName = user.name;
+    req.session.playerRole = user.role;
+
+    res.redirect("/painel");
+  } catch (error) {
+    console.log("Erro ao logar jogador:", error);
+
+    res.render("pages/player-login", {
+      title: "Entrar - SurvivalZ",
+      error: "Erro ao entrar. Tente novamente."
+    });
+  }
+};
+
+const logoutPlayer = (req, res) => {
+  req.session.playerId = null;
+  req.session.playerName = null;
+  req.session.playerRole = null;
+
+  res.redirect("/");
+};
+
+module.exports = {
+  renderRegister,
+  registerPlayer,
+  renderLogin,
+  loginPlayer,
+  logoutPlayer
+};

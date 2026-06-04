@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/forum.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="forum-section">
+      <div class="container">
+
+        <div class="forum-header">
+          <span class="section-tag">Comunidade SurvivalZ</span>
+
+          <h1>Fórum SurvivalZ</h1>
+
+          <p>
+            O centro oficial da comunidade. Tire dúvidas, acompanhe avisos,
+            envie sugestões, abra denúncias e participe da evolução do servidor.
+          </p>
+        </div>
+
+        <div class="forum-category-grid">
+          <% categories.forEach((category) => { %>
+            <a href="/forum/categoria/<%= category.slug %>" class="forum-category-card">
+  <div class="forum-category-icon">
+    <span><%= category.icon || "☣" %></span>
+  </div>
+
+  <div class="forum-category-content">
+    <h2><%= category.name %></h2>
+    <p><%= category.description || "Categoria do fórum SurvivalZ." %></p>
+
+    <div class="forum-category-meta">
+      <span><%= category._count ? category._count.topics : 0 %> tópico(s)</span>
+      <strong>Acessar →</strong>
+    </div>
+  </div>
+</a>
+          <% }) %>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

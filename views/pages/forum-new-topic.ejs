@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/forum.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="forum-section">
+      <div class="container">
+
+        <div class="forum-form-header">
+          <a href="/forum/categoria/<%= category.slug %>" class="forum-back-link">
+            ← Voltar para <%= category.name %>
+          </a>
+
+          <span class="section-tag"><%= category.icon || "☣" %> Novo tópico</span>
+
+          <h1>Criar tópico</h1>
+
+          <p>
+            <% 
+  const categoryDescriptions = {
+    "duvidas": "Explique sua dúvida com detalhes para que a comunidade ou a staff possa ajudar.",
+    "sugestoes": "Envie sua ideia para melhorar sistemas, eventos, loja, regras ou a experiência do SurvivalZ.",
+    "denuncias": "Descreva a denúncia com clareza e inclua links de provas sempre que possível.",
+    "revisao-punicao": "Explique o ocorrido e informe os detalhes da punição que deseja revisar.",
+    "guias-tutoriais": "Crie um conteúdo útil para ajudar outros sobreviventes.",
+    "comunidade": "Compartilhe uma conversa, print, história ou assunto da comunidade.",
+    "avisos-oficiais": "Publique um comunicado oficial para os jogadores."
+  };
+
+  const newTopicDescription = categoryDescriptions[category.slug] || "Publique seu tópico na categoria selecionada.";
+%>
+
+<%= newTopicDescription %>
+          </p>
+        </div>
+        
+        <div class="forum-form-card">
+          <% if (error) { %>
+            <div class="forum-form-error">
+              <%= error %>
+            </div>
+          <% } %>
+
+          <form action="/forum/categoria/<%= category.slug %>/novo" method="POST" class="forum-form">
+            <div class="form-group">
+              <label for="title">Título do tópico</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value="<%= old.title || '' %>"
+                placeholder="<%= category.slug === 'denuncias' ? 'Ex: Denúncia contra jogador por abuso/anti-jogo' : category.slug === 'sugestoes' ? 'Ex: Sugestão para melhorar o sistema de loot' : category.slug === 'duvidas' ? 'Ex: Como funciona o acesso ao Beta?' : 'Título do tópico' %>"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="content">Conteúdo</label>
+              <textarea
+                id="content"
+                name="content"
+                placeholder="Escreva sua mensagem com detalhes..."
+                required
+              ><%= old.content || '' %></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary forum-submit-btn">
+              Publicar tópico
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/forum.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="forum-section">
+      <div class="container">
+
+        <div class="forum-topic-page-header">
+          <a href="/forum/categoria/<%= topic.category.slug %>" class="forum-back-link">
+            ← Voltar para <%= topic.category.name %>
+          </a>
+
+          <span class="section-tag"><%= topic.category.icon || "☣" %> <%= topic.category.name %></span>
+          <%
+  const topicStatusLabels = {
+    OPEN: "Aberto",
+    CLOSED: "Fechado",
+    PINNED: "Fixado",
+    ARCHIVED: "Arquivado"
+  };
+
+  const topicStatusLabel = topicStatusLabels[topic.status] || "Aberto";
+%>
+
+<span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
+  <%= topicStatusLabel %>
+</span>
+          <h1><%= topic.title %></h1>
+
+          <p>
+            Criado por <strong><%= topic.author.name %></strong>
+            • <%= new Date(topic.createdAt).toLocaleDateString("pt-BR") %>
+            • <%= topic.views + 1 %> visualizações
+          </p>
+        </div>
+
+        <article class="forum-main-post">
+          <div class="forum-post-author">
+            <div class="forum-avatar">
+              <%= topic.author.name.charAt(0).toUpperCase() %>
+            </div>
+
+            <div>
+              <strong><%= topic.author.name %></strong>
+              <span><%= topic.author.role %></span>
+            </div>
+          </div>
+
+          <div class="forum-post-content">
+            <%= topic.content.replace(/\n/g, "<br>") %>
+          </div>
+        </article>
+
+        <div class="forum-replies-header">
+          <h2>Respostas</h2>
+          <span><%= topic.posts.length %> resposta(s)</span>
+        </div>
+
+        <% if (topic.posts.length === 0) { %>
+          <div class="forum-empty-box">
+            <h2>Nenhuma resposta ainda</h2>
+            <p>Seja o primeiro a responder este tópico.</p>
+          </div>
+        <% } %>
+
+        <% topic.posts.forEach((post) => { %>
+          <article class="forum-main-post forum-reply-post">
+            <div class="forum-post-author">
+              <div class="forum-avatar">
+                <%= post.author.name.charAt(0).toUpperCase() %>
+              </div>
+
+              <div>
+                <strong><%= post.author.name %></strong>
+                <span><%= post.author.role %></span>
+              </div>
+            </div>
+
+            <div class="forum-post-content">
+              <%= post.content.replace(/\n/g, "<br>") %>
+            </div>
+          </article>
+        <% }) %>
+        <div class="forum-reply-form-card">
+  <% if (replyError) { %>
+    <div class="forum-permission-alert">
+      <strong>⚠ Tópico fechado</strong>
+      <span><%= replyError %></span>
+    </div>
+  <% } %>
+
+  <% if (topic.status === "CLOSED" || topic.status === "ARCHIVED") { %>
+    <h2>Respostas bloqueadas</h2>
+
+    <p>
+      Este tópico está fechado ou arquivado e não aceita novas respostas.
+    </p>
+  <% } else if (isPlayerLogged) { %>
+    <h2>Responder tópico</h2>
+
+    <form action="/forum/topico/<%= topic.id %>/responder" method="POST" class="forum-form">
+      ...
+    </form>
+  <% } else { %>
+    <h2>Entre para responder</h2>
+
+    <p>
+      Você precisa estar logado para participar deste tópico.
+    </p>
+
+    <a href="/entrar" class="btn-primary">
+      Entrar na conta
+    </a>
+  <% } %>
+</div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

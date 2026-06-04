@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/player.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="player-dashboard-section">
+      <div class="container">
+
+        <div class="player-dashboard-header">
+          <div>
+            <span class="section-tag">Meu painel</span>
+
+            <h1>Bem-vindo, <%= playerName || "sobrevivente" %></h1>
+
+            <p>
+              Este será o painel principal do jogador na Central SurvivalZ.
+              Aqui ficarão perfil, pedidos, denúncias, fórum e futuras informações da conta.
+            </p>
+          </div>
+
+          <a href="/sair" class="btn-secondary">
+            Sair da conta
+          </a>
+        </div>
+
+        <div class="player-dashboard-grid">
+          <div class="player-panel-card">
+            <span>👤</span>
+            <h2>Perfil do jogador</h2>
+            <p>
+              Em breve você poderá editar dados da conta, avatar, Discord,
+              nick vinculado e informações públicas do perfil.
+            </p>
+          </div>
+
+          <div class="player-panel-card">
+            <span>🛒</span>
+            <h2>Meus pedidos</h2>
+            <p>
+              Futuramente seus pedidos da Loja Beta aparecerão aqui automaticamente
+              vinculados à sua conta.
+            </p>
+
+            <a href="/loja/consultar">Consultar pedido atual</a>
+          </div>
+
+          <div class="player-panel-card">
+            <span>💬</span>
+            <h2>Fórum</h2>
+            <p>
+              Área futura para dúvidas, sugestões, guias, conversas da comunidade
+              e tópicos oficiais do SurvivalZ.
+            </p>
+          </div>
+
+          <div class="player-panel-card">
+            <span>⚠</span>
+            <h2>Denúncias</h2>
+            <p>
+              Em breve será possível abrir denúncias, acompanhar status e receber
+              resposta da staff diretamente pelo site.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

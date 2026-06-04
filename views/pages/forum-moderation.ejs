@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/forum.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="forum-section">
+      <div class="container">
+
+        <div class="forum-header">
+          <span class="section-tag">Staff SurvivalZ</span>
+
+          <h1>Moderação do Fórum</h1>
+
+          <p>
+            Gerencie os tópicos da comunidade, altere status, feche discussões,
+            fixe publicações importantes e arquive conteúdos antigos.
+          </p>
+        </div>
+
+        <div class="forum-moderation-list">
+          <% if (topics.length === 0) { %>
+            <div class="forum-empty-box">
+              <h2>Nenhum tópico criado</h2>
+              <p>Quando os jogadores criarem tópicos, eles aparecerão aqui.</p>
+            </div>
+          <% } %>
+
+          <% topics.forEach((topic) => { %>
+            <article class="forum-moderation-card">
+              <div class="forum-moderation-main">
+                <span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
+                  <%= topic.status %>
+                </span>
+
+                <h2>
+                  <a href="/forum/topico/<%= topic.id %>">
+                    <%= topic.title %>
+                  </a>
+                </h2>
+
+                <p>
+                  Categoria: <strong><%= topic.category.name %></strong>
+                  • Autor: <strong><%= topic.author.name %></strong>
+                  • <%= topic._count.posts %> resposta(s)
+                </p>
+              </div>
+
+              <form action="/forum/moderacao/topico/<%= topic.id %>/status" method="POST" class="forum-moderation-actions">
+                <select name="status">
+                  <option value="OPEN" <%= topic.status === "OPEN" ? "selected" : "" %>>Aberto</option>
+                  <option value="CLOSED" <%= topic.status === "CLOSED" ? "selected" : "" %>>Fechado</option>
+                  <option value="PINNED" <%= topic.status === "PINNED" ? "selected" : "" %>>Fixado</option>
+                  <option value="ARCHIVED" <%= topic.status === "ARCHIVED" ? "selected" : "" %>>Arquivado</option>
+                </select>
+
+                <button type="submit" class="btn-primary">
+                  Salvar
+                </button>
+              </form>
+            </article>
+          <% }) %>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

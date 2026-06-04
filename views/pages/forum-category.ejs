@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/forum.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="forum-section">
+      <div class="container">
+
+        <div class="forum-category-page-header">
+          <a href="/forum" class="forum-back-link">← Voltar ao fórum</a>
+
+          <div>
+            <span class="section-tag"><%= category.icon || "☣" %> Categoria</span>
+
+            <h1><%= category.name %></h1>
+
+            <p><%= category.description || "Tópicos da categoria." %></p>
+          </div>
+
+          <% const staffRoles = ["STAFF", "ADMIN", "OWNER"]; %>
+          <%
+  const actionLabels = {
+    "duvidas": "Criar dúvida",
+    "sugestoes": "Enviar sugestão",
+    "denuncias": "Criar denúncia",
+    "revisao-punicao": "Solicitar revisão",
+    "guias-tutoriais": "Criar guia",
+    "comunidade": "Criar tópico",
+    "avisos-oficiais": "Criar aviso"
+  };
+
+  const createTopicLabel = actionLabels[category.slug] || "Criar tópico";
+%>
+<% if (!isPlayerLogged) { %>
+  <a href="/entrar" class="btn-primary">
+    Entrar para postar
+  </a>
+<% } else if (category.slug === "avisos-oficiais" && !staffRoles.includes(playerRole)) { %>
+  <span class="forum-locked-badge">
+    Somente staff
+  </span>
+<% } else if (category.isLocked) { %>
+  <span class="forum-locked-badge">
+    Categoria bloqueada
+  </span>
+<% } else { %>
+  <a href="/forum/categoria/<%= category.slug %>/novo" class="btn-primary">
+  <%= createTopicLabel %>
+</a>
+<% } %>
+        </div>
+
+            <% if (permissionError) { %>
+  <div class="forum-permission-alert">
+    <strong>⚠ Acesso negado</strong>
+    <span><%= permissionError %></span>
+  </div>
+<% } %>
+        
+        <div class="forum-topic-list">
+          <% if (category.topics.length === 0) { %>
+            <div class="forum-empty-box">
+              <h2>Nenhum tópico por aqui ainda</h2>
+              <p>
+                Esta categoria ainda não possui tópicos. Seja o primeiro a criar uma publicação.
+              </p>
+            </div>
+          <% } %>
+
+          <% category.topics.forEach((topic) => { %>
+            <a href="/forum/topico/<%= topic.id %>" class="forum-topic-card">
+              <div>
+                <%
+  const topicStatusLabels = {
+    OPEN: "Aberto",
+    CLOSED: "Fechado",
+    PINNED: "Fixado",
+    ARCHIVED: "Arquivado"
+  };
+
+  const topicStatusLabel = topicStatusLabels[topic.status] || "Aberto";
+%>
+
+<span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
+  <%= topicStatusLabel %>
+</span>
+                <h2><%= topic.title %></h2>
+
+                <p>
+                  Criado por <strong><%= topic.author.name %></strong>
+                  • <%= new Date(topic.createdAt).toLocaleDateString("pt-BR") %>
+                </p>
+              </div>
+
+              <div class="forum-topic-stats">
+                <span><%= topic.views %> views</span>
+                <span><%= topic._count ? topic._count.posts : 0 %> resposta(s)</span>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

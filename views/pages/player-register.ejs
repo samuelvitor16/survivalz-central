@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/player.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="player-auth-section">
+      <div class="container player-auth-container">
+
+        <div class="player-auth-card">
+          <span class="section-tag">Criar conta</span>
+
+          <h1>Entre para a Central SurvivalZ</h1>
+
+          <p>
+            Crie sua conta para acessar futuramente seu perfil, histórico, denúncias,
+            dúvidas, fórum e sistemas da comunidade.
+          </p>
+
+          <% if (error) { %>
+            <div class="player-auth-error">
+              <%= error %>
+            </div>
+          <% } %>
+
+          <form action="/cadastrar" method="POST" class="player-auth-form" autocomplete="off">
+            <div class="form-group">
+              <label for="name">Nome</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value="<%= old.name || '' %>"
+                placeholder="Seu nome"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value="<%= old.email || '' %>"
+                placeholder="seuemail@email.com"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="discord">Discord</label>
+              <input
+                type="text"
+                id="discord"
+                name="discord"
+                value="<%= old.discord || '' %>"
+                placeholder="@seudiscord"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="sampNick">Nick no servidor</label>
+              <input
+                type="text"
+                id="sampNick"
+                name="sampNick"
+                value="<%= old.sampNick || '' %>"
+                placeholder="Seu_Nick"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Mínimo 6 caracteres"
+                required
+              >
+            </div>
+
+            <button type="submit" class="btn-primary player-auth-btn">
+              Criar conta
+            </button>
+          </form>
+
+          <div class="player-auth-footer">
+            <span>Já tem conta?</span>
+            <a href="/entrar">Entrar agora</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

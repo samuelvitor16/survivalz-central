@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/player.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="player-auth-section">
+      <div class="container player-auth-container">
+
+        <div class="player-auth-card">
+          <span class="section-tag">Login</span>
+
+          <h1>Acesse sua conta</h1>
+
+          <p>
+            Entre na Central SurvivalZ para acompanhar seu perfil, histórico,
+            fórum e futuros sistemas da comunidade.
+          </p>
+
+          <% if (error) { %>
+            <div class="player-auth-error">
+              <%= error %>
+            </div>
+          <% } %>
+
+          <form action="/entrar" method="POST" class="player-auth-form" autocomplete="off">
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="seuemail@email.com"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Sua senha"
+                required
+              >
+            </div>
+
+            <button type="submit" class="btn-primary player-auth-btn">
+              Entrar
+            </button>
+          </form>
+
+          <div class="player-auth-footer">
+            <span>Ainda não tem conta?</span>
+            <a href="/cadastrar">Criar conta</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

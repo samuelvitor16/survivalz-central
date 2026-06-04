@@ -9,6 +9,9 @@ const reportRoutes = require("./routes/reportRoutes");
 const staffRoutes = require("./routes/staffRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const shopRoutes = require("./routes/shopRoutes");
+const playerRoutes = require("./routes/playerRoutes");
+const forumRoutes = require("./routes/forumRoutes");
+const forumModerationRoutes = require("./routes/forumModerationRoutes");
 
 const { renderNotFound } = require("./controllers/errorController");
 
@@ -45,18 +48,31 @@ app.use(session({
 // Variáveis globais para as views
 app.use((req, res, next) => {
   res.locals.isAdminLogged = req.session.isAdminLogged || false;
+
+  res.locals.isPlayerLogged = !!req.session.playerId;
+  res.locals.playerName = req.session.playerName || null;
+  res.locals.playerRole = req.session.playerRole || null;
+
   res.locals.discordInvite = process.env.DISCORD_INVITE || "#";
   res.locals.guideLink = process.env.GUIDE_LINK || "/sobre";
+
+  res.locals.permissionError = null;
+
   next();
 });
 
 // ================= ROTAS =================
 
 app.use("/", publicRoutes);
+app.use("/", playerRoutes);
 app.use("/denuncias", reportRoutes);
 app.use("/staff", staffRoutes);
 app.use("/admin", adminRoutes);
 app.use("/loja", shopRoutes);
+app.use("/forum/moderacao", forumModerationRoutes);
+app.use("/forum", forumRoutes);
+
+
 
 // ================= ERRO 404 =================
 
@@ -66,6 +82,27 @@ app.get("/health", (req, res) => {
     service: "SurvivalZ Central",
     timestamp: new Date().toISOString()
   });
+});
+
+const prisma = require("./config/prisma");
+
+app.get("/db-test", async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+
+    res.json({
+      success: true,
+      message: "Banco conectado com sucesso!",
+      usersCount: users.length
+    });
+  } catch (error) {
+    console.log("Erro no banco:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Erro ao conectar no banco."
+    });
+  }
 });
 
 app.use(renderNotFound);

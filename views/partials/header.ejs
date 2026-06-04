@@ -15,11 +15,22 @@
 
     <nav class="navbar">
       <a href="/">Início</a>
+      <a href="/forum">Fórum</a>
+      <% if (["STAFF", "ADMIN", "OWNER"].includes(playerRole)) { %>
+      <a href="/forum/moderacao">Moderação</a>
+      <% } %>
       <a href="/sobre">Sobre</a>
       <a href="/gestao">Gestão</a>
       <a href="<%= guideLink %>" target="_blank">Guia</a>
       <a href="/loja">Loja Beta</a>
       <a href="/loja/consultar">Consultar Pedido</a>
+        <% if (isPlayerLogged) { %>
+      <a href="/painel">Meu Painel</a>
+      <a href="/sair">Sair</a>
+        <% } else { %>
+      <a href="/entrar">Entrar</a>
+      <a href="/cadastrar">Criar Conta</a>
+        <% } %>
 
       <% if (isAdminLogged) { %>
         <a href="/admin">Admin</a>

@@ -1,0 +1,188 @@
+/* ================= PLAYER AUTH / DASHBOARD ================= */
+
+.player-auth-section,
+.player-dashboard-section {
+  min-height: 85vh;
+  padding: 80px 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.78) 48%, rgba(0, 0, 0, 0.92) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.96) 100%),
+    url("/images/home/hero-bg.png") center center / cover no-repeat;
+}
+
+.player-auth-container {
+  display: flex;
+  justify-content: center;
+}
+
+.player-auth-card {
+  width: 100%;
+  max-width: 560px;
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.055), transparent 38%),
+    rgba(10, 10, 10, 0.96);
+  border: 1px solid rgba(255, 43, 43, 0.22);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 0 38px rgba(255, 0, 0, 0.08);
+}
+
+.player-auth-card h1,
+.player-dashboard-header h1 {
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1.05;
+  margin-bottom: 14px;
+}
+
+.player-auth-card p,
+.player-dashboard-header p {
+  color: #d0d0d0;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.player-auth-error {
+  background: rgba(196, 0, 0, 0.16);
+  border: 1px solid rgba(255, 43, 43, 0.35);
+  color: #ff7777;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 18px;
+  font-weight: 800;
+}
+
+.player-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.player-auth-form label {
+  display: block;
+  color: #ddd;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.player-auth-form input {
+  width: 100%;
+  background: rgba(8, 8, 8, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #fff;
+  border-radius: 13px;
+  padding: 14px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.player-auth-form input:focus {
+  border-color: rgba(255, 43, 43, 0.58);
+  box-shadow: 0 0 0 3px rgba(255, 43, 43, 0.08);
+}
+
+.player-auth-btn {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+  font-weight: 900;
+  margin-top: 8px;
+}
+
+.player-auth-footer {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+  color: #aaa;
+}
+
+.player-auth-footer a {
+  color: #ff2b2b;
+  font-weight: 900;
+}
+
+/* ================= DASHBOARD ================= */
+
+.player-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.player-dashboard-header > div {
+  max-width: 780px;
+}
+
+.player-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.player-panel-card {
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.045), transparent 38%),
+    rgba(17, 17, 17, 0.94);
+  border: 1px solid rgba(255, 43, 43, 0.18);
+  border-radius: 20px;
+  padding: 24px;
+  transition: 0.25s ease;
+}
+
+.player-panel-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 43, 43, 0.42);
+  box-shadow: 0 16px 38px rgba(255, 0, 0, 0.08);
+}
+
+.player-panel-card > span {
+  font-size: 34px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.player-panel-card h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.player-panel-card p {
+  color: #aaa;
+  line-height: 1.55;
+}
+
+.player-panel-card a {
+  display: inline-block;
+  margin-top: 16px;
+  color: #ff2b2b;
+  font-weight: 900;
+}
+
+@media (max-width: 1050px) {
+  .player-dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .player-dashboard-header {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 650px) {
+  .player-auth-section,
+  .player-dashboard-section {
+    padding: 48px 0;
+  }
+
+  .player-auth-card {
+    padding: 22px;
+    border-radius: 18px;
+  }
+
+  .player-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
