@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/player.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="player-dashboard-section">
+      <div class="container">
+
+        <% const profileBannerUrl = user.bannerUrl || "/images/home/hero-bg.png"; %>
+
+        <div class="profile-v4-shell">
+
+          <div
+            class="profile-v4-cover"
+            style='background-image: linear-gradient(90deg, rgba(0,0,0,.72), rgba(120,0,0,.30)), url("<%= profileBannerUrl %>");'
+          ></div>
+
+          <div class="profile-v4-main">
+            <div class="profile-v4-avatar-box">
+              <% if (user.avatarUrl) { %>
+                <img
+                  src="<%= user.avatarUrl %>"
+                  alt="Avatar de <%= user.name %>"
+                  class="profile-v4-avatar-img"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+                <div class="profile-v4-avatar-fallback" style="display:none;">
+                  <%= user.name.charAt(0).toUpperCase() %>
+                </div>
+              <% } else { %>
+                <div class="profile-v4-avatar-fallback">
+                  <%= user.name.charAt(0).toUpperCase() %>
+                </div>
+              <% } %>
+            </div>
+
+            <div class="profile-v4-info">
+              <div class="profile-v4-title-row">
+                <div>
+                  <h1><%= user.name %></h1>
+
+                  <div class="profile-v4-subtitle">
+                    <span><%= user.sampNick || "Nick não informado" %></span>
+                    <strong><%= user.role %></strong>
+                  </div>
+                </div>
+
+                <% if (isPlayerLogged && playerName === user.name) { %>
+                  <a href="/perfil/editar" class="btn-primary profile-v4-edit-btn">
+                    Editar perfil
+                  </a>
+                <% } %>
+              </div>
+
+              <div class="profile-v4-badges">
+                <span class="role-badge role-<%= user.role.toLowerCase() %>"><%= user.role %></span>
+                <span>Conta criada em <%= new Date(user.createdAt).toLocaleDateString("pt-BR") %></span>
+
+                <% if (user.location) { %>
+                  <span><%= user.location %></span>
+                <% } %>
+              </div>
+
+              <div class="profile-v4-bio">
+                <% if (user.bio) { %>
+                  <%- user.bio.replace(/\n/g, "<br>") %>
+                <% } else { %>
+                  Este sobrevivente ainda não adicionou uma bio.
+                <% } %>
+              </div>
+              <div class="profile-v4-medal-strip">
+  <div class="profile-v4-medal-strip-header">
+    <strong>Medalhas</strong>
+    <span><%= user.medals.length %> medalha(s)</span>
+  </div>
+
+  <% if (user.medals.length === 0) { %>
+    <p class="profile-v4-no-medals">
+      Este jogador ainda não possui medalhas.
+    </p>
+  <% } else { %>
+    <div class="profile-v4-medal-list">
+      <% user.medals.forEach((userMedal) => { %>
+        <div
+          class="profile-v4-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+          title="<%= userMedal.medal.name %> - <%= userMedal.medal.description || 'Medalha SurvivalZ' %>"
+        >
+          <span><%= userMedal.medal.icon || "🏅" %></span>
+          <strong><%= userMedal.medal.name %></strong>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+            </div>
+          </div>
+
+          <div class="profile-v4-stats">
+            <div>
+              <span>Tópicos públicos</span>
+              <strong><%= user.topics.length %></strong>
+            </div>
+
+            <div>
+              <span>Total de tópicos</span>
+              <strong><%= user._count.topics %></strong>
+            </div>
+
+            <div>
+              <span>Respostas</span>
+              <strong><%= user._count.posts %></strong>
+            </div>
+
+            <div>
+  <span>Medalhas</span>
+  <strong><%= user.medals.length %></strong>
+</div>
+
+            <div>
+  <span>Reputação</span>
+  <strong><%= user.reputation || 0 %></strong>
+</div>
+          </div>
+
+          <div class="profile-v4-actions">
+            <a href="/forum" class="btn-secondary">Ver fórum</a>
+            <a href="/forum/categoria/comunidade" class="btn-secondary">Comunidade</a>
+            <a href="/forum/categoria/denuncias" class="btn-secondary">Denúncias</a>
+          </div>
+
+          <div class="profile-v4-tabs">
+            <span class="active">Posts do perfil</span>
+            <span>Última atividade</span>
+            <span>Postagens</span>
+            <span>Sobre</span>
+            <span>Medalhas</span>
+          </div>
+
+        </div>
+
+        <div class="profile-v4-content-grid">
+          <div class="profile-v4-panel">
+            <div class="player-list-header">
+              <h2>Atividade pública</h2>
+              <a href="/forum">Ver fórum</a>
+            </div>
+
+            <% if (user.topics.length === 0) { %>
+              <p class="player-empty-text">
+                Este jogador ainda não criou tópicos públicos.
+              </p>
+            <% } %>
+
+            <% user.topics.forEach((topic) => { %>
+              <a href="/forum/topico/<%= topic.id %>" class="player-dashboard-topic-item">
+                <div>
+                  <strong><%= topic.title %></strong>
+                  <span>
+                    <%= topic.category.name %> • <%= topic._count.posts %> resposta(s)
+                  </span>
+                </div>
+
+                <small><%= topic.status %></small>
+              </a>
+            <% }) %>
+          </div>
+
+          <div class="profile-v4-panel">
+            <h2>Sobre</h2>
+
+            <div class="profile-v4-about-item">
+              <span>Nome</span>
+              <strong><%= user.name %></strong>
+            </div>
+
+            <div class="profile-v4-about-item">
+              <span>Nick no servidor</span>
+              <strong><%= user.sampNick || "Não informado" %></strong>
+            </div>
+
+            <div class="profile-v4-about-item">
+              <span>Cargo</span>
+              <strong><%= user.role %></strong>
+            </div>
+
+            <div class="profile-v4-about-item">
+              <span>Discord</span>
+              <strong><%= user.discord || "Não informado" %></strong>
+            </div>
+
+            <div class="profile-v4-about-item">
+              <span>Localização / grupo</span>
+              <strong><%= user.location || "Não informado" %></strong>
+            </div>
+          </div>
+          
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

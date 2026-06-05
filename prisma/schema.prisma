@@ -20,19 +20,39 @@ enum TopicStatus {
   ARCHIVED
 }
 
+enum MedalRarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+  SPECIAL
+}
+
 model User {
-  id           String   @id @default(cuid())
+  id           String  @id @default(cuid())
   name         String
-  email        String   @unique
+  email        String  @unique
   passwordHash String
   discord      String?
-  sampNick     String?  @unique
-  avatarUrl    String?
-  role         UserRole @default(PLAYER)
-  isBanned     Boolean  @default(false)
+  sampNick     String? @unique
+
+  avatarUrl String?
+  bannerUrl String?
+  bio       String? @db.Text
+  location  String?
+
+  signatureText     String? @db.Text
+  signatureImageUrl String?
+  reputation        Int     @default(0)
+
+  role     UserRole @default(PLAYER)
+  isBanned Boolean  @default(false)
 
   topics ForumTopic[]
   posts  ForumPost[]
+
+  medals        UserMedal[] @relation("UserMedals")
+  medalsAwarded UserMedal[] @relation("AwardedMedals")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -59,12 +79,17 @@ model ForumCategory {
 }
 
 model ForumTopic {
-  id      String      @id @default(cuid())
+  id      String @id @default(cuid())
   title   String
   slug    String
-  content String      @db.Text
-  status  TopicStatus @default(OPEN)
-  views   Int         @default(0)
+  content String @db.Text
+
+  reportAccusedNick String?
+  reportReason      String?
+  reportEvidence    String? @db.Text
+
+  status TopicStatus @default(OPEN)
+  views  Int         @default(0)
 
   authorId String
   author   User   @relation(fields: [authorId], references: [id])
@@ -95,4 +120,42 @@ model ForumPost {
   updatedAt DateTime @updatedAt
 
   @@map("forum_posts")
+}
+
+model Medal {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  description String?     @db.Text
+  icon        String?
+  color       String?
+  rarity      MedalRarity @default(COMMON)
+  isActive    Boolean     @default(true)
+
+  users UserMedal[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("medals")
+}
+
+model UserMedal {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation("UserMedals", fields: [userId], references: [id])
+
+  medalId String
+  medal   Medal  @relation(fields: [medalId], references: [id])
+
+  awardedById String?
+  awardedBy   User?   @relation("AwardedMedals", fields: [awardedById], references: [id])
+
+  reason String? @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, medalId])
+  @@map("user_medals")
 }

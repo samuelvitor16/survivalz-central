@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
   renderForumModeration,
+  renderReportsModeration,
   updateTopicStatus
 } = require("../controllers/forumModerationController");
 
@@ -12,5 +13,6 @@ const {
 
 router.get("/", requireForumStaff, renderForumModeration);
 router.post("/topico/:id/status", requireForumStaff, updateTopicStatus);
+router.get("/denuncias", requireForumStaff, renderReportsModeration);
 
 module.exports = router;

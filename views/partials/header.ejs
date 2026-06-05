@@ -17,8 +17,10 @@
       <a href="/">Início</a>
       <a href="/forum">Fórum</a>
       <% if (["STAFF", "ADMIN", "OWNER"].includes(playerRole)) { %>
-      <a href="/forum/moderacao">Moderação</a>
-      <% } %>
+  <a href="/forum/moderacao">Moderação</a>
+  <a href="/forum/moderacao/denuncias">Denúncias</a>
+<% } %>
+
       <a href="/sobre">Sobre</a>
       <a href="/gestao">Gestão</a>
       <a href="<%= guideLink %>" target="_blank">Guia</a>

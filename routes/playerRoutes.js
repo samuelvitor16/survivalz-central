@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const {
+  renderPlayerDashboard
+} = require("../controllers/playerDashboardController");
 
 const {
   renderRegister,
@@ -22,10 +25,6 @@ router.post("/entrar", redirectIfPlayerLogged, loginPlayer);
 
 router.get("/sair", requirePlayer, logoutPlayer);
 
-router.get("/painel", requirePlayer, (req, res) => {
-  res.render("pages/player-dashboard", {
-    title: "Meu Painel - SurvivalZ"
-  });
-});
+router.get("/painel", requirePlayer, renderPlayerDashboard);
 
 module.exports = router;

@@ -40,9 +40,20 @@
           <% topics.forEach((topic) => { %>
             <article class="forum-moderation-card">
               <div class="forum-moderation-main">
-                <span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
-                  <%= topic.status %>
-                </span>
+                <%
+  const statusLabels = {
+    OPEN: "Aberto",
+    CLOSED: "Fechado",
+    PINNED: "Fixado",
+    ARCHIVED: "Arquivado"
+  };
+
+  const statusLabel = statusLabels[topic.status] || topic.status;
+%>
+
+<span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
+  <%= statusLabel %>
+</span>
 
                 <h2>
                   <a href="/forum/topico/<%= topic.id %>">

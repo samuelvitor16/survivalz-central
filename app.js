@@ -12,6 +12,7 @@ const shopRoutes = require("./routes/shopRoutes");
 const playerRoutes = require("./routes/playerRoutes");
 const forumRoutes = require("./routes/forumRoutes");
 const forumModerationRoutes = require("./routes/forumModerationRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 
 const { renderNotFound } = require("./controllers/errorController");
 
@@ -57,6 +58,7 @@ app.use((req, res, next) => {
   res.locals.guideLink = process.env.GUIDE_LINK || "/sobre";
 
   res.locals.permissionError = null;
+  res.locals.privateCategoryMessage = null;
 
   next();
 });
@@ -65,12 +67,14 @@ app.use((req, res, next) => {
 
 app.use("/", publicRoutes);
 app.use("/", playerRoutes);
+app.use("/perfil", profileRoutes);
 app.use("/denuncias", reportRoutes);
 app.use("/staff", staffRoutes);
 app.use("/admin", adminRoutes);
 app.use("/loja", shopRoutes);
 app.use("/forum/moderacao", forumModerationRoutes);
 app.use("/forum", forumRoutes);
+
 
 
 

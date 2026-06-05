@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/player.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="player-dashboard-section">
+      <div class="container">
+
+        <div class="player-dashboard-header">
+          <div>
+            <span class="section-tag">Editar perfil</span>
+
+            <h1>Personalize seu perfil</h1>
+
+            <p>
+              Adicione avatar, banner, bio e informações públicas para deixar seu perfil
+              com mais cara de comunidade.
+            </p>
+          </div>
+
+          <a href="/perfil/<%= user.id %>" class="btn-secondary">
+            Ver perfil público
+          </a>
+        </div>
+
+        <div class="profile-edit-card">
+          <% if (error) { %>
+            <div class="player-auth-error">
+              <%= error %>
+            </div>
+          <% } %>
+
+          <% if (success) { %>
+            <div class="profile-edit-success">
+              <%= success %>
+            </div>
+          <% } %>
+
+          <form action="/perfil/editar" method="POST" class="player-auth-form">
+            <div class="form-group">
+              <label for="name">Nome público</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value="<%= user.name || '' %>"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="sampNick">Nick no servidor</label>
+              <input
+                type="text"
+                id="sampNick"
+                name="sampNick"
+                value="<%= user.sampNick || '' %>"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="discord">Discord</label>
+              <input
+                type="text"
+                id="discord"
+                name="discord"
+                value="<%= user.discord || '' %>"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="location">Localização / facção / grupo</label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value="<%= user.location || '' %>"
+                placeholder="Ex: Zona Norte, Sobrevivente solo, Clã..."
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="avatarUrl">URL do avatar</label>
+              <input
+                type="url"
+                id="avatarUrl"
+                name="avatarUrl"
+                value="<%= user.avatarUrl || '' %>"
+                placeholder="https://..."
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="bannerUrl">URL do banner/capa</label>
+              <input
+                type="url"
+                id="bannerUrl"
+                name="bannerUrl"
+                value="<%= user.bannerUrl || '' %>"
+                placeholder="https://..."
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="bio">Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                placeholder="Fale um pouco sobre você, seu estilo de jogo, clã, história no servidor..."
+              ><%= user.bio || '' %></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary player-auth-btn">
+              Salvar perfil
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

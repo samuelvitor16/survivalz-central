@@ -68,6 +68,13 @@
     <span><%= permissionError %></span>
   </div>
 <% } %>
+
+<% if (privateCategoryMessage) { %>
+  <div class="forum-permission-alert">
+    <strong>🔒 Categoria privada</strong>
+    <span><%= privateCategoryMessage %></span>
+  </div>
+<% } %>
         
         <div class="forum-topic-list">
           <% if (category.topics.length === 0) { %>
@@ -80,36 +87,44 @@
           <% } %>
 
           <% category.topics.forEach((topic) => { %>
-            <a href="/forum/topico/<%= topic.id %>" class="forum-topic-card">
-              <div>
-                <%
-  const topicStatusLabels = {
-    OPEN: "Aberto",
-    CLOSED: "Fechado",
-    PINNED: "Fixado",
-    ARCHIVED: "Arquivado"
-  };
+  <article class="forum-topic-card">
+    <div>
+      <%
+        const topicStatusLabels = {
+          OPEN: "Aberto",
+          CLOSED: "Fechado",
+          PINNED: "Fixado",
+          ARCHIVED: "Arquivado"
+        };
 
-  const topicStatusLabel = topicStatusLabels[topic.status] || "Aberto";
-%>
+        const topicStatusLabel = topicStatusLabels[topic.status] || "Aberto";
+      %>
 
-<span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
-  <%= topicStatusLabel %>
-</span>
-                <h2><%= topic.title %></h2>
+      <span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
+        <%= topicStatusLabel %>
+      </span>
 
-                <p>
-                  Criado por <strong><%= topic.author.name %></strong>
-                  • <%= new Date(topic.createdAt).toLocaleDateString("pt-BR") %>
-                </p>
-              </div>
+      <h2>
+        <a href="/forum/topico/<%= topic.id %>" class="forum-topic-title-link">
+          <%= topic.title %>
+        </a>
+      </h2>
 
-              <div class="forum-topic-stats">
-                <span><%= topic.views %> views</span>
-                <span><%= topic._count ? topic._count.posts : 0 %> resposta(s)</span>
-              </div>
-            </a>
-          <% }) %>
+      <p>
+        Criado por
+        <a href="/perfil/<%= topic.author.id %>" class="forum-author-link">
+          <strong><%= topic.author.name %></strong>
+        </a>
+        • <%= new Date(topic.createdAt).toLocaleDateString("pt-BR") %>
+      </p>
+    </div>
+
+    <div class="forum-topic-stats">
+      <span><%= topic.views %> views</span>
+      <span><%= topic._count ? topic._count.posts : 0 %> resposta(s)</span>
+    </div>
+  </article>
+<% }) %>
         </div>
 
       </div>

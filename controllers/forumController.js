@@ -1,6 +1,20 @@
 const prisma = require("../config/prisma");
 const STAFF_ROLES = ["STAFF", "ADMIN", "OWNER"];
+const isForumStaff = (req) => {
+  return STAFF_ROLES.includes(req.session.playerRole);
+};
 
+const canViewTopic = (req, topic) => {
+  if (topic.category.slug !== "denuncias") {
+    return true;
+  }
+
+  if (isForumStaff(req)) {
+    return true;
+  }
+
+  return req.session.playerId && topic.authorId === req.session.playerId;
+};
 const canCreateTopicInCategory = (req, category) => {
   if (!req.session.playerId) return false;
   if (category.isLocked) return false;
@@ -54,21 +68,6 @@ const renderForumCategory = async (req, res) => {
     const category = await prisma.forumCategory.findUnique({
       where: {
         slug
-      },
-      include: {
-        topics: {
-          orderBy: {
-            updatedAt: "desc"
-          },
-          include: {
-            author: true,
-            _count: {
-              select: {
-                posts: true
-              }
-            }
-          }
-        }
       }
     });
 
@@ -78,11 +77,43 @@ const renderForumCategory = async (req, res) => {
       });
     }
 
+    const isReportsCategory = category.slug === "denuncias";
+
+    const topicsWhere = isReportsCategory && !isForumStaff(req)
+      ? {
+          authorId: req.session.playerId || "__not_logged__"
+        }
+      : {};
+
+    const topics = await prisma.forumTopic.findMany({
+      where: {
+        categoryId: category.id,
+        ...topicsWhere
+      },
+      orderBy: {
+        updatedAt: "desc"
+      },
+      include: {
+        author: true,
+        _count: {
+          select: {
+            posts: true
+          }
+        }
+      }
+    });
+
     res.render("pages/forum-category", {
       title: `${category.name} - Fórum SurvivalZ`,
-      category,
+      category: {
+        ...category,
+        topics
+      },
       permissionError: req.query.erro === "sem-permissao"
         ? "Você não tem permissão para criar tópico nesta categoria."
+        : null,
+      privateCategoryMessage: isReportsCategory && !isForumStaff(req)
+        ? "Por privacidade, você visualiza apenas as denúncias criadas pela sua própria conta."
         : null
     });
   } catch (error) {
@@ -126,7 +157,13 @@ const renderNewTopic = async (req, res) => {
 const createTopic = async (req, res) => {
   try {
     const { slug } = req.params;
-    const { title, content } = req.body;
+    const {
+  title,
+  content,
+  reportAccusedNick,
+  reportReason,
+  reportEvidence
+} = req.body;
 
     const category = await prisma.forumCategory.findUnique({
       where: {
@@ -167,18 +204,45 @@ const createTopic = async (req, res) => {
       });
     }
 
+    const isReportCategory = category.slug === "denuncias";
+
+if (isReportCategory) {
+  if (!reportAccusedNick || !reportReason || !reportEvidence) {
+    return res.render("pages/forum-new-topic", {
+      title: `Novo tópico - ${category.name}`,
+      category,
+      error: "Para criar uma denúncia, informe acusado, motivo e provas.",
+      old: req.body
+    });
+  }
+
+  if (reportAccusedNick.trim().length < 3) {
+    return res.render("pages/forum-new-topic", {
+      title: `Novo tópico - ${category.name}`,
+      category,
+      error: "Informe um nick válido para o acusado.",
+      old: req.body
+    });
+  }
+}
+
     const baseSlug = createSlug(title);
     const finalSlug = `${baseSlug}-${Date.now()}`;
 
     const topic = await prisma.forumTopic.create({
-      data: {
-        title: title.trim(),
-        slug: finalSlug,
-        content: content.trim(),
-        authorId: req.session.playerId,
-        categoryId: category.id
-      }
-    });
+  data: {
+    title: title.trim(),
+    slug: finalSlug,
+    content: content.trim(),
+
+    reportAccusedNick: isReportCategory ? reportAccusedNick.trim() : null,
+    reportReason: isReportCategory ? reportReason.trim() : null,
+    reportEvidence: isReportCategory ? reportEvidence.trim() : null,
+
+    authorId: req.session.playerId,
+    categoryId: category.id
+  }
+});
 
     res.redirect(`/forum/topico/${topic.id}`);
   } catch (error) {
@@ -196,14 +260,52 @@ const renderTopic = async (req, res) => {
         id
       },
       include: {
-        author: true,
+        author: {
+          include: {
+            medals: {
+              take: 5,
+              orderBy: {
+                createdAt: "desc"
+              },
+              include: {
+                medal: true
+              }
+            },
+            _count: {
+              select: {
+                topics: true,
+                posts: true
+              }
+            }
+          }
+        },
+
         category: true,
+
         posts: {
           orderBy: {
             createdAt: "asc"
           },
           include: {
-            author: true
+            author: {
+              include: {
+                medals: {
+                  take: 5,
+                  orderBy: {
+                    createdAt: "desc"
+                  },
+                  include: {
+                    medal: true
+                  }
+                },
+                _count: {
+                  select: {
+                    topics: true,
+                    posts: true
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -213,6 +315,10 @@ const renderTopic = async (req, res) => {
       return res.status(404).render("pages/404", {
         title: "Tópico não encontrado"
       });
+    }
+
+    if (!canViewTopic(req, topic)) {
+      return res.status(403).send("Você não tem permissão para visualizar esta denúncia.");
     }
 
     await prisma.forumTopic.update({
@@ -227,12 +333,12 @@ const renderTopic = async (req, res) => {
     });
 
     res.render("pages/forum-topic", {
-  title: `${topic.title} - Fórum SurvivalZ`,
-  topic,
-  replyError: req.query.erro === "topico-fechado"
-    ? "Este tópico está fechado e não aceita novas respostas."
-    : null
-});
+      title: `${topic.title} - Fórum SurvivalZ`,
+      topic,
+      replyError: req.query.erro === "topico-fechado"
+        ? "Este tópico está fechado e não aceita novas respostas."
+        : null
+    });
   } catch (error) {
     console.log("Erro ao carregar tópico:", error);
     res.status(500).send("Erro ao carregar tópico.");
@@ -288,11 +394,39 @@ const createReply = async (req, res) => {
   }
 };
 
+const updateTopicStatusFromTopic = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ["OPEN", "CLOSED", "PINNED", "ARCHIVED"];
+
+    if (!validStatuses.includes(status)) {
+      return res.redirect(`/forum/topico/${id}`);
+    }
+
+    await prisma.forumTopic.update({
+      where: {
+        id
+      },
+      data: {
+        status
+      }
+    });
+
+    res.redirect(`/forum/topico/${id}`);
+  } catch (error) {
+    console.log("Erro ao atualizar status pelo tópico:", error);
+    res.status(500).send("Erro ao atualizar status do tópico.");
+  }
+};
+
 module.exports = {
   renderForumHome,
   renderForumCategory,
   renderNewTopic,
   createTopic,
   renderTopic,
-  createReply
+  createReply,
+  updateTopicStatusFromTopic
 };

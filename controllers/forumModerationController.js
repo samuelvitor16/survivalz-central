@@ -54,7 +54,40 @@ const updateTopicStatus = async (req, res) => {
   }
 };
 
+const renderReportsModeration = async (req, res) => {
+  try {
+    const reports = await prisma.forumTopic.findMany({
+      where: {
+        category: {
+          slug: "denuncias"
+        }
+      },
+      orderBy: {
+        updatedAt: "desc"
+      },
+      include: {
+        author: true,
+        category: true,
+        _count: {
+          select: {
+            posts: true
+          }
+        }
+      }
+    });
+
+    res.render("pages/forum-reports-moderation", {
+      title: "Denúncias - Moderação SurvivalZ",
+      reports
+    });
+  } catch (error) {
+    console.log("Erro ao carregar denúncias:", error);
+    res.status(500).send("Erro ao carregar denúncias.");
+  }
+};
+
 module.exports = {
   renderForumModeration,
+  renderReportsModeration,
   updateTopicStatus
 };

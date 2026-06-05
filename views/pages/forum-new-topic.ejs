@@ -55,26 +55,65 @@
 
           <form action="/forum/categoria/<%= category.slug %>/novo" method="POST" class="forum-form">
             <div class="form-group">
-              <label for="title">Título do tópico</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value="<%= old.title || '' %>"
-                placeholder="<%= category.slug === 'denuncias' ? 'Ex: Denúncia contra jogador por abuso/anti-jogo' : category.slug === 'sugestoes' ? 'Ex: Sugestão para melhorar o sistema de loot' : category.slug === 'duvidas' ? 'Ex: Como funciona o acesso ao Beta?' : 'Título do tópico' %>"
-                required
-              >
-            </div>
+  <label for="title">Título do tópico</label>
+  <input
+    type="text"
+    id="title"
+    name="title"
+    value="<%= old.title || '' %>"
+    placeholder="<%= category.slug === 'denuncias' ? 'Ex: Denúncia contra jogador por abuso/anti-jogo' : category.slug === 'sugestoes' ? 'Ex: Sugestão para melhorar o sistema de loot' : category.slug === 'duvidas' ? 'Ex: Como funciona o acesso ao Beta?' : 'Título do tópico' %>"
+    required
+  >
+</div>
 
-            <div class="form-group">
-              <label for="content">Conteúdo</label>
-              <textarea
-                id="content"
-                name="content"
-                placeholder="Escreva sua mensagem com detalhes..."
-                required
-              ><%= old.content || '' %></textarea>
-            </div>
+<% if (category.slug === "denuncias") { %>
+  <div class="forum-report-fields">
+    <div class="form-group">
+      <label for="reportAccusedNick">Nick do acusado</label>
+      <input
+        type="text"
+        id="reportAccusedNick"
+        name="reportAccusedNick"
+        value="<%= old.reportAccusedNick || '' %>"
+        placeholder="Nick_do_Acusado"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="reportReason">Motivo da denúncia</label>
+      <select id="reportReason" name="reportReason" required>
+        <option value="">Selecione um motivo</option>
+        <option value="Anti-jogo" <%= old.reportReason === "Anti-jogo" ? "selected" : "" %>>Anti-jogo</option>
+        <option value="Abuso de bug" <%= old.reportReason === "Abuso de bug" ? "selected" : "" %>>Abuso de bug</option>
+        <option value="Ofensa / Toxicidade" <%= old.reportReason === "Ofensa / Toxicidade" ? "selected" : "" %>>Ofensa / Toxicidade</option>
+        <option value="Cheat / Programa ilegal" <%= old.reportReason === "Cheat / Programa ilegal" ? "selected" : "" %>>Cheat / Programa ilegal</option>
+        <option value="Abuso de staff" <%= old.reportReason === "Abuso de staff" ? "selected" : "" %>>Abuso de staff</option>
+        <option value="Outro" <%= old.reportReason === "Outro" ? "selected" : "" %>>Outro</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="reportEvidence">Provas</label>
+      <textarea
+        id="reportEvidence"
+        name="reportEvidence"
+        placeholder="Cole links de prints, vídeos, Discord CDN, YouTube, Drive, Imgur etc."
+        required
+      ><%= old.reportEvidence || '' %></textarea>
+    </div>
+  </div>
+<% } %>
+
+<div class="form-group">
+  <label for="content">Descrição</label>
+  <textarea
+    id="content"
+    name="content"
+    placeholder="Descreva o ocorrido com detalhes..."
+    required
+  ><%= old.content || '' %></textarea>
+</div>
 
             <button type="submit" class="btn-primary forum-submit-btn">
               Publicar tópico

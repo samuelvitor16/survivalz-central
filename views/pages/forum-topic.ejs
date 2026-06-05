@@ -41,59 +41,215 @@
           <h1><%= topic.title %></h1>
 
           <p>
-            Criado por <strong><%= topic.author.name %></strong>
+             Criado por <a href="/perfil/<%= topic.author.id %>"><strong><%= topic.author.name %></strong></a>
             • <%= new Date(topic.createdAt).toLocaleDateString("pt-BR") %>
             • <%= topic.views + 1 %> visualizações
           </p>
+          <% if (["STAFF", "ADMIN", "OWNER"].includes(playerRole)) { %>
+  <div class="forum-topic-staff-actions">
+    <form action="/forum/topico/<%= topic.id %>/status" method="POST">
+      <input type="hidden" name="status" value="OPEN">
+      <button type="submit" class="<%= topic.status === 'OPEN' ? 'active' : '' %>">
+        Abrir
+      </button>
+    </form>
+
+    <form action="/forum/topico/<%= topic.id %>/status" method="POST">
+      <input type="hidden" name="status" value="CLOSED">
+      <button type="submit" class="<%= topic.status === 'CLOSED' ? 'active' : '' %>">
+        Fechar
+      </button>
+    </form>
+
+    <form action="/forum/topico/<%= topic.id %>/status" method="POST">
+      <input type="hidden" name="status" value="PINNED">
+      <button type="submit" class="<%= topic.status === 'PINNED' ? 'active' : '' %>">
+        Fixar
+      </button>
+    </form>
+
+    <form action="/forum/topico/<%= topic.id %>/status" method="POST">
+      <input type="hidden" name="status" value="ARCHIVED">
+      <button type="submit" class="<%= topic.status === 'ARCHIVED' ? 'active' : '' %>">
+        Arquivar
+      </button>
+    </form>
+  </div>
+<% } %>
         </div>
+          <% if (topic.category.slug === "denuncias") { %>
+  <div class="forum-report-summary">
+    <h2>Detalhes da denúncia</h2>
 
-        <article class="forum-main-post">
-          <div class="forum-post-author">
-            <div class="forum-avatar">
-              <%= topic.author.name.charAt(0).toUpperCase() %>
-            </div>
+    <div class="forum-report-grid">
+      <div>
+        <span>Acusado</span>
+        <strong><%= topic.reportAccusedNick || "Não informado" %></strong>
+      </div>
 
-            <div>
-              <strong><%= topic.author.name %></strong>
-              <span><%= topic.author.role %></span>
-            </div>
-          </div>
+      <div>
+        <span>Motivo</span>
+        <strong><%= topic.reportReason || "Não informado" %></strong>
+      </div>
+    </div>
 
-          <div class="forum-post-content">
-            <%= topic.content.replace(/\n/g, "<br>") %>
-          </div>
-        </article>
-
-        <div class="forum-replies-header">
-          <h2>Respostas</h2>
-          <span><%= topic.posts.length %> resposta(s)</span>
+    <div class="forum-report-evidence">
+      <span>Provas</span>
+      <p><%- (topic.reportEvidence || "Nenhuma prova informada.").replace(/\n/g, "<br>") %></p>
+    </div>
+  </div>
+<% } %>
+        <article class="forum-post-layout">
+  <aside class="forum-post-author-card">
+    <a href="/perfil/<%= topic.author.id %>" class="forum-post-avatar-link">
+      <% if (topic.author.avatarUrl) { %>
+        <img
+          src="<%= topic.author.avatarUrl %>"
+          alt="Avatar de <%= topic.author.name %>"
+          class="forum-post-avatar-img"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+        <div class="forum-post-avatar-fallback" style="display:none;">
+          <%= topic.author.name.charAt(0).toUpperCase() %>
         </div>
+      <% } else { %>
+        <div class="forum-post-avatar-fallback">
+          <%= topic.author.name.charAt(0).toUpperCase() %>
+        </div>
+      <% } %>
+    </a>
 
-        <% if (topic.posts.length === 0) { %>
-          <div class="forum-empty-box">
-            <h2>Nenhuma resposta ainda</h2>
-            <p>Seja o primeiro a responder este tópico.</p>
+    <a href="/perfil/<%= topic.author.id %>" class="forum-post-author-name">
+      <%= topic.author.name %>
+    </a>
+
+    <span class="forum-post-role role-<%= topic.author.role.toLowerCase() %>">
+      <%= topic.author.role %>
+    </span>
+    <% if (topic.author.medals && topic.author.medals.length > 0) { %>
+  <div class="forum-post-medals">
+    <% topic.author.medals.forEach((userMedal) => { %>
+      <span
+        class="forum-post-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+        title="<%= userMedal.medal.name %> - <%= userMedal.medal.description || 'Medalha SurvivalZ' %>"
+      >
+        <%= userMedal.medal.icon || "🏅" %>
+      </span>
+    <% }) %>
+  </div>
+<% } %>
+
+    <div class="forum-post-author-info">
+      <span>Nick</span>
+      <strong><%= topic.author.sampNick || "Não informado" %></strong>
+    </div>
+
+    <div class="forum-post-author-stats">
+      <div>
+        <span>Tópicos</span>
+        <strong><%= topic.author._count.topics %></strong>
+      </div>
+
+      <div>
+        <span>Respostas</span>
+        <strong><%= topic.author._count.posts %></strong>
+      </div>
+    </div>
+  </aside>
+
+  <div class="forum-post-body">
+    <div class="forum-post-top">
+      <span>Postado em <%= new Date(topic.createdAt).toLocaleDateString("pt-BR") %></span>
+      <strong>#1</strong>
+    </div>
+
+    <div class="forum-post-content">
+      <%- topic.content.replace(/\n/g, "<br>") %>
+    </div>
+
+    <div class="forum-post-signature">
+      <span>Assinatura</span>
+      <p>Área futura para frase, imagem, clã, conquistas ou assinatura personalizada.</p>
+    </div>
+  </div>
+</article>
+
+        <% topic.posts.forEach((post, index) => { %>
+  <article class="forum-post-layout forum-reply-post">
+    <aside class="forum-post-author-card">
+      <a href="/perfil/<%= post.author.id %>" class="forum-post-avatar-link">
+        <% if (post.author.avatarUrl) { %>
+          <img
+            src="<%= post.author.avatarUrl %>"
+            alt="Avatar de <%= post.author.name %>"
+            class="forum-post-avatar-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          >
+          <div class="forum-post-avatar-fallback" style="display:none;">
+            <%= post.author.name.charAt(0).toUpperCase() %>
+          </div>
+        <% } else { %>
+          <div class="forum-post-avatar-fallback">
+            <%= post.author.name.charAt(0).toUpperCase() %>
           </div>
         <% } %>
+      </a>
 
-        <% topic.posts.forEach((post) => { %>
-          <article class="forum-main-post forum-reply-post">
-            <div class="forum-post-author">
-              <div class="forum-avatar">
-                <%= post.author.name.charAt(0).toUpperCase() %>
-              </div>
+      <a href="/perfil/<%= post.author.id %>" class="forum-post-author-name">
+        <%= post.author.name %>
+      </a>
 
-              <div>
-                <strong><%= post.author.name %></strong>
-                <span><%= post.author.role %></span>
-              </div>
-            </div>
+      <span class="forum-post-role role-<%= post.author.role.toLowerCase() %>">
+        <%= post.author.role %>
+      </span>
+      <% if (post.author.medals && post.author.medals.length > 0) { %>
+  <div class="forum-post-medals">
+    <% post.author.medals.forEach((userMedal) => { %>
+      <span
+        class="forum-post-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+        title="<%= userMedal.medal.name %> - <%= userMedal.medal.description || 'Medalha SurvivalZ' %>"
+      >
+        <%= userMedal.medal.icon || "🏅" %>
+      </span>
+    <% }) %>
+  </div>
+<% } %>
 
-            <div class="forum-post-content">
-              <%= post.content.replace(/\n/g, "<br>") %>
-            </div>
-          </article>
-        <% }) %>
+      <div class="forum-post-author-info">
+        <span>Nick</span>
+        <strong><%= post.author.sampNick || "Não informado" %></strong>
+      </div>
+
+      <div class="forum-post-author-stats">
+        <div>
+          <span>Tópicos</span>
+          <strong><%= post.author._count.topics %></strong>
+        </div>
+
+        <div>
+          <span>Respostas</span>
+          <strong><%= post.author._count.posts %></strong>
+        </div>
+      </div>
+    </aside>
+
+    <div class="forum-post-body">
+      <div class="forum-post-top">
+        <span>Respondido em <%= new Date(post.createdAt).toLocaleDateString("pt-BR") %></span>
+        <strong>#<%= index + 2 %></strong>
+      </div>
+
+      <div class="forum-post-content">
+        <%- post.content.replace(/\n/g, "<br>") %>
+      </div>
+
+      <div class="forum-post-signature">
+        <span>Assinatura</span>
+        <p>Área futura para assinatura personalizada.</p>
+      </div>
+    </div>
+  </article>
+<% }) %>
         <div class="forum-reply-form-card">
   <% if (replyError) { %>
     <div class="forum-permission-alert">
@@ -112,7 +268,20 @@
     <h2>Responder tópico</h2>
 
     <form action="/forum/topico/<%= topic.id %>/responder" method="POST" class="forum-form">
-      ...
+      <div class="form-group">
+        <label for="content">Sua resposta</label>
+
+        <textarea
+          id="content"
+          name="content"
+          placeholder="Escreva sua resposta..."
+          required
+        ></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary forum-submit-btn">
+        Enviar resposta
+      </button>
     </form>
   <% } else { %>
     <h2>Entre para responder</h2>

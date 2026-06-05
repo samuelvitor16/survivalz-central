@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/forum.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="forum-section">
+      <div class="container">
+
+        <div class="forum-header">
+          <span class="section-tag">Staff SurvivalZ</span>
+
+          <h1>Denúncias</h1>
+
+          <p>
+            Analise denúncias abertas pelos jogadores, confira acusado, motivo,
+            provas e altere o status conforme a decisão da staff.
+          </p>
+
+          <div class="forum-staff-links">
+            <a href="/forum/moderacao" class="btn-secondary">Todos os tópicos</a>
+            <a href="/forum/categoria/denuncias" class="btn-secondary">Ver categoria pública</a>
+          </div>
+        </div>
+
+        <div class="forum-reports-list">
+          <% if (reports.length === 0) { %>
+            <div class="forum-empty-box">
+              <h2>Nenhuma denúncia encontrada</h2>
+              <p>Quando jogadores criarem denúncias, elas aparecerão aqui.</p>
+            </div>
+          <% } %>
+
+          <% reports.forEach((report) => { %>
+            <article class="forum-report-moderation-card">
+              <div class="forum-report-moderation-main">
+                <span class="forum-topic-status status-<%= report.status.toLowerCase() %>">
+                  <%= report.status %>
+                </span>
+
+                <h2>
+                  <a href="/forum/topico/<%= report.id %>">
+                    <%= report.title %>
+                  </a>
+                </h2>
+
+                <div class="forum-report-moderation-grid">
+                  <div>
+                    <span>Acusado</span>
+                    <strong><%= report.reportAccusedNick || "Não informado" %></strong>
+                  </div>
+
+                  <div>
+                    <span>Motivo</span>
+                    <strong><%= report.reportReason || "Não informado" %></strong>
+                  </div>
+
+                  <div>
+                    <span>Autor</span>
+                    <strong><%= report.author.name %></strong>
+                  </div>
+
+                  <div>
+                    <span>Respostas</span>
+                    <strong><%= report._count.posts %></strong>
+                  </div>
+                </div>
+
+                <div class="forum-report-proof-preview">
+                  <span>Provas</span>
+                  <p><%= report.reportEvidence || "Nenhuma prova informada." %></p>
+                </div>
+              </div>
+
+              <form action="/forum/moderacao/topico/<%= report.id %>/status" method="POST" class="forum-moderation-actions">
+                <select name="status">
+                  <option value="OPEN" <%= report.status === "OPEN" ? "selected" : "" %>>Aberta</option>
+                  <option value="CLOSED" <%= report.status === "CLOSED" ? "selected" : "" %>>Fechada</option>
+                  <option value="PINNED" <%= report.status === "PINNED" ? "selected" : "" %>>Fixada</option>
+                  <option value="ARCHIVED" <%= report.status === "ARCHIVED" ? "selected" : "" %>>Arquivada</option>
+                </select>
+
+                <button type="submit" class="btn-primary">
+                  Salvar
+                </button>
+
+                <a href="/forum/topico/<%= report.id %>" class="btn-secondary">
+                  Abrir
+                </a>
+              </form>
+            </article>
+          <% }) %>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>
