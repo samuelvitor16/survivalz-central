@@ -13,6 +13,7 @@ const playerRoutes = require("./routes/playerRoutes");
 const forumRoutes = require("./routes/forumRoutes");
 const forumModerationRoutes = require("./routes/forumModerationRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const viewHelpers = require("./utils/viewHelpers");
 
 const { renderNotFound } = require("./controllers/errorController");
 
@@ -23,6 +24,7 @@ const PORT = process.env.PORT || 3000;
 // Configurar EJS como motor de visualização
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+Object.assign(app.locals, viewHelpers);
 
 // Liberar arquivos estáticos: CSS, JS, imagens
 app.use(express.static(path.join(__dirname, "public")));

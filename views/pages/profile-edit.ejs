@@ -21,113 +21,143 @@
         <div class="player-dashboard-header">
           <div>
             <span class="section-tag">Editar perfil</span>
-
             <h1>Personalize seu perfil</h1>
-
             <p>
-              Adicione avatar, banner, bio e informações públicas para deixar seu perfil
-              com mais cara de comunidade.
+              Ajuste avatar, capa, bio, assinatura e informacoes publicas do seu perfil.
             </p>
           </div>
 
           <a href="/perfil/<%= user.id %>" class="btn-secondary">
-            Ver perfil público
+            Ver perfil publico
           </a>
         </div>
 
-        <div class="profile-edit-card">
-          <% if (error) { %>
-            <div class="player-auth-error">
-              <%= error %>
-            </div>
-          <% } %>
+        <div class="profile-edit-layout">
+          <div class="profile-edit-card">
+            <% if (error) { %>
+              <div class="player-auth-error">
+                <%= error %>
+              </div>
+            <% } %>
 
-          <% if (success) { %>
-            <div class="profile-edit-success">
-              <%= success %>
-            </div>
-          <% } %>
+            <% if (success) { %>
+              <div class="profile-edit-success">
+                <%= success %>
+              </div>
+            <% } %>
 
-          <form action="/perfil/editar" method="POST" class="player-auth-form">
-            <div class="form-group">
-              <label for="name">Nome público</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value="<%= user.name || '' %>"
-                required
-              >
+            <form action="/perfil/editar" method="POST" class="player-auth-form">
+              <div class="form-group">
+                <label for="name">Nome publico</label>
+                <input type="text" id="name" name="name" value="<%= user.name || '' %>" maxlength="80" required>
+              </div>
+
+              <div class="form-group">
+                <label for="sampNick">Nick no servidor</label>
+                <input type="text" id="sampNick" name="sampNick" value="<%= user.sampNick || '' %>" maxlength="40" required>
+              </div>
+
+              <div class="form-group">
+                <label for="discord">Discord</label>
+                <input type="text" id="discord" name="discord" value="<%= user.discord || '' %>" maxlength="80">
+              </div>
+
+              <div class="form-group">
+                <label for="location">Localizacao / faccao / grupo</label>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  value="<%= user.location || '' %>"
+                  maxlength="80"
+                  placeholder="Ex: Zona Norte, Sobrevivente solo, Cla..."
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="avatarUrl">URL do avatar</label>
+                <input type="url" id="avatarUrl" name="avatarUrl" value="<%= user.avatarUrl || '' %>" placeholder="https://...">
+              </div>
+
+              <div class="form-group">
+                <label for="bannerUrl">URL do banner/capa</label>
+                <input type="url" id="bannerUrl" name="bannerUrl" value="<%= user.bannerUrl || '' %>" placeholder="https://...">
+              </div>
+
+              <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  maxlength="800"
+                  placeholder="Fale sobre voce, seu estilo de jogo, cla ou historia no servidor..."
+                ><%= user.bio || '' %></textarea>
+                <small class="profile-edit-hint">Maximo recomendado: 800 caracteres.</small>
+              </div>
+
+              <div class="form-group">
+                <label for="signatureText">Assinatura em texto</label>
+                <textarea
+                  id="signatureText"
+                  name="signatureText"
+                  maxlength="350"
+                  placeholder="Frase, lema, cla, recado ou mini apresentacao..."
+                ><%= user.signatureText || '' %></textarea>
+                <small class="profile-edit-hint">Maximo recomendado: 350 caracteres.</small>
+              </div>
+
+              <div class="form-group">
+                <label for="signatureImageUrl">URL da imagem de assinatura</label>
+                <input
+                  type="url"
+                  id="signatureImageUrl"
+                  name="signatureImageUrl"
+                  value="<%= user.signatureImageUrl || '' %>"
+                  placeholder="https://..."
+                >
+              </div>
+
+              <button type="submit" class="btn-primary player-auth-btn">
+                Salvar perfil
+              </button>
+            </form>
+          </div>
+
+          <aside class="profile-edit-preview-card">
+            <h2>Preview</h2>
+
+            <div
+              id="bannerPreview"
+              class="profile-edit-banner-preview"
+              style="<%= user.bannerUrl ? `background-image: url('${user.bannerUrl}')` : '' %>"
+            >
+              <span>Banner 1400x350</span>
             </div>
 
-            <div class="form-group">
-              <label for="sampNick">Nick no servidor</label>
-              <input
-                type="text"
-                id="sampNick"
-                name="sampNick"
-                value="<%= user.sampNick || '' %>"
-                required
-              >
+            <div class="profile-edit-avatar-preview">
+              <% if (user.avatarUrl) { %>
+                <img id="avatarPreview" src="<%= user.avatarUrl %>" alt="Preview do avatar">
+              <% } else { %>
+                <img id="avatarPreview" src="" alt="Preview do avatar" style="display:none;">
+                <span id="avatarFallback"><%= user.name.charAt(0).toUpperCase() %></span>
+              <% } %>
             </div>
 
-            <div class="form-group">
-              <label for="discord">Discord</label>
-              <input
-                type="text"
-                id="discord"
-                name="discord"
-                value="<%= user.discord || '' %>"
-                required
-              >
-            </div>
+            <div class="profile-edit-signature-preview">
+              <strong>Assinatura</strong>
+              <% if (user.signatureText) { %>
+                <p id="signatureTextPreview"><%- renderUserText(user.signatureText) %></p>
+              <% } else { %>
+                <p id="signatureTextPreview">Texto da assinatura.</p>
+              <% } %>
 
-            <div class="form-group">
-              <label for="location">Localização / facção / grupo</label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value="<%= user.location || '' %>"
-                placeholder="Ex: Zona Norte, Sobrevivente solo, Clã..."
-              >
+              <% if (user.signatureImageUrl) { %>
+                <img id="signatureImagePreview" src="<%= user.signatureImageUrl %>" alt="Preview da assinatura">
+              <% } else { %>
+                <img id="signatureImagePreview" src="" alt="Preview da assinatura" style="display:none;">
+              <% } %>
             </div>
-
-            <div class="form-group">
-              <label for="avatarUrl">URL do avatar</label>
-              <input
-                type="url"
-                id="avatarUrl"
-                name="avatarUrl"
-                value="<%= user.avatarUrl || '' %>"
-                placeholder="https://..."
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="bannerUrl">URL do banner/capa</label>
-              <input
-                type="url"
-                id="bannerUrl"
-                name="bannerUrl"
-                value="<%= user.bannerUrl || '' %>"
-                placeholder="https://..."
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="bio">Bio</label>
-              <textarea
-                id="bio"
-                name="bio"
-                placeholder="Fale um pouco sobre você, seu estilo de jogo, clã, história no servidor..."
-              ><%= user.bio || '' %></textarea>
-            </div>
-
-            <button type="submit" class="btn-primary player-auth-btn">
-              Salvar perfil
-            </button>
-          </form>
+          </aside>
         </div>
 
       </div>
@@ -136,5 +166,42 @@
 
   <%- include("../partials/footer") %>
 
+  <script>
+    const updateImagePreview = (inputId, imageId, fallbackId) => {
+      const input = document.getElementById(inputId);
+      const image = document.getElementById(imageId);
+      const fallback = fallbackId ? document.getElementById(fallbackId) : null;
+
+      if (!input || !image) return;
+
+      input.addEventListener("input", () => {
+        const value = input.value.trim();
+        const isHttpUrl = /^https?:\/\//i.test(value);
+        image.src = isHttpUrl ? value : "";
+        image.style.display = isHttpUrl ? "block" : "none";
+        if (fallback) fallback.style.display = isHttpUrl ? "none" : "flex";
+      });
+    };
+
+    updateImagePreview("avatarUrl", "avatarPreview", "avatarFallback");
+    updateImagePreview("signatureImageUrl", "signatureImagePreview");
+
+    const bannerInput = document.getElementById("bannerUrl");
+    const bannerPreview = document.getElementById("bannerPreview");
+    if (bannerInput && bannerPreview) {
+      bannerInput.addEventListener("input", () => {
+        const value = bannerInput.value.trim();
+        bannerPreview.style.backgroundImage = /^https?:\/\//i.test(value) ? `url("${value}")` : "";
+      });
+    }
+
+    const signatureInput = document.getElementById("signatureText");
+    const signaturePreview = document.getElementById("signatureTextPreview");
+    if (signatureInput && signaturePreview) {
+      signatureInput.addEventListener("input", () => {
+        signaturePreview.textContent = signatureInput.value || "Texto da assinatura.";
+      });
+    }
+  </script>
 </body>
 </html>

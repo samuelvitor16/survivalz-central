@@ -4,16 +4,32 @@ const renderPlayerDashboard = async (req, res) => {
   try {
     const playerId = req.session.playerId;
 
-    const [user, topics, reports, repliesCount] = await Promise.all([
+    const [user, topics, reports, recentReplies, repliesCount] = await Promise.all([
       prisma.user.findUnique({
         where: {
           id: playerId
+        },
+        include: {
+          medals: {
+            take: 6,
+            orderBy: {
+              createdAt: "desc"
+            },
+            include: {
+              medal: true
+            }
+          }
         }
       }),
 
       prisma.forumTopic.findMany({
         where: {
-          authorId: playerId
+          authorId: playerId,
+          category: {
+            slug: {
+              not: "denuncias"
+            }
+          }
         },
         orderBy: {
           updatedAt: "desc"
@@ -50,6 +66,23 @@ const renderPlayerDashboard = async (req, res) => {
         }
       }),
 
+      prisma.forumPost.findMany({
+        where: {
+          authorId: playerId
+        },
+        orderBy: {
+          createdAt: "desc"
+        },
+        take: 5,
+        include: {
+          topic: {
+            include: {
+              category: true
+            }
+          }
+        }
+      }),
+
       prisma.forumPost.count({
         where: {
           authorId: playerId
@@ -62,6 +95,7 @@ const renderPlayerDashboard = async (req, res) => {
       user,
       topics,
       reports,
+      recentReplies,
       repliesCount
     });
   } catch (error) {

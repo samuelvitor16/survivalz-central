@@ -18,113 +18,156 @@
     <section class="player-dashboard-section">
       <div class="container">
 
-        <div class="player-dashboard-header">
-          <div>
-            <span class="section-tag">Meu painel</span>
+        <div class="dashboard-v2-hero">
+          <div class="dashboard-v2-profile">
+            <a href="/perfil/<%= user.id %>" class="dashboard-v2-avatar">
+              <% if (user.avatarUrl) { %>
+                <img
+                  src="<%= user.avatarUrl %>"
+                  alt="Avatar de <%= user.name %>"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+                <span style="display:none;"><%= user.name.charAt(0).toUpperCase() %></span>
+              <% } else { %>
+                <span><%= user.name.charAt(0).toUpperCase() %></span>
+              <% } %>
+            </a>
 
-            <h1>Bem-vindo, <%= user ? user.name : "sobrevivente" %></h1>
+            <div>
+              <span class="section-tag">Meu painel</span>
+              <h1>Bem-vindo, <%= user.name %></h1>
+              <p>
+                Acompanhe seu perfil, suas medalhas, topicos, denuncias,
+                respostas recentes e atalhos principais da Central SurvivalZ.
+              </p>
 
-            <p>
-              Acompanhe sua conta, seus tópicos, denúncias, respostas e atalhos
-              principais da Central SurvivalZ.
-            </p>
+              <div class="dashboard-v2-badges">
+                <span class="role-badge role-<%= user.role.toLowerCase() %>"><%= roleLabel(user.role) %></span>
+                <span>Nick: <%= user.sampNick || "Nao informado" %></span>
+                <span>Reputacao: <%= user.reputation || 0 %></span>
+              </div>
+            </div>
           </div>
 
-          <a href="/sair" class="btn-secondary">
-            Sair da conta
-          </a>
+          <a href="/sair" class="btn-secondary">Sair da conta</a>
+        </div>
+
+        <div class="dashboard-v2-quick-links">
+          <a href="/perfil/editar">Editar perfil</a>
+          <a href="/perfil/<%= user.id %>">Meu perfil</a>
+          <a href="/comunidade">Comunidade</a>
+          <a href="/forum/categoria/denuncias/novo">Criar denuncia</a>
+          <a href="/forum">Forum</a>
+          <a href="/loja">Loja</a>
         </div>
 
         <div class="player-dashboard-grid">
           <div class="player-panel-card">
-            <span>👤</span>
-            <h2>Minha conta</h2>
+            <span>☣</span>
+            <h2>Perfil</h2>
             <p>
               <strong>E-mail:</strong> <%= user.email %><br>
-              <strong>Discord:</strong> <%= user.discord || "Não informado" %><br>
-              <strong>Nick:</strong> <%= user.sampNick || "Não informado" %><br>
-              <strong>Cargo:</strong> <%= user.role %>
+              <strong>Discord:</strong> <%= user.discord || "Nao informado" %><br>
+              <strong>Cargo:</strong> <%= roleLabel(user.role) %>
             </p>
           </div>
 
           <div class="player-panel-card">
-            <span>💬</span>
-            <h2>Meus tópicos</h2>
-            <p>
-              Você criou <strong><%= topics.length %></strong> tópico(s) recente(s).
-            </p>
+            <span>◆</span>
+            <h2>Medalhas recentes</h2>
 
-            <a href="/forum">Acessar fórum</a>
+            <% if (!user.medals || user.medals.length === 0) { %>
+              <p>Suas medalhas aparecerao aqui quando forem concedidas pela staff.</p>
+            <% } else { %>
+              <div class="dashboard-v2-medals">
+                <% user.medals.forEach((userMedal) => { %>
+                  <span
+                    class="forum-post-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+                    title="<%= userMedal.medal.name %>"
+                  >
+                    <%= userMedal.medal.icon || "★" %>
+                  </span>
+                <% }) %>
+              </div>
+            <% } %>
           </div>
 
           <div class="player-panel-card">
-            <span>⚠</span>
-            <h2>Minhas denúncias</h2>
-            <p>
-              Você possui <strong><%= reports.length %></strong> denúncia(s) recente(s).
-            </p>
-
-            <a href="/forum/categoria/denuncias">Ver denúncias</a>
+            <span>▣</span>
+            <h2>Topicos</h2>
+            <p>Voce possui <strong><%= topics.length %></strong> topico(s) publico(s) recente(s).</p>
+            <a href="/forum">Acessar forum</a>
           </div>
 
           <div class="player-panel-card">
-            <span>✍️</span>
-            <h2>Minhas respostas</h2>
-            <p>
-              Você enviou <strong><%= repliesCount %></strong> resposta(s) no fórum.
-            </p>
+            <span>!</span>
+            <h2>Denuncias</h2>
+            <p>Voce possui <strong><%= reports.length %></strong> denuncia(s) recente(s).</p>
+            <a href="/forum/categoria/denuncias">Ver denuncias</a>
           </div>
         </div>
 
-        <div class="player-dashboard-content-grid">
+        <div class="player-dashboard-content-grid dashboard-v2-content-grid">
           <div class="player-dashboard-list-card">
             <div class="player-list-header">
-              <h2>Últimos tópicos</h2>
-              <a href="/forum">Ver fórum</a>
+              <h2>Topicos recentes</h2>
+              <a href="/forum/categoria/comunidade/novo">Criar topico</a>
             </div>
 
             <% if (topics.length === 0) { %>
-              <p class="player-empty-text">
-                Você ainda não criou nenhum tópico.
-              </p>
+              <p class="player-empty-text">Voce ainda nao criou topicos publicos.</p>
             <% } %>
 
             <% topics.forEach((topic) => { %>
               <a href="/forum/topico/<%= topic.id %>" class="player-dashboard-topic-item">
                 <div>
                   <strong><%= topic.title %></strong>
-                  <span>
-                    <%= topic.category.name %> • <%= topic._count.posts %> resposta(s)
-                  </span>
+                  <span><%= topic.category.name %> • <%= topic._count.posts %> resposta(s)</span>
                 </div>
 
-                <small><%= topic.status %></small>
+                <small><%= topicStatusLabel(topic.status) %></small>
               </a>
             <% }) %>
           </div>
 
           <div class="player-dashboard-list-card">
             <div class="player-list-header">
-              <h2>Minhas denúncias</h2>
-              <a href="/forum/categoria/denuncias">Ver área</a>
+              <h2>Denuncias recentes</h2>
+              <a href="/forum/categoria/denuncias/novo">Criar denuncia</a>
             </div>
 
             <% if (reports.length === 0) { %>
-              <p class="player-empty-text">
-                Você ainda não abriu nenhuma denúncia.
-              </p>
+              <p class="player-empty-text">Voce ainda nao abriu nenhuma denuncia.</p>
             <% } %>
 
             <% reports.forEach((report) => { %>
               <a href="/forum/topico/<%= report.id %>" class="player-dashboard-topic-item">
                 <div>
                   <strong><%= report.title %></strong>
-                  <span>
-                    Acusado: <%= report.reportAccusedNick || "Não informado" %>
-                  </span>
+                  <span>Acusado: <%= report.reportAccusedNick || "Nao informado" %></span>
                 </div>
 
-                <small><%= report.status %></small>
+                <small><%= topicStatusLabel(report.status) %></small>
+              </a>
+            <% }) %>
+          </div>
+
+          <div class="player-dashboard-list-card dashboard-v2-wide-card">
+            <div class="player-list-header">
+              <h2>Respostas recentes</h2>
+              <span><%= repliesCount %> resposta(s)</span>
+            </div>
+
+            <% if (recentReplies.length === 0) { %>
+              <p class="player-empty-text">Voce ainda nao respondeu topicos do forum.</p>
+            <% } %>
+
+            <% recentReplies.forEach((reply) => { %>
+              <a href="/forum/topico/<%= reply.topic.id %>" class="player-dashboard-topic-item">
+                <div>
+                  <strong><%= reply.topic.title %></strong>
+                  <span><%= reply.topic.category.name %> • respondido em <%= formatDate(reply.createdAt) %></span>
+                </div>
               </a>
             <% }) %>
           </div>

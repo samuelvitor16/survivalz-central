@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/forum.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="forum-section community-section">
+      <div class="container">
+
+        <div class="community-hero">
+          <div>
+            <span class="section-tag">Comunidade SurvivalZ</span>
+            <h1>Central dos sobreviventes</h1>
+            <p>
+              Um ponto de encontro para avisos, duvidas, sugestoes, denuncias,
+              perfis, medalhas e conversas da comunidade SurvivalZ.
+            </p>
+          </div>
+
+          <div class="community-hero-actions">
+            <a href="/forum" class="btn-primary">Abrir forum</a>
+            <a href="/forum/categoria/denuncias" class="btn-secondary">Denuncias</a>
+          </div>
+        </div>
+
+        <div class="community-stats-grid">
+          <div>
+            <span>Usuarios</span>
+            <strong><%= stats.totalUsers %></strong>
+          </div>
+
+          <div>
+            <span>Topicos</span>
+            <strong><%= stats.totalTopics %></strong>
+          </div>
+
+          <div>
+            <span>Respostas</span>
+            <strong><%= stats.totalPosts %></strong>
+          </div>
+
+          <div>
+            <span>Denuncias</span>
+            <strong><%= stats.totalReports %></strong>
+          </div>
+        </div>
+
+        <div class="community-quick-links">
+          <a href="/forum">Forum</a>
+          <a href="/forum/categoria/denuncias">Denuncias</a>
+          <a href="/forum/categoria/duvidas">Duvidas</a>
+          <a href="/forum/categoria/sugestoes">Sugestoes</a>
+          <a href="/loja">Loja Beta</a>
+        </div>
+
+        <div class="community-main-grid">
+          <section class="community-panel community-panel-large">
+            <div class="community-panel-header">
+              <h2>Topicos recentes</h2>
+              <a href="/forum">Ver forum</a>
+            </div>
+
+            <% if (recentTopics.length === 0) { %>
+              <p class="community-empty">Nenhum topico publico publicado ainda.</p>
+            <% } %>
+
+            <% recentTopics.forEach((topic) => { %>
+              <a href="/forum/topico/<%= topic.id %>" class="community-topic-row">
+                <div>
+                  <strong><%= topic.title %></strong>
+                  <span>
+                    <%= topic.category.name %> por <%= topic.author.name %>
+                    • <%= topic._count.posts %> resposta(s)
+                  </span>
+                </div>
+                <small class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
+                  <%= topicStatusLabel(topic.status) %>
+                </small>
+              </a>
+            <% }) %>
+          </section>
+
+          <aside class="community-panel">
+            <div class="community-panel-header">
+              <h2>Ultimos membros</h2>
+            </div>
+
+            <% if (latestUsers.length === 0) { %>
+              <p class="community-empty">Nenhum membro registrado ainda.</p>
+            <% } %>
+
+            <% latestUsers.forEach((member) => { %>
+              <a href="/perfil/<%= member.id %>" class="community-member-row">
+                <% if (member.avatarUrl) { %>
+                  <img src="<%= member.avatarUrl %>" alt="Avatar de <%= member.name %>">
+                <% } else { %>
+                  <span><%= member.name.charAt(0).toUpperCase() %></span>
+                <% } %>
+
+                <div>
+                  <strong><%= member.name %></strong>
+                  <small><%= member.sampNick || roleLabel(member.role) %></small>
+                </div>
+              </a>
+            <% }) %>
+          </aside>
+        </div>
+
+        <div class="community-category-grid">
+          <%- include("../partials/community-topic-panel", {
+            heading: "Avisos oficiais",
+            href: "/forum/categoria/avisos-oficiais",
+            topics: officialTopics
+          }) %>
+
+          <%- include("../partials/community-topic-panel", {
+            heading: "Duvidas recentes",
+            href: "/forum/categoria/duvidas",
+            topics: doubtTopics
+          }) %>
+
+          <%- include("../partials/community-topic-panel", {
+            heading: "Sugestoes recentes",
+            href: "/forum/categoria/sugestoes",
+            topics: suggestionTopics
+          }) %>
+        </div>
+
+        <section class="community-panel">
+          <div class="community-panel-header">
+            <h2>Jogadores mais ativos</h2>
+          </div>
+
+          <div class="community-active-grid">
+            <% if (activeUsers.length === 0) { %>
+              <p class="community-empty">A atividade da comunidade aparecera aqui.</p>
+            <% } %>
+
+            <% activeUsers.forEach((member, index) => { %>
+              <a href="/perfil/<%= member.id %>" class="community-active-card">
+                <span>#<%= index + 1 %></span>
+                <div>
+                  <strong><%= member.name %></strong>
+                  <small>
+                    <%= member._count.topics %> topico(s) •
+                    <%= member._count.posts %> resposta(s)
+                  </small>
+                </div>
+              </a>
+            <% }) %>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

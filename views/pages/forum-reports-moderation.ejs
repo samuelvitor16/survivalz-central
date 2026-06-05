@@ -46,7 +46,7 @@
             <article class="forum-report-moderation-card">
               <div class="forum-report-moderation-main">
                 <span class="forum-topic-status status-<%= report.status.toLowerCase() %>">
-                  <%= report.status %>
+                  <%= topicStatusLabel(report.status) %>
                 </span>
 
                 <h2>
@@ -79,7 +79,7 @@
 
                 <div class="forum-report-proof-preview">
                   <span>Provas</span>
-                  <p><%= report.reportEvidence || "Nenhuma prova informada." %></p>
+                  <p><%- renderUserText(report.reportEvidence || "Nenhuma prova informada.") %></p>
                 </div>
               </div>
 

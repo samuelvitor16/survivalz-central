@@ -20,102 +20,84 @@
 
         <% const profileBannerUrl = user.bannerUrl || "/images/home/hero-bg.png"; %>
 
-        <div class="profile-v4-shell">
-
+        <div class="profile-v5-shell">
           <div
-            class="profile-v4-cover"
-            style='background-image: linear-gradient(90deg, rgba(0,0,0,.72), rgba(120,0,0,.30)), url("<%= profileBannerUrl %>");'
+            class="profile-v5-cover"
+            style='background-image: linear-gradient(90deg, rgba(0,0,0,.76), rgba(120,0,0,.26)), url("<%= profileBannerUrl %>");'
           ></div>
 
-          <div class="profile-v4-main">
-            <div class="profile-v4-avatar-box">
+          <div class="profile-v5-main">
+            <div class="profile-v5-avatar-box">
               <% if (user.avatarUrl) { %>
                 <img
                   src="<%= user.avatarUrl %>"
                   alt="Avatar de <%= user.name %>"
-                  class="profile-v4-avatar-img"
+                  class="profile-v5-avatar-img"
                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
-                <div class="profile-v4-avatar-fallback" style="display:none;">
+                <div class="profile-v5-avatar-fallback" style="display:none;">
                   <%= user.name.charAt(0).toUpperCase() %>
                 </div>
               <% } else { %>
-                <div class="profile-v4-avatar-fallback">
+                <div class="profile-v5-avatar-fallback">
                   <%= user.name.charAt(0).toUpperCase() %>
                 </div>
               <% } %>
             </div>
 
-            <div class="profile-v4-info">
-              <div class="profile-v4-title-row">
+            <div class="profile-v5-info">
+              <div class="profile-v5-title-row">
                 <div>
+                  <span class="section-tag">Perfil SurvivalZ</span>
                   <h1><%= user.name %></h1>
 
-                  <div class="profile-v4-subtitle">
-                    <span><%= user.sampNick || "Nick não informado" %></span>
-                    <strong><%= user.role %></strong>
+                  <div class="profile-v5-subtitle">
+                    <strong class="role-badge role-<%= user.role.toLowerCase() %>"><%= roleLabel(user.role) %></strong>
+                    <span><%= user.sampNick || "Nick nao informado" %></span>
+                    <% if (user.location) { %>
+                      <span><%= user.location %></span>
+                    <% } %>
                   </div>
                 </div>
 
-                <% if (isPlayerLogged && playerName === user.name) { %>
-                  <a href="/perfil/editar" class="btn-primary profile-v4-edit-btn">
-                    Editar perfil
-                  </a>
-                <% } %>
+                <div class="profile-v5-actions">
+                  <% if (isOwnProfile) { %>
+                    <a href="/perfil/editar" class="btn-primary">Editar perfil</a>
+                  <% } %>
+                  <a href="/forum" class="btn-secondary">Ver forum</a>
+                  <a href="/comunidade" class="btn-secondary">Comunidade</a>
+                </div>
               </div>
 
-              <div class="profile-v4-badges">
-                <span class="role-badge role-<%= user.role.toLowerCase() %>"><%= user.role %></span>
-                <span>Conta criada em <%= new Date(user.createdAt).toLocaleDateString("pt-BR") %></span>
-
-                <% if (user.location) { %>
-                  <span><%= user.location %></span>
-                <% } %>
-              </div>
-
-              <div class="profile-v4-bio">
-                <% if (user.bio) { %>
-                  <%- user.bio.replace(/\n/g, "<br>") %>
+              <div class="profile-v5-medal-strip">
+                <% if (user.medals.length === 0) { %>
+                  <span>Sem medalhas ainda</span>
                 <% } else { %>
-                  Este sobrevivente ainda não adicionou uma bio.
+                  <% user.medals.slice(0, 8).forEach((userMedal) => { %>
+                    <span
+                      class="profile-v5-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+                      title="<%= userMedal.medal.name %>"
+                    >
+                      <%= userMedal.medal.icon || "★" %>
+                    </span>
+                  <% }) %>
                 <% } %>
               </div>
-              <div class="profile-v4-medal-strip">
-  <div class="profile-v4-medal-strip-header">
-    <strong>Medalhas</strong>
-    <span><%= user.medals.length %> medalha(s)</span>
-  </div>
 
-  <% if (user.medals.length === 0) { %>
-    <p class="profile-v4-no-medals">
-      Este jogador ainda não possui medalhas.
-    </p>
-  <% } else { %>
-    <div class="profile-v4-medal-list">
-      <% user.medals.forEach((userMedal) => { %>
-        <div
-          class="profile-v4-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
-          title="<%= userMedal.medal.name %> - <%= userMedal.medal.description || 'Medalha SurvivalZ' %>"
-        >
-          <span><%= userMedal.medal.icon || "🏅" %></span>
-          <strong><%= userMedal.medal.name %></strong>
-        </div>
-      <% }) %>
-    </div>
-  <% } %>
-</div>
+              <div class="profile-v5-bio">
+                <% if (user.bio) { %>
+                  <%- renderUserText(user.bio) %>
+                <% } else { %>
+                  Este sobrevivente ainda nao adicionou uma bio.
+                <% } %>
+              </div>
             </div>
           </div>
 
-          <div class="profile-v4-stats">
+          <div class="profile-v5-stats">
             <div>
-              <span>Tópicos públicos</span>
-              <strong><%= user.topics.length %></strong>
-            </div>
-
-            <div>
-              <span>Total de tópicos</span>
-              <strong><%= user._count.topics %></strong>
+              <span>Topicos publicos</span>
+              <strong><%= publicTopicsCount %></strong>
             </div>
 
             <div>
@@ -124,43 +106,38 @@
             </div>
 
             <div>
-  <span>Medalhas</span>
-  <strong><%= user.medals.length %></strong>
-</div>
+              <span>Medalhas</span>
+              <strong><%= user.medals.length %></strong>
+            </div>
 
             <div>
-  <span>Reputação</span>
-  <strong><%= user.reputation || 0 %></strong>
-</div>
+              <span>Reputacao</span>
+              <strong><%= user.reputation || 0 %></strong>
+            </div>
+
+            <div>
+              <span>Conta criada</span>
+              <strong><%= formatDate(user.createdAt) %></strong>
+            </div>
           </div>
 
-          <div class="profile-v4-actions">
-            <a href="/forum" class="btn-secondary">Ver fórum</a>
-            <a href="/forum/categoria/comunidade" class="btn-secondary">Comunidade</a>
-            <a href="/forum/categoria/denuncias" class="btn-secondary">Denúncias</a>
-          </div>
-
-          <div class="profile-v4-tabs">
-            <span class="active">Posts do perfil</span>
-            <span>Última atividade</span>
-            <span>Postagens</span>
-            <span>Sobre</span>
-            <span>Medalhas</span>
-          </div>
-
+          <nav class="profile-v5-tabs">
+            <a class="<%= activeTab === 'posts' ? 'active' : '' %>" href="/perfil/<%= user.id %>?tab=posts">Posts</a>
+            <a class="<%= activeTab === 'sobre' ? 'active' : '' %>" href="/perfil/<%= user.id %>?tab=sobre">Sobre</a>
+            <a class="<%= activeTab === 'medalhas' ? 'active' : '' %>" href="/perfil/<%= user.id %>?tab=medalhas">Medalhas</a>
+            <a class="<%= activeTab === 'atividade' ? 'active' : '' %>" href="/perfil/<%= user.id %>?tab=atividade">Atividade</a>
+          </nav>
         </div>
 
-        <div class="profile-v4-content-grid">
-          <div class="profile-v4-panel">
+        <div class="profile-v5-panel">
+          <% if (activeTab === "posts") { %>
             <div class="player-list-header">
-              <h2>Atividade pública</h2>
-              <a href="/forum">Ver fórum</a>
+              <h2>Topicos publicos</h2>
+              <a href="/forum">Ver forum</a>
             </div>
 
             <% if (user.topics.length === 0) { %>
-              <p class="player-empty-text">
-                Este jogador ainda não criou tópicos públicos.
-              </p>
+              <p class="player-empty-text">Este jogador ainda nao criou topicos publicos.</p>
             <% } %>
 
             <% user.topics.forEach((topic) => { %>
@@ -172,40 +149,90 @@
                   </span>
                 </div>
 
-                <small><%= topic.status %></small>
+                <small><%= topicStatusLabel(topic.status) %></small>
               </a>
             <% }) %>
-          </div>
+          <% } %>
 
-          <div class="profile-v4-panel">
-            <h2>Sobre</h2>
+          <% if (activeTab === "sobre") { %>
+            <h2>Sobre o jogador</h2>
 
-            <div class="profile-v4-about-item">
-              <span>Nome</span>
-              <strong><%= user.name %></strong>
+            <div class="profile-v5-about-grid">
+              <div><span>Nome publico</span><strong><%= user.name %></strong></div>
+              <div><span>Nick no servidor</span><strong><%= user.sampNick || "Nao informado" %></strong></div>
+              <div><span>Discord</span><strong><%= user.discord || "Nao informado" %></strong></div>
+              <div><span>Localizacao / grupo</span><strong><%= user.location || "Nao informado" %></strong></div>
+              <div><span>Cargo</span><strong><%= roleLabel(user.role) %></strong></div>
+              <div><span>Conta criada em</span><strong><%= formatDate(user.createdAt) %></strong></div>
             </div>
 
-            <div class="profile-v4-about-item">
-              <span>Nick no servidor</span>
-              <strong><%= user.sampNick || "Não informado" %></strong>
+            <div class="profile-v5-about-bio">
+              <h3>Bio</h3>
+              <p>
+                <% if (user.bio) { %>
+                  <%- renderUserText(user.bio) %>
+                <% } else { %>
+                  Nenhuma bio publicada.
+                <% } %>
+              </p>
+            </div>
+          <% } %>
+
+          <% if (activeTab === "medalhas") { %>
+            <h2>Medalhas</h2>
+
+            <% if (user.medals.length === 0) { %>
+              <p class="player-empty-text">Este jogador ainda nao possui medalhas.</p>
+            <% } %>
+
+            <div class="profile-medals-grid">
+              <% user.medals.forEach((userMedal) => { %>
+                <article class="profile-medal-card medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>">
+                  <div class="profile-medal-icon">
+                    <span><%= userMedal.medal.icon || "★" %></span>
+                  </div>
+
+                  <div>
+                    <strong><%= userMedal.medal.name %></strong>
+                    <span><%= userMedal.medal.rarity %></span>
+                    <p><%= userMedal.medal.description || "Medalha SurvivalZ." %></p>
+                    <% if (userMedal.reason) { %>
+                      <small>Motivo: <%= userMedal.reason %></small>
+                    <% } %>
+                  </div>
+                </article>
+              <% }) %>
+            </div>
+          <% } %>
+
+          <% if (activeTab === "atividade") { %>
+            <div class="player-list-header">
+              <h2>Atividade recente</h2>
+              <a href="/forum">Ver forum</a>
             </div>
 
-            <div class="profile-v4-about-item">
-              <span>Cargo</span>
-              <strong><%= user.role %></strong>
-            </div>
+            <% if (recentPosts.length === 0 && user.topics.length === 0) { %>
+              <p class="player-empty-text">A atividade publica deste jogador aparecera aqui.</p>
+            <% } %>
 
-            <div class="profile-v4-about-item">
-              <span>Discord</span>
-              <strong><%= user.discord || "Não informado" %></strong>
-            </div>
+            <% user.topics.slice(0, 5).forEach((topic) => { %>
+              <a href="/forum/topico/<%= topic.id %>" class="player-dashboard-topic-item">
+                <div>
+                  <strong>Criou: <%= topic.title %></strong>
+                  <span><%= topic.category.name %> • <%= formatDate(topic.createdAt) %></span>
+                </div>
+              </a>
+            <% }) %>
 
-            <div class="profile-v4-about-item">
-              <span>Localização / grupo</span>
-              <strong><%= user.location || "Não informado" %></strong>
-            </div>
-          </div>
-          
+            <% recentPosts.forEach((post) => { %>
+              <a href="/forum/topico/<%= post.topic.id %>" class="player-dashboard-topic-item">
+                <div>
+                  <strong>Respondeu em: <%= post.topic.title %></strong>
+                  <span><%= post.topic.category.name %> • <%= formatDate(post.createdAt) %></span>
+                </div>
+              </a>
+            <% }) %>
+          <% } %>
         </div>
 
       </div>

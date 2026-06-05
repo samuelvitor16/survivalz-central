@@ -1,0 +1,19 @@
+<section class="community-panel">
+  <div class="community-panel-header">
+    <h2><%= heading %></h2>
+    <a href="<%= href %>">Ver area</a>
+  </div>
+
+  <% if (topics.length === 0) { %>
+    <p class="community-empty">Nada publicado por aqui ainda.</p>
+  <% } %>
+
+  <% topics.forEach((topic) => { %>
+    <a href="/forum/topico/<%= topic.id %>" class="community-topic-row compact">
+      <div>
+        <strong><%= topic.title %></strong>
+        <span><%= topic.author.name %> • <%= formatDate(topic.createdAt) %></span>
+      </div>
+    </a>
+  <% }) %>
+</section>

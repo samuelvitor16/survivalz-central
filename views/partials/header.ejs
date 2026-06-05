@@ -5,49 +5,114 @@
   <img src="/images/logo/survivalz-logo.png" alt="SurvivalZ">
 </a>
 
-    <input type="checkbox" id="nav-toggle" class="nav-checkbox">
-
-    <label for="nav-toggle" class="nav-toggle">
-      <span></span>
-      <span></span>
-      <span></span>
-    </label>
-
+    <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
+  ☰
+</button>
     <nav class="navbar">
-      <a href="/">Início</a>
-      <a href="/forum">Fórum</a>
-      <% if (["STAFF", "ADMIN", "OWNER"].includes(playerRole)) { %>
-  <a href="/forum/moderacao">Moderação</a>
-  <a href="/forum/moderacao/denuncias">Denúncias</a>
-<% } %>
+  <a href="/">Início</a>
+  <a href="/comunidade">Comunidade</a>
+  <a href="/forum">Fórum</a>
+  <a href="/loja">Loja Beta</a>
 
+  <div class="nav-dropdown">
+    <button type="button">Servidor ▾</button>
+
+    <div class="nav-dropdown-menu">
       <a href="/sobre">Sobre</a>
       <a href="/gestao">Gestão</a>
       <a href="<%= guideLink %>" target="_blank">Guia</a>
-      <a href="/loja">Loja Beta</a>
       <a href="/loja/consultar">Consultar Pedido</a>
-        <% if (isPlayerLogged) { %>
-      <a href="/painel">Meu Painel</a>
-      <a href="/sair">Sair</a>
-        <% } else { %>
-      <a href="/entrar">Entrar</a>
-      <a href="/cadastrar">Criar Conta</a>
-        <% } %>
+    </div>
+  </div>
 
-      <% if (isAdminLogged) { %>
-        <a href="/admin">Admin</a>
+  <% if (["STAFF", "ADMIN", "OWNER"].includes(playerRole)) { %>
+    <div class="nav-dropdown">
+      <button type="button">Staff ▾</button>
+
+      <div class="nav-dropdown-menu">
+        <a href="/forum/moderacao">Moderação</a>
+        <a href="/forum/moderacao/denuncias">Denúncias</a>
+        <a href="/forum/moderacao/medalhas">Medalhas</a>
+      </div>
+    </div>
+  <% } %>
+
+  <% if (isPlayerLogged) { %>
+    <div class="nav-dropdown">
+      <button type="button">Conta ▾</button>
+
+      <div class="nav-dropdown-menu">
+        <a href="/painel">Meu Painel</a>
+        <a href="/perfil/editar">Editar Perfil</a>
+        <a href="/sair">Sair</a>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="nav-dropdown">
+      <button type="button">Conta ▾</button>
+
+      <div class="nav-dropdown-menu">
+        <a href="/entrar">Entrar</a>
+        <a href="/cadastrar">Criar Conta</a>
+      </div>
+    </div>
+  <% } %>
+
+  <% if (isAdminLogged) { %>
+    <div class="nav-dropdown">
+      <button type="button">Admin ▾</button>
+
+      <div class="nav-dropdown-menu">
+        <a href="/admin">Painel Admin</a>
         <a href="/admin/pedidos">Pedidos</a>
-        <a href="/admin/logout" class="logout-link">Sair</a>
-      <% } %>
+        <a href="/admin/logout">Sair Admin</a>
+      </div>
+    </div>
+  <% } %>
 
-      <a href="<%= discordInvite %>" target="_blank" class="btn-nav">
-        Discord
-      </a>
-    </nav>
+  <a href="<%= discordInvite %>" target="_blank" class="btn-nav">
+    Discord
+  </a>
+</nav>
 
   </div>
 </header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuBtn = document.querySelector("#mobileMenuBtn, .mobile-menu-btn");
+    const navbar = document.querySelector(".navbar");
 
+    if (menuBtn && navbar) {
+      menuBtn.addEventListener("click", () => {
+        navbar.classList.toggle("is-open");
+
+        document.querySelectorAll(".nav-dropdown.open").forEach((dropdown) => {
+          dropdown.classList.remove("open");
+        });
+      });
+    }
+
+    const dropdownButtons = document.querySelectorAll(".nav-dropdown > button");
+
+    dropdownButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        if (window.innerWidth > 768) return;
+
+        event.preventDefault();
+
+        const dropdown = button.closest(".nav-dropdown");
+
+        document.querySelectorAll(".nav-dropdown.open").forEach((item) => {
+          if (item !== dropdown) {
+            item.classList.remove("open");
+          }
+        });
+
+        dropdown.classList.toggle("open");
+      });
+    });
+  });
+</script>
 
 <!--<a href="/denuncias">Denúncias</a> 
       <a href="/staff">Staff</a>

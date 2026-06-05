@@ -1,0 +1,89 @@
+<article class="forum-post-layout <%= typeof isReply !== 'undefined' && isReply ? 'forum-reply-post' : '' %>">
+  <aside class="forum-post-author-card">
+    <a href="/perfil/<%= author.id %>" class="forum-post-avatar-link">
+      <% if (author.avatarUrl) { %>
+        <img
+          src="<%= author.avatarUrl %>"
+          alt="Avatar de <%= author.name %>"
+          class="forum-post-avatar-img"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+        <div class="forum-post-avatar-fallback" style="display:none;">
+          <%= author.name.charAt(0).toUpperCase() %>
+        </div>
+      <% } else { %>
+        <div class="forum-post-avatar-fallback">
+          <%= author.name.charAt(0).toUpperCase() %>
+        </div>
+      <% } %>
+    </a>
+
+    <a href="/perfil/<%= author.id %>" class="forum-post-author-name">
+      <%= author.name %>
+    </a>
+
+    <span class="forum-post-role role-<%= author.role.toLowerCase() %>">
+      <%= roleLabel(author.role) %>
+    </span>
+
+    <% if (author.medals && author.medals.length > 0) { %>
+      <div class="forum-post-medals">
+        <% author.medals.forEach((userMedal) => { %>
+          <span
+            class="forum-post-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+            title="<%= userMedal.medal.name %> - <%= userMedal.medal.description || 'Medalha SurvivalZ' %>"
+          >
+            <%= userMedal.medal.icon || "★" %>
+          </span>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <div class="forum-post-author-info">
+      <span>Nick</span>
+      <strong><%= author.sampNick || "Nao informado" %></strong>
+    </div>
+
+    <div class="forum-post-author-info">
+      <span>Reputacao</span>
+      <strong><%= author.reputation || 0 %></strong>
+    </div>
+
+    <div class="forum-post-author-stats">
+      <div>
+        <span>Topicos</span>
+        <strong><%= author._count ? author._count.topics : 0 %></strong>
+      </div>
+
+      <div>
+        <span>Respostas</span>
+        <strong><%= author._count ? author._count.posts : 0 %></strong>
+      </div>
+    </div>
+  </aside>
+
+  <div class="forum-post-body">
+    <div class="forum-post-top">
+      <span><%= dateLabel %> <%= formatDate(postedAt) %></span>
+      <strong>#<%= postNumber %></strong>
+    </div>
+
+    <div class="forum-post-content">
+      <%- renderUserText(content) %>
+    </div>
+
+    <% if (author.signatureText || author.signatureImageUrl) { %>
+      <div class="forum-post-signature">
+        <span>Assinatura</span>
+
+        <% if (author.signatureText) { %>
+          <p><%- renderUserText(author.signatureText) %></p>
+        <% } %>
+
+        <% if (author.signatureImageUrl) { %>
+          <img src="<%= author.signatureImageUrl %>" alt="Assinatura de <%= author.name %>">
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</article>

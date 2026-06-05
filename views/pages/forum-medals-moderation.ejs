@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/forum.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="forum-section">
+      <div class="container">
+
+        <div class="forum-header">
+          <span class="section-tag">Staff SurvivalZ</span>
+          <h1>Medalhas</h1>
+          <p>
+            Conceda e remova medalhas dos jogadores usando e-mail, nick no servidor
+            ou nome publico. As medalhas aparecem nos perfis e nos cards das postagens.
+          </p>
+
+          <div class="forum-staff-links">
+            <a href="/forum/moderacao" class="btn-secondary">Todos os topicos</a>
+            <a href="/forum/moderacao/denuncias" class="btn-secondary">Denuncias</a>
+          </div>
+        </div>
+
+        <% if (error) { %>
+          <div class="forum-form-error"><%= error %></div>
+        <% } %>
+
+        <% if (success) { %>
+          <div class="forum-form-success"><%= success %></div>
+        <% } %>
+
+        <div class="forum-medals-grid">
+          <section class="forum-medal-panel">
+            <h2>Conceder medalha</h2>
+
+            <form action="/forum/moderacao/medalhas/conceder" method="POST" class="forum-form">
+              <div class="form-group">
+                <label for="awardUserLookup">E-mail, nick ou nome</label>
+                <input
+                  id="awardUserLookup"
+                  name="userLookup"
+                  type="text"
+                  value="<%= lookup || '' %>"
+                  placeholder="player@email.com ou Nick_SAMP"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="awardMedalId">Medalha</label>
+                <select id="awardMedalId" name="medalId" required>
+                  <% medals.forEach((medal) => { %>
+                    <option value="<%= medal.id %>">
+                      <%= medal.icon || "★" %> <%= medal.name %> - <%= medal.rarity %>
+                    </option>
+                  <% }) %>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="reason">Motivo</label>
+                <textarea
+                  id="reason"
+                  name="reason"
+                  maxlength="300"
+                  placeholder="Ex: Participou do beta fechado, ajudou em testes, venceu evento..."
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn-primary forum-submit-btn">Conceder</button>
+            </form>
+          </section>
+
+          <section class="forum-medal-panel">
+            <h2>Remover medalha</h2>
+
+            <form action="/forum/moderacao/medalhas/remover" method="POST" class="forum-form">
+              <div class="form-group">
+                <label for="removeUserLookup">E-mail, nick ou nome</label>
+                <input
+                  id="removeUserLookup"
+                  name="userLookup"
+                  type="text"
+                  value="<%= lookup || '' %>"
+                  placeholder="player@email.com ou Nick_SAMP"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="removeMedalId">Medalha</label>
+                <select id="removeMedalId" name="medalId" required>
+                  <% medals.forEach((medal) => { %>
+                    <option value="<%= medal.id %>">
+                      <%= medal.icon || "★" %> <%= medal.name %> - <%= medal.rarity %>
+                    </option>
+                  <% }) %>
+                </select>
+              </div>
+
+              <button type="submit" class="btn-secondary forum-submit-btn">Remover</button>
+            </form>
+          </section>
+        </div>
+
+        <div class="forum-medals-grid secondary">
+          <section class="forum-medal-panel">
+            <div class="community-panel-header">
+              <h2>Medalhas existentes</h2>
+            </div>
+
+            <% if (medals.length === 0) { %>
+              <p class="community-empty">Nenhuma medalha ativa cadastrada. Rode o seed de medalhas.</p>
+            <% } %>
+
+            <div class="forum-medal-list">
+              <% medals.forEach((medal) => { %>
+                <article class="forum-medal-row medal-rarity-<%= medal.rarity.toLowerCase() %>">
+                  <span><%= medal.icon || "★" %></span>
+                  <div>
+                    <strong><%= medal.name %></strong>
+                    <small><%= medal.rarity %> • <%= medal.description || "Medalha SurvivalZ." %></small>
+                  </div>
+                </article>
+              <% }) %>
+            </div>
+          </section>
+
+          <section class="forum-medal-panel">
+            <div class="community-panel-header">
+              <h2>Usuario pesquisado</h2>
+
+              <form action="/forum/moderacao/medalhas" method="GET" class="forum-medal-search">
+                <input type="text" name="usuario" value="<%= lookup || '' %>" placeholder="Buscar usuario">
+                <button type="submit">Buscar</button>
+              </form>
+            </div>
+
+            <% if (!lookup) { %>
+              <p class="community-empty">Busque um usuario para ver as medalhas atuais.</p>
+            <% } else if (!searchedUser) { %>
+              <p class="community-empty">Nenhum usuario encontrado para "<%= lookup %>".</p>
+            <% } else { %>
+              <div class="forum-medal-user-card">
+                <strong><%= searchedUser.name %></strong>
+                <span><%= searchedUser.email %> • <%= searchedUser.sampNick || "Nick nao informado" %></span>
+              </div>
+
+              <% if (searchedUser.medals.length === 0) { %>
+                <p class="community-empty">Este usuario ainda nao possui medalhas.</p>
+              <% } %>
+
+              <div class="forum-medal-list">
+                <% searchedUser.medals.forEach((userMedal) => { %>
+                  <article class="forum-medal-row medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>">
+                    <span><%= userMedal.medal.icon || "★" %></span>
+                    <div>
+                      <strong><%= userMedal.medal.name %></strong>
+                      <small>
+                        <%= userMedal.reason || "Sem motivo informado." %>
+                        • <%= formatDate(userMedal.createdAt) %>
+                      </small>
+                    </div>
+                  </article>
+                <% }) %>
+              </div>
+            <% } %>
+          </section>
+        </div>
+
+        <section class="forum-medal-panel">
+          <div class="community-panel-header">
+            <h2>Usuarios recentes</h2>
+          </div>
+
+          <div class="forum-medal-users-grid">
+            <% recentUsers.forEach((member) => { %>
+              <a href="/forum/moderacao/medalhas?usuario=<%= encodeURIComponent(member.sampNick || member.email) %>" class="forum-medal-user-link">
+                <strong><%= member.name %></strong>
+                <span><%= member.sampNick || member.email %></span>
+                <small><%= member.medals.length %> medalha(s)</small>
+              </a>
+            <% }) %>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>
