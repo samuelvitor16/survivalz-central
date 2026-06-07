@@ -47,5 +47,89 @@
     "paymentStatus": "pago",
     "deliveryStatus": "entregue",
     "updatedAt": "2026-06-02T13:28:39.573Z"
+  },
+  {
+    "id": 2,
+    "code": "SZ-0002",
+    "status": "pendente",
+    "createdAt": "2026-06-07T18:19:02.060Z",
+    "customer": {
+      "name": "Samuel",
+      "discord": "dybalax11",
+      "email": "dybalasala01@gmail.com",
+      "sampNick": "DybalaX_",
+      "notes": ""
+    },
+    "items": [
+      {
+        "id": "zcoins-500",
+        "name": "500 ZCoins",
+        "category": "zcoins",
+        "type": "ZCoins",
+        "priceCents": 250,
+        "quantity": 1,
+        "totalCents": 250
+      }
+    ],
+    "subtotal": 250,
+    "discount": 0,
+    "total": 250,
+    "coupon": null,
+    "paymentMethod": "pix",
+    "paymentStatus": "aguardando_pagamento",
+    "deliveryStatus": "pendente",
+    "userId": "cmq43jodn0000xsuwzzci5t4y",
+    "userName": "Samuel",
+    "userEmail": "dybalasala01@gmail.com",
+    "userSampNick": "DybalaX_",
+    "userDiscord": "dybalax11"
+  },
+  {
+    "id": 3,
+    "code": "SZ-0003",
+    "status": "pendente",
+    "createdAt": "2026-06-07T19:39:36.443Z",
+    "customer": {
+      "name": "Samuel",
+      "discord": "dybalax11",
+      "email": "dybalasala01@gmail.com",
+      "sampNick": "DybalaX_",
+      "notes": ""
+    },
+    "items": [
+      {
+        "id": "zcoins-500",
+        "name": "500 ZCoins",
+        "category": "zcoins",
+        "type": "ZCoins",
+        "priceCents": 250,
+        "quantity": 1,
+        "totalCents": 250
+      }
+    ],
+    "subtotal": 250,
+    "discount": 0,
+    "total": 250,
+    "coupon": null,
+    "paymentMethod": "pix",
+    "paymentStatus": "aguardando_pagamento",
+    "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114+553198461651352040000530398654042.505802BR5912SURVIVALZPIX6010ABRE CAMPO62100506SZ000363047901",
+    "pixQrCode": "data:image/png;base64,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",
+    "pixConfigured": true,
+    "pixError": null,
+    "payment": {
+      "method": "pix",
+      "pixCopyPaste": "00020101021126360014br.gov.bcb.pix0114+553198461651352040000530398654042.505802BR5912SURVIVALZPIX6010ABRE CAMPO62100506SZ000363047901",
+      "pixQrCode": "data:image/png;base64,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",
+      "pixConfigured": true,
+      "pixError": null,
+      "generatedAt": "2026-06-07T19:39:36.525Z"
+    },
+    "deliveryStatus": "pendente",
+    "userId": "cmq43jodn0000xsuwzzci5t4y",
+    "userName": "Samuel",
+    "userEmail": "dybalasala01@gmail.com",
+    "userSampNick": "DybalaX_",
+    "userDiscord": "dybalax11"
   }
 ]

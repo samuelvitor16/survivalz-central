@@ -15,10 +15,10 @@
   <%- include("../partials/header") %>
 
   <main>
-    <section class="player-dashboard-section">
+    <section class="player-dashboard-section sz-profile-editor">
       <div class="container">
 
-        <div class="player-dashboard-header">
+        <div class="player-dashboard-header sz-profile-editor-header">
           <div>
             <span class="section-tag">Editar perfil</span>
             <h1>Personalize seu perfil</h1>
@@ -32,8 +32,8 @@
           </a>
         </div>
 
-        <div class="profile-edit-layout">
-          <div class="profile-edit-card">
+        <div class="sz-profile-editor-layout">
+          <div class="sz-profile-editor-card">
             <% if (error) { %>
               <div class="player-auth-error">
                 <%= error %>
@@ -41,47 +41,133 @@
             <% } %>
 
             <% if (success) { %>
-              <div class="profile-edit-success">
+              <div class="sz-profile-editor-success">
                 <%= success %>
               </div>
             <% } %>
 
-            <form action="/perfil/editar" method="POST" class="player-auth-form">
-              <div class="form-group">
-                <label for="name">Nome publico</label>
-                <input type="text" id="name" name="name" value="<%= user.name || '' %>" maxlength="80" required>
+            <div class="sz-profile-editor-upload-message" data-profile-upload-message role="status" aria-live="polite" hidden></div>
+
+            <form action="/perfil/editar" method="POST" class="player-auth-form sz-profile-editor-form">
+              <div class="sz-profile-editor-grid">
+                <div class="form-group">
+                  <label for="name">Nome publico</label>
+                  <input type="text" id="name" name="name" value="<%= user.name || '' %>" maxlength="80" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="sampNick">Nick no servidor</label>
+                  <input type="text" id="sampNick" name="sampNick" value="<%= user.sampNick || '' %>" maxlength="40" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="discord">Discord</label>
+                  <input type="text" id="discord" name="discord" value="<%= user.discord || '' %>" maxlength="80">
+                </div>
+
+                <div class="form-group">
+                  <label for="location">Localizacao / faccao / grupo</label>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value="<%= user.location || '' %>"
+                    maxlength="80"
+                    placeholder="Ex: Zona Norte, Sobrevivente solo, Cla..."
+                  >
+                </div>
               </div>
 
-              <div class="form-group">
-                <label for="sampNick">Nick no servidor</label>
-                <input type="text" id="sampNick" name="sampNick" value="<%= user.sampNick || '' %>" maxlength="40" required>
-              </div>
+              <div class="sz-profile-editor-media-grid">
+                <article class="sz-profile-editor-media-card">
+                  <div class="sz-profile-editor-media-head">
+                    <div>
+                      <span>Avatar</span>
+                      <strong>Imagem quadrada do jogador</strong>
+                    </div>
+                    <small>PNG, JPG, WEBP ou GIF ate 3MB</small>
+                  </div>
 
-              <div class="form-group">
-                <label for="discord">Discord</label>
-                <input type="text" id="discord" name="discord" value="<%= user.discord || '' %>" maxlength="80">
-              </div>
+                  <div class="sz-profile-editor-avatar-preview">
+                    <% if (user.avatarUrl) { %>
+                      <img id="avatarCardPreview" src="<%= user.avatarUrl %>" alt="Preview do avatar">
+                      <span id="avatarCardFallback" style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                    <% } else { %>
+                      <img id="avatarCardPreview" src="" alt="Preview do avatar" style="display:none;">
+                      <span id="avatarCardFallback"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                    <% } %>
+                  </div>
 
-              <div class="form-group">
-                <label for="location">Localizacao / faccao / grupo</label>
-                <input
-                  type="text"
-                  id="location"
-                  name="location"
-                  value="<%= user.location || '' %>"
-                  maxlength="80"
-                  placeholder="Ex: Zona Norte, Sobrevivente solo, Cla..."
-                >
-              </div>
+                  <div class="form-group">
+                    <label for="avatarUrl">URL do avatar</label>
+                    <input
+                      type="text"
+                      inputmode="url"
+                      id="avatarUrl"
+                      name="avatarUrl"
+                      value="<%= user.avatarUrl || '' %>"
+                      placeholder="https://... ou /uploads/profile/arquivo.png"
+                    >
+                  </div>
 
-              <div class="form-group">
-                <label for="avatarUrl">URL do avatar</label>
-                <input type="url" id="avatarUrl" name="avatarUrl" value="<%= user.avatarUrl || '' %>" placeholder="https://...">
-              </div>
+                  <input
+                    type="file"
+                    id="avatarUpload"
+                    class="sz-profile-editor-file-input"
+                    accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
+                    data-profile-upload="avatar"
+                    data-profile-endpoint="/uploads/profile/avatar"
+                    data-profile-input="avatarUrl"
+                    data-profile-preview="avatarCardPreview,avatarPreview"
+                    data-profile-fallback="avatarCardFallback,avatarFallback"
+                    data-profile-max-size="3145728"
+                  >
+                  <label for="avatarUpload" class="sz-profile-editor-upload-btn">Enviar avatar</label>
+                </article>
 
-              <div class="form-group">
-                <label for="bannerUrl">URL do banner/capa</label>
-                <input type="url" id="bannerUrl" name="bannerUrl" value="<%= user.bannerUrl || '' %>" placeholder="https://...">
+                <article class="sz-profile-editor-media-card sz-profile-editor-media-card-wide">
+                  <div class="sz-profile-editor-media-head">
+                    <div>
+                      <span>Banner</span>
+                      <strong>Capa horizontal do perfil</strong>
+                    </div>
+                    <small>PNG, JPG, WEBP ou GIF ate 5MB</small>
+                  </div>
+
+                  <div class="sz-profile-editor-banner-preview">
+                    <% if (user.bannerUrl) { %>
+                      <img id="bannerCardPreview" src="<%= user.bannerUrl %>" alt="Preview do banner">
+                    <% } else { %>
+                      <img id="bannerCardPreview" src="" alt="Preview do banner" style="display:none;">
+                    <% } %>
+                    <span>Banner 1400x350</span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="bannerUrl">URL do banner/capa</label>
+                    <input
+                      type="text"
+                      inputmode="url"
+                      id="bannerUrl"
+                      name="bannerUrl"
+                      value="<%= user.bannerUrl || '' %>"
+                      placeholder="https://... ou /uploads/profile/arquivo.webp"
+                    >
+                  </div>
+
+                  <input
+                    type="file"
+                    id="bannerUpload"
+                    class="sz-profile-editor-file-input"
+                    accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
+                    data-profile-upload="banner"
+                    data-profile-endpoint="/uploads/profile/banner"
+                    data-profile-input="bannerUrl"
+                    data-profile-preview="bannerCardPreview,bannerPreviewImage"
+                    data-profile-max-size="5242880"
+                  >
+                  <label for="bannerUpload" class="sz-profile-editor-upload-btn">Enviar banner</label>
+                </article>
               </div>
 
               <div class="form-group">
@@ -92,58 +178,99 @@
                   maxlength="800"
                   placeholder="Fale sobre voce, seu estilo de jogo, cla ou historia no servidor..."
                 ><%= user.bio || '' %></textarea>
-                <small class="profile-edit-hint">Maximo recomendado: 800 caracteres.</small>
+                <small class="sz-profile-editor-hint">Maximo recomendado: 800 caracteres.</small>
               </div>
 
-              <div class="form-group">
-                <label for="signatureText">Assinatura em texto</label>
-                <textarea
-                  id="signatureText"
-                  name="signatureText"
-                  maxlength="350"
-                  placeholder="Frase, lema, cla, recado ou mini apresentacao..."
-                ><%= user.signatureText || '' %></textarea>
-                <small class="profile-edit-hint">Maximo recomendado: 350 caracteres.</small>
-              </div>
+              <article class="sz-profile-editor-media-card sz-profile-editor-signature-card">
+                <div class="sz-profile-editor-media-head">
+                  <div>
+                    <span>Assinatura</span>
+                    <strong>Texto e imagem exibidos nas postagens</strong>
+                  </div>
+                  <small>Imagem ate 5MB</small>
+                </div>
 
-              <div class="form-group">
-                <label for="signatureImageUrl">URL da imagem de assinatura</label>
+                <div class="form-group">
+                  <label for="signatureText">Assinatura em texto</label>
+                  <textarea
+                    id="signatureText"
+                    name="signatureText"
+                    maxlength="350"
+                    placeholder="Frase, lema, cla, recado ou mini apresentacao..."
+                  ><%= user.signatureText || '' %></textarea>
+                  <small class="sz-profile-editor-hint">Maximo recomendado: 350 caracteres.</small>
+                </div>
+
+                <div class="sz-profile-editor-signature-preview">
+                  <strong>Preview da assinatura</strong>
+                  <% if (user.signatureText) { %>
+                    <p id="signatureTextCardPreview"><%- renderUserText(user.signatureText) %></p>
+                  <% } else { %>
+                    <p id="signatureTextCardPreview">Texto da assinatura.</p>
+                  <% } %>
+
+                  <% if (user.signatureImageUrl) { %>
+                    <img id="signatureImageCardPreview" src="<%= user.signatureImageUrl %>" alt="Preview da assinatura">
+                  <% } else { %>
+                    <img id="signatureImageCardPreview" src="" alt="Preview da assinatura" style="display:none;">
+                  <% } %>
+                </div>
+
+                <div class="form-group">
+                  <label for="signatureImageUrl">URL da imagem de assinatura</label>
+                  <input
+                    type="text"
+                    inputmode="url"
+                    id="signatureImageUrl"
+                    name="signatureImageUrl"
+                    value="<%= user.signatureImageUrl || '' %>"
+                    placeholder="https://... ou /uploads/profile/arquivo.gif"
+                  >
+                </div>
+
                 <input
-                  type="url"
-                  id="signatureImageUrl"
-                  name="signatureImageUrl"
-                  value="<%= user.signatureImageUrl || '' %>"
-                  placeholder="https://..."
+                  type="file"
+                  id="signatureUpload"
+                  class="sz-profile-editor-file-input"
+                  accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
+                  data-profile-upload="signature"
+                  data-profile-endpoint="/uploads/profile/signature"
+                  data-profile-input="signatureImageUrl"
+                  data-profile-preview="signatureImageCardPreview,signatureImagePreview"
+                  data-profile-max-size="5242880"
                 >
-              </div>
+                <label for="signatureUpload" class="sz-profile-editor-upload-btn">Enviar imagem de assinatura</label>
+              </article>
 
-              <button type="submit" class="btn-primary player-auth-btn">
+              <button type="submit" class="btn-primary player-auth-btn sz-profile-editor-submit">
                 Salvar perfil
               </button>
             </form>
           </div>
 
-          <aside class="profile-edit-preview-card">
-            <h2>Preview</h2>
+          <aside class="sz-profile-editor-preview-card">
+            <h2>Preview do perfil</h2>
 
-            <div
-              id="bannerPreview"
-              class="profile-edit-banner-preview"
-              style="<%= user.bannerUrl ? `background-image: url('${user.bannerUrl}')` : '' %>"
-            >
+            <div class="sz-profile-editor-banner-preview sz-profile-editor-preview-banner">
+              <% if (user.bannerUrl) { %>
+                <img id="bannerPreviewImage" src="<%= user.bannerUrl %>" alt="Preview da capa">
+              <% } else { %>
+                <img id="bannerPreviewImage" src="" alt="Preview da capa" style="display:none;">
+              <% } %>
               <span>Banner 1400x350</span>
             </div>
 
-            <div class="profile-edit-avatar-preview">
+            <div class="sz-profile-editor-avatar-preview sz-profile-editor-preview-avatar">
               <% if (user.avatarUrl) { %>
                 <img id="avatarPreview" src="<%= user.avatarUrl %>" alt="Preview do avatar">
+                <span id="avatarFallback" style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
               <% } else { %>
                 <img id="avatarPreview" src="" alt="Preview do avatar" style="display:none;">
-                <span id="avatarFallback"><%= user.name.charAt(0).toUpperCase() %></span>
+                <span id="avatarFallback"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
               <% } %>
             </div>
 
-            <div class="profile-edit-signature-preview">
+            <div class="sz-profile-editor-signature-preview">
               <strong>Assinatura</strong>
               <% if (user.signatureText) { %>
                 <p id="signatureTextPreview"><%- renderUserText(user.signatureText) %></p>
@@ -166,42 +293,6 @@
 
   <%- include("../partials/footer") %>
 
-  <script>
-    const updateImagePreview = (inputId, imageId, fallbackId) => {
-      const input = document.getElementById(inputId);
-      const image = document.getElementById(imageId);
-      const fallback = fallbackId ? document.getElementById(fallbackId) : null;
-
-      if (!input || !image) return;
-
-      input.addEventListener("input", () => {
-        const value = input.value.trim();
-        const isHttpUrl = /^https?:\/\//i.test(value);
-        image.src = isHttpUrl ? value : "";
-        image.style.display = isHttpUrl ? "block" : "none";
-        if (fallback) fallback.style.display = isHttpUrl ? "none" : "flex";
-      });
-    };
-
-    updateImagePreview("avatarUrl", "avatarPreview", "avatarFallback");
-    updateImagePreview("signatureImageUrl", "signatureImagePreview");
-
-    const bannerInput = document.getElementById("bannerUrl");
-    const bannerPreview = document.getElementById("bannerPreview");
-    if (bannerInput && bannerPreview) {
-      bannerInput.addEventListener("input", () => {
-        const value = bannerInput.value.trim();
-        bannerPreview.style.backgroundImage = /^https?:\/\//i.test(value) ? `url("${value}")` : "";
-      });
-    }
-
-    const signatureInput = document.getElementById("signatureText");
-    const signaturePreview = document.getElementById("signatureTextPreview");
-    if (signatureInput && signaturePreview) {
-      signatureInput.addEventListener("input", () => {
-        signaturePreview.textContent = signatureInput.value || "Texto da assinatura.";
-      });
-    }
-  </script>
+  <script src="/js/profileEditor.js" defer></script>
 </body>
 </html>

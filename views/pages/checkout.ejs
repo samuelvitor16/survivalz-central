@@ -26,6 +26,13 @@
             Preencha seus dados para enviar o pedido. A gestão do SurvivalZ irá analisar
             as informações e orientar o pagamento manualmente.
           </p>
+          <% if (typeof checkoutUser !== "undefined" && checkoutUser) { %>
+            <div class="checkout-account-link">
+              Pedido vinculado a conta <strong><%= checkoutUser.name %></strong>.
+              Os campos abaixo foram preenchidos automaticamente, mas voce pode ajustar antes de enviar.
+            </div>
+          <% } %>
+
           <div class="checkout-coupon-warning">
             <strong>🎁 Cupom de primeira compra:</strong>
             <span>
@@ -37,22 +44,22 @@
           <form action="#" method="POST" class="checkout-form">
             <div class="form-group">
               <label for="name">Nome</label>
-              <input type="text" id="name" name="name" placeholder="Seu nome">
+              <input type="text" id="name" name="name" value="<%= typeof checkoutUser !== 'undefined' && checkoutUser ? checkoutUser.name : '' %>" placeholder="Seu nome">
             </div>
 
             <div class="form-group">
               <label for="discord">Discord</label>
-              <input type="text" id="discord" name="discord" placeholder="Ex: Dybala#0000 ou @dybala">
+              <input type="text" id="discord" name="discord" value="<%= typeof checkoutUser !== 'undefined' && checkoutUser ? (checkoutUser.discord || '') : '' %>" placeholder="Ex: Dybala#0000 ou @dybala">
             </div>
 
             <div class="form-group">
               <label for="email">E-mail</label>
-              <input type="email" id="email" name="email" placeholder="seuemail@email.com">
+              <input type="email" id="email" name="email" value="<%= typeof checkoutUser !== 'undefined' && checkoutUser ? checkoutUser.email : '' %>" placeholder="seuemail@email.com">
             </div>
 
             <div class="form-group">
               <label for="sampNick">Nick no servidor</label>
-              <input type="text" id="sampNick" name="sampNick" placeholder="Ex: Dybala_Survivor">
+              <input type="text" id="sampNick" name="sampNick" value="<%= typeof checkoutUser !== 'undefined' && checkoutUser ? (checkoutUser.sampNick || '') : '' %>" placeholder="Ex: Dybala_Survivor">
             </div>
 
             <div class="form-group">

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/members.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="members-section">
+      <div class="container">
+
+        <div class="members-hero">
+          <div>
+            <span class="section-tag">Comunidade SurvivalZ</span>
+            <h1>Membros da Comunidade</h1>
+            <p>
+              Conheca os sobreviventes cadastrados na Central SurvivalZ,
+              veja seus perfis, reputacao, atividade no forum e insignias recentes.
+            </p>
+          </div>
+
+          <a href="/comunidade" class="members-hero-link">Voltar para comunidade</a>
+        </div>
+
+        <form action="/membros" method="GET" class="members-filter-card">
+          <div class="members-search-field">
+            <label for="search">Buscar membro</label>
+            <input
+              type="search"
+              id="search"
+              name="search"
+              value="<%= filters.search %>"
+              maxlength="80"
+              placeholder="Nome publico ou nick no servidor"
+            >
+          </div>
+
+          <div>
+            <label for="role">Cargo</label>
+            <select id="role" name="role">
+              <option value="">Todos</option>
+              <% roleOptions.forEach((role) => { %>
+                <option value="<%= role %>" <%= filters.role === role ? "selected" : "" %>>
+                  <%= roleLabel(role) %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div>
+            <label for="sort">Ordenar por</label>
+            <select id="sort" name="sort">
+              <option value="recent" <%= filters.sort === "recent" ? "selected" : "" %>>Mais recentes</option>
+              <option value="reputation" <%= filters.sort === "reputation" ? "selected" : "" %>>Reputacao</option>
+              <option value="topics" <%= filters.sort === "topics" ? "selected" : "" %>>Topicos</option>
+              <option value="posts" <%= filters.sort === "posts" ? "selected" : "" %>>Respostas</option>
+              <option value="medals" <%= filters.sort === "medals" ? "selected" : "" %>>Insignias</option>
+            </select>
+          </div>
+
+          <div class="members-filter-actions">
+            <button type="submit">Filtrar</button>
+            <a href="/membros">Limpar</a>
+          </div>
+        </form>
+
+        <% if (members.length === 0) { %>
+          <div class="members-empty">
+            <strong>Nenhum sobrevivente encontrado.</strong>
+            <p>Tente limpar os filtros ou buscar por outro nome/nick.</p>
+          </div>
+        <% } else { %>
+          <div class="members-grid">
+            <% members.forEach((member) => { %>
+              <article class="member-card">
+                <div class="member-card-top">
+                  <a href="/perfil/<%= member.id %>" class="member-avatar">
+                    <% if (member.avatarUrl) { %>
+                      <img
+                        src="<%= member.avatarUrl %>"
+                        alt="Avatar de <%= member.name %>"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                      >
+                      <span style="display:none;"><%= (member.name || "S").charAt(0).toUpperCase() %></span>
+                    <% } else { %>
+                      <span><%= (member.name || "S").charAt(0).toUpperCase() %></span>
+                    <% } %>
+                  </a>
+
+                  <div class="member-main-info">
+                    <span class="member-role member-role-<%= String(member.role || 'PLAYER').toLowerCase() %>">
+                      <%= roleLabel(member.role) %>
+                    </span>
+                    <h2><%= member.name %></h2>
+                    <p><%= member.sampNick || "Nick nao informado" %></p>
+                  </div>
+                </div>
+
+                <div class="member-medals">
+                  <% if (member.medals.length === 0) { %>
+                    <span class="member-no-medals">Sem insignias</span>
+                  <% } else { %>
+                    <% member.medals.forEach((userMedal) => { %>
+                      <span
+                        class="member-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+                        title="<%= medalTooltip(userMedal) %>"
+                      >
+                        <%= userMedal.medal.icon || "M" %>
+                      </span>
+                    <% }) %>
+                  <% } %>
+                </div>
+
+                <div class="member-stats">
+                  <div>
+                    <span>Reputacao</span>
+                    <strong><%= member.reputation || 0 %></strong>
+                  </div>
+
+                  <div>
+                    <span>Topicos</span>
+                    <strong><%= member._count.topics %></strong>
+                  </div>
+
+                  <div>
+                    <span>Respostas</span>
+                    <strong><%= member._count.posts %></strong>
+                  </div>
+                </div>
+
+                <div class="member-footer">
+                  <small>Registro em <%= formatDate(member.createdAt) %></small>
+                  <a href="/perfil/<%= member.id %>" class="member-profile-btn">Ver perfil</a>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

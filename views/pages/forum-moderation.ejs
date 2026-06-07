@@ -18,71 +18,156 @@
     <section class="forum-section">
       <div class="container">
 
-        <div class="forum-header">
-          <span class="section-tag">Staff SurvivalZ</span>
+        <section class="sz-staff-hero">
+          <div>
+            <span class="sz-staff-kicker">Staff SurvivalZ</span>
+            <h1>Hub Staff</h1>
 
-          <h1>Moderação do Fórum</h1>
+            <p>
+              Central rápida para acompanhar denúncias, moderar tópicos, conceder medalhas
+              e acessar as principais áreas internas da equipe.
+            </p>
+          </div>
 
-          <p>
-            Gerencie os tópicos da comunidade, altere status, feche discussões,
-            fixe publicações importantes e arquive conteúdos antigos.
-          </p>
-        </div>
+          <div class="sz-staff-hero-actions">
+            <a href="/forum/moderacao/denuncias">Denúncias</a>
+            <a href="/forum/moderacao/medalhas">Medalhas</a>
+            <a href="/admin">Desenvolvedor</a>
+          </div>
+        </section>
 
-        <div class="forum-moderation-list">
+        <section class="sz-staff-overview">
+          <article>
+            <span>Tópicos filtrados</span>
+            <strong><%= overview.topicsCount %></strong>
+            <small>Resultado do filtro atual</small>
+          </article>
+
+          <article>
+            <span>Denúncias abertas</span>
+            <strong><%= overview.openReports %></strong>
+            <small>Casos aguardando análise</small>
+          </article>
+
+          <article>
+            <span>Usuários</span>
+            <strong><%= overview.usersCount %></strong>
+            <small>Contas registradas</small>
+          </article>
+
+          <article>
+            <span>Medalhas</span>
+            <strong><%= overview.medalsCount %></strong>
+            <small>Insígnias cadastradas</small>
+          </article>
+        </section>
+
+        <section class="sz-staff-actions">
+          <a href="/forum/categoria/avisos-oficiais/novo">
+            <span>📢</span>
+            <div>
+              <strong>Criar aviso oficial</strong>
+              <small>Publicar comunicado para a comunidade</small>
+            </div>
+          </a>
+
+          <a href="/forum/categoria/denuncias">
+            <span>⚠️</span>
+            <div>
+              <strong>Denúncias privadas</strong>
+              <small>Ver área de denúncias do fórum</small>
+            </div>
+          </a>
+
+          <a href="/forum/moderacao/medalhas">
+            <span>🏅</span>
+            <div>
+              <strong>Conceder medalha</strong>
+              <small>Gerenciar insígnias dos jogadores</small>
+            </div>
+          </a>
+
+          <a href="/forum">
+            <span>💬</span>
+            <div>
+              <strong>Fórum público</strong>
+              <small>Voltar para as categorias públicas</small>
+            </div>
+          </a>
+        </section>
+
+        <nav class="sz-staff-filters">
+          <a class="<%= status === 'ALL' ? 'active' : '' %>" href="/forum/moderacao">Todos</a>
+          <a class="<%= status === 'OPEN' ? 'active' : '' %>" href="/forum/moderacao?status=OPEN">Abertos</a>
+          <a class="<%= status === 'PINNED' ? 'active' : '' %>" href="/forum/moderacao?status=PINNED">Fixados</a>
+          <a class="<%= status === 'CLOSED' ? 'active' : '' %>" href="/forum/moderacao?status=CLOSED">Fechados</a>
+          <a class="<%= status === 'ARCHIVED' ? 'active' : '' %>" href="/forum/moderacao?status=ARCHIVED">Arquivados</a>
+        </nav>
+
+        <section class="sz-staff-panel">
+          <div class="sz-staff-panel-header">
+            <div>
+              <span>Moderação</span>
+              <h2>Tópicos encontrados</h2>
+            </div>
+
+            <strong><%= topics.length %> tópico(s)</strong>
+          </div>
+
           <% if (topics.length === 0) { %>
-            <div class="forum-empty-box">
-              <h2>Nenhum tópico criado</h2>
-              <p>Quando os jogadores criarem tópicos, eles aparecerão aqui.</p>
+            <div class="sz-staff-empty">
+              <h3>Nenhum tópico encontrado</h3>
+              <p>Não há tópicos para este filtro. Use outro status ou volte para todos.</p>
             </div>
           <% } %>
 
-          <% topics.forEach((topic) => { %>
-            <article class="forum-moderation-card">
-              <div class="forum-moderation-main">
-                <%
-  const statusLabels = {
-    OPEN: "Aberto",
-    CLOSED: "Fechado",
-    PINNED: "Fixado",
-    ARCHIVED: "Arquivado"
-  };
+          <div class="sz-staff-topic-list">
+            <% topics.forEach((topic) => { %>
+              <article class="sz-staff-topic-card">
+                <div class="sz-staff-topic-main">
+                  <div class="sz-staff-topic-badges">
+                    <span class="sz-staff-status sz-staff-status-<%= topic.status.toLowerCase() %>">
+                      <%= topicStatusLabel(topic.status) %>
+                    </span>
 
-  const statusLabel = statusLabels[topic.status] || topic.status;
-%>
+                    <span class="sz-staff-category">
+                      <%= topic.category.icon || "☣" %>
+                      <%= topic.category.name %>
+                    </span>
+                  </div>
 
-<span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
-  <%= statusLabel %>
-</span>
+                  <h3>
+                    <a href="/forum/topico/<%= topic.id %>">
+                      <%= topic.title %>
+                    </a>
+                  </h3>
 
-                <h2>
-                  <a href="/forum/topico/<%= topic.id %>">
-                    <%= topic.title %>
-                  </a>
-                </h2>
+                  <p>
+                    Autor: <strong><%= topic.author.name %></strong>
+                    • <%= topic._count.posts %> resposta(s)
+                  </p>
+                </div>
 
-                <p>
-                  Categoria: <strong><%= topic.category.name %></strong>
-                  • Autor: <strong><%= topic.author.name %></strong>
-                  • <%= topic._count.posts %> resposta(s)
-                </p>
-              </div>
+                <form
+                  action="/forum/moderacao/topico/<%= topic.id %>/status"
+                  method="POST"
+                  class="sz-staff-topic-actions"
+                >
+                  <select name="status">
+                    <option value="OPEN" <%= topic.status === "OPEN" ? "selected" : "" %>>Aberto</option>
+                    <option value="CLOSED" <%= topic.status === "CLOSED" ? "selected" : "" %>>Fechado</option>
+                    <option value="PINNED" <%= topic.status === "PINNED" ? "selected" : "" %>>Fixado</option>
+                    <option value="ARCHIVED" <%= topic.status === "ARCHIVED" ? "selected" : "" %>>Arquivado</option>
+                  </select>
 
-              <form action="/forum/moderacao/topico/<%= topic.id %>/status" method="POST" class="forum-moderation-actions">
-                <select name="status">
-                  <option value="OPEN" <%= topic.status === "OPEN" ? "selected" : "" %>>Aberto</option>
-                  <option value="CLOSED" <%= topic.status === "CLOSED" ? "selected" : "" %>>Fechado</option>
-                  <option value="PINNED" <%= topic.status === "PINNED" ? "selected" : "" %>>Fixado</option>
-                  <option value="ARCHIVED" <%= topic.status === "ARCHIVED" ? "selected" : "" %>>Arquivado</option>
-                </select>
+                  <button type="submit">Salvar</button>
 
-                <button type="submit" class="btn-primary">
-                  Salvar
-                </button>
-              </form>
-            </article>
-          <% }) %>
-        </div>
+                  <a href="/forum/topico/<%= topic.id %>">Abrir</a>
+                </form>
+              </article>
+            <% }) %>
+          </div>
+        </section>
 
       </div>
     </section>

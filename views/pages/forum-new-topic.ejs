@@ -107,12 +107,12 @@
 
 <div class="form-group">
   <label for="content">Descrição</label>
-  <textarea
-    id="content"
-    name="content"
-    placeholder="Descreva o ocorrido com detalhes..."
-    required
-  ><%= old.content || '' %></textarea>
+  
+  <%- include("../partials/forum-editor-toolbar", {
+  textareaId: "content",
+  previewId: "newTopicPreview",
+  value: old.content || ""
+}) %>  
 </div>
 
             <button type="submit" class="btn-primary forum-submit-btn">
@@ -126,6 +126,7 @@
   </main>
 
   <%- include("../partials/footer") %>
+  <script src="/js/forumEditor.js"></script>
 
 </body>
 </html>

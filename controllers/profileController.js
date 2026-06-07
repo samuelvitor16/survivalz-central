@@ -131,6 +131,16 @@ const trimOrNull = (value) => {
   return trimmed || null;
 };
 
+const isSafeProfileImageUrl = (value) => {
+  const trimmed = trimOrNull(value);
+
+  if (!trimmed) return true;
+
+  if (isSafeHttpUrl(trimmed)) return true;
+
+  return /^\/uploads\/profile\/[0-9]+-[a-f0-9]+\.(png|jpg|jpeg|webp|gif)$/i.test(trimmed);
+};
+
 const updateProfile = async (req, res) => {
   try {
     const currentUser = await prisma.user.findUnique({
@@ -180,11 +190,11 @@ const updateProfile = async (req, res) => {
 
     const hasInvalidUrl = urlsToValidate.some(([, value]) => {
       const trimmed = trimOrNull(value);
-      return trimmed && !isSafeHttpUrl(trimmed);
+      return trimmed && !isSafeProfileImageUrl(trimmed);
     });
 
     if (hasInvalidUrl) {
-      return renderProfileEdit(res, formUser, "Use apenas URLs validas com http:// ou https://.");
+      return renderProfileEdit(res, formUser, "Use apenas URLs validas com http://, https:// ou uploads internos do perfil.");
     }
 
     if (trimOrNull(bio) && bio.trim().length > 800) {

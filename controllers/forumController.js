@@ -4,12 +4,41 @@ const isForumStaff = (req) => {
   return STAFF_ROLES.includes(req.session.playerRole);
 };
 
-const canViewTopic = (req, topic) => {
+const getCurrentPlayerRole = async (req, res) => {
+  if (!req.session.playerId) return req.session.playerRole || null;
+
+  if (STAFF_ROLES.includes(req.session.playerRole)) {
+    return req.session.playerRole;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: req.session.playerId
+    },
+    select: {
+      role: true
+    }
+  });
+
+  if (!user) return req.session.playerRole || null;
+
+  req.session.playerRole = user.role;
+
+  if (res && res.locals) {
+    res.locals.playerRole = user.role;
+  }
+
+  return user.role;
+};
+
+const isStaffRole = (role) => STAFF_ROLES.includes(role);
+
+const canViewTopic = (req, topic, canManageTopic = isForumStaff(req)) => {
   if (topic.category.slug !== "denuncias") {
     return true;
   }
 
-  if (isForumStaff(req)) {
+  if (canManageTopic) {
     return true;
   }
 
@@ -25,6 +54,27 @@ const canCreateTopicInCategory = (req, category) => {
 
   return true;
 };
+
+const isTopicLockedForPlayer = (topic) => {
+  return topic.status === "CLOSED" || topic.status === "ARCHIVED";
+};
+
+const canEditTopic = (req, topic) => {
+  if (isForumStaff(req)) return true;
+  return req.session.playerId === topic.authorId && !isTopicLockedForPlayer(topic);
+};
+
+const canDeleteTopic = (req, topic) => {
+  if (isForumStaff(req)) return true;
+  return req.session.playerId === topic.authorId && !isTopicLockedForPlayer(topic) && topic._count && topic._count.posts === 0;
+};
+
+const canEditPost = (req, post) => {
+  if (isForumStaff(req)) return true;
+  return req.session.playerId === post.authorId && !isTopicLockedForPlayer(post.topic);
+};
+
+const canDeletePost = canEditPost;
 
 const createSlug = (text) => {
   return String(text)
@@ -95,6 +145,16 @@ const renderForumCategory = async (req, res) => {
       },
       include: {
         author: true,
+        category: true,
+        posts: {
+          take: 1,
+          orderBy: {
+            createdAt: "desc"
+          },
+          include: {
+            author: true
+          }
+        },
         _count: {
           select: {
             posts: true
@@ -107,7 +167,11 @@ const renderForumCategory = async (req, res) => {
       title: `${category.name} - Fórum SurvivalZ`,
       category: {
         ...category,
-        topics
+        topics: topics.sort((a, b) => {
+          if (a.status === "PINNED" && b.status !== "PINNED") return -1;
+          if (a.status !== "PINNED" && b.status === "PINNED") return 1;
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
+        })
       },
       permissionError: req.query.erro === "sem-permissao"
         ? "Você não tem permissão para criar tópico nesta categoria."
@@ -281,6 +345,11 @@ const renderTopic = async (req, res) => {
         },
 
         category: true,
+        _count: {
+          select: {
+            posts: true
+          }
+        },
 
         posts: {
           orderBy: {
@@ -317,7 +386,10 @@ const renderTopic = async (req, res) => {
       });
     }
 
-    if (!canViewTopic(req, topic)) {
+    const currentPlayerRole = await getCurrentPlayerRole(req, res);
+    const canManageTopic = isStaffRole(currentPlayerRole);
+
+    if (!canViewTopic(req, topic, canManageTopic)) {
       return res.status(403).send("Você não tem permissão para visualizar esta denúncia.");
     }
 
@@ -332,9 +404,22 @@ const renderTopic = async (req, res) => {
       }
     });
 
+    const categories = canManageTopic
+      ? await prisma.forumCategory.findMany({
+          orderBy: {
+            position: "asc"
+          }
+        })
+      : [];
+
     res.render("pages/forum-topic", {
       title: `${topic.title} - Fórum SurvivalZ`,
       topic,
+      categories,
+      currentPlayerId: req.session.playerId || null,
+      canManageTopic,
+      canEditOwnTopic: canEditTopic(req, topic),
+      canDeleteOwnTopic: canDeleteTopic(req, topic),
       replyError: req.query.erro === "topico-fechado"
         ? "Este tópico está fechado e não aceita novas respostas."
         : null
@@ -421,6 +506,326 @@ const updateTopicStatusFromTopic = async (req, res) => {
   }
 };
 
+const moveTopicCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { categoryId } = req.body;
+
+    const category = await prisma.forumCategory.findUnique({
+      where: {
+        id: categoryId
+      }
+    });
+
+    if (!category) {
+      return res.redirect(`/forum/topico/${id}`);
+    }
+
+    await prisma.forumTopic.update({
+      where: {
+        id
+      },
+      data: {
+        categoryId: category.id,
+        updatedAt: new Date()
+      }
+    });
+
+    res.redirect(`/forum/topico/${id}`);
+  } catch (error) {
+    console.log("Erro ao mover tópico:", error);
+    res.status(500).send("Erro ao mover tópico.");
+  }
+};
+
+const renderEditTopic = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const topic = await prisma.forumTopic.findUnique({
+      where: {
+        id
+      },
+      include: {
+        category: true,
+        _count: {
+          select: {
+            posts: true
+          }
+        }
+      }
+    });
+
+    if (!topic) {
+      return res.status(404).render("pages/404", {
+        title: "Tópico não encontrado"
+      });
+    }
+
+    if (!canEditTopic(req, topic)) {
+      return res.status(403).send("Você não tem permissão para editar este tópico.");
+    }
+
+    res.render("pages/forum-edit-topic", {
+      title: `Editar tópico - ${topic.title}`,
+      topic,
+      error: null
+    });
+  } catch (error) {
+    console.log("Erro ao abrir edição de tópico:", error);
+    res.status(500).send("Erro ao abrir edição de tópico.");
+  }
+};
+
+const updateTopic = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content } = req.body;
+
+    const topic = await prisma.forumTopic.findUnique({
+      where: {
+        id
+      },
+      include: {
+        category: true,
+        _count: {
+          select: {
+            posts: true
+          }
+        }
+      }
+    });
+
+    if (!topic) {
+      return res.status(404).render("pages/404", {
+        title: "Tópico não encontrado"
+      });
+    }
+
+    if (!canEditTopic(req, topic)) {
+      return res.status(403).send("Você não tem permissão para editar este tópico.");
+    }
+
+    if (!title || !content || title.trim().length < 5 || content.trim().length < 10) {
+      return res.render("pages/forum-edit-topic", {
+        title: `Editar tópico - ${topic.title}`,
+        topic: {
+          ...topic,
+          title: title || topic.title,
+          content: content || topic.content
+        },
+        error: "Informe um título com pelo menos 5 caracteres e conteúdo com pelo menos 10."
+      });
+    }
+
+    await prisma.forumTopic.update({
+      where: {
+        id
+      },
+      data: {
+        title: title.trim().slice(0, 160),
+        content: content.trim(),
+        updatedAt: new Date()
+      }
+    });
+
+    res.redirect(`/forum/topico/${id}`);
+  } catch (error) {
+    console.log("Erro ao editar tópico:", error);
+    res.status(500).send("Erro ao editar tópico.");
+  }
+};
+
+const deleteTopic = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const topic = await prisma.forumTopic.findUnique({
+      where: {
+        id
+      },
+      include: {
+        category: true,
+        _count: {
+          select: {
+            posts: true
+          }
+        }
+      }
+    });
+
+    if (!topic) {
+      return res.status(404).render("pages/404", {
+        title: "Tópico não encontrado"
+      });
+    }
+
+    if (!canDeleteTopic(req, topic)) {
+      return res.status(403).send("Você não tem permissão para apagar este tópico.");
+    }
+
+    await prisma.forumPost.deleteMany({
+      where: {
+        topicId: topic.id
+      }
+    });
+
+    await prisma.forumTopic.delete({
+      where: {
+        id: topic.id
+      }
+    });
+
+    res.redirect(`/forum/categoria/${topic.category.slug}`);
+  } catch (error) {
+    console.log("Erro ao apagar tópico:", error);
+    res.status(500).send("Erro ao apagar tópico.");
+  }
+};
+
+const renderEditPost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const post = await prisma.forumPost.findUnique({
+      where: {
+        id: postId
+      },
+      include: {
+        topic: {
+          include: {
+            category: true
+          }
+        }
+      }
+    });
+
+    if (!post) {
+      return res.status(404).render("pages/404", {
+        title: "Resposta não encontrada"
+      });
+    }
+
+    if (!canEditPost(req, post)) {
+      return res.status(403).send("Você não tem permissão para editar esta resposta.");
+    }
+
+    res.render("pages/forum-edit-post", {
+      title: `Editar resposta - ${post.topic.title}`,
+      post,
+      error: null
+    });
+  } catch (error) {
+    console.log("Erro ao abrir edição de resposta:", error);
+    res.status(500).send("Erro ao abrir edição de resposta.");
+  }
+};
+
+const updatePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { content } = req.body;
+
+    const post = await prisma.forumPost.findUnique({
+      where: {
+        id: postId
+      },
+      include: {
+        topic: true
+      }
+    });
+
+    if (!post) {
+      return res.status(404).render("pages/404", {
+        title: "Resposta não encontrada"
+      });
+    }
+
+    if (!canEditPost(req, post)) {
+      return res.status(403).send("Você não tem permissão para editar esta resposta.");
+    }
+
+    if (!content || content.trim().length < 3) {
+      return res.render("pages/forum-edit-post", {
+        title: `Editar resposta - ${post.topic.title}`,
+        post: {
+          ...post,
+          content: content || post.content
+        },
+        error: "A resposta precisa ter pelo menos 3 caracteres."
+      });
+    }
+
+    await prisma.forumPost.update({
+      where: {
+        id: post.id
+      },
+      data: {
+        content: content.trim()
+      }
+    });
+
+    await prisma.forumTopic.update({
+      where: {
+        id: post.topicId
+      },
+      data: {
+        updatedAt: new Date()
+      }
+    });
+
+    res.redirect(`/forum/topico/${post.topicId}`);
+  } catch (error) {
+    console.log("Erro ao editar resposta:", error);
+    res.status(500).send("Erro ao editar resposta.");
+  }
+};
+
+const deletePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const post = await prisma.forumPost.findUnique({
+      where: {
+        id: postId
+      },
+      include: {
+        topic: true
+      }
+    });
+
+    if (!post) {
+      return res.status(404).render("pages/404", {
+        title: "Resposta não encontrada"
+      });
+    }
+
+    if (!canDeletePost(req, post)) {
+      return res.status(403).send("Você não tem permissão para apagar esta resposta.");
+    }
+
+    await prisma.forumPost.delete({
+      where: {
+        id: post.id
+      }
+    });
+
+    await prisma.forumTopic.update({
+      where: {
+        id: post.topicId
+      },
+      data: {
+        updatedAt: new Date()
+      }
+    });
+
+    res.redirect(`/forum/topico/${post.topicId}`);
+  } catch (error) {
+    console.log("Erro ao apagar resposta:", error);
+    res.status(500).send("Erro ao apagar resposta.");
+  }
+};
+
 module.exports = {
   renderForumHome,
   renderForumCategory,
@@ -428,5 +833,12 @@ module.exports = {
   createTopic,
   renderTopic,
   createReply,
-  updateTopicStatusFromTopic
+  updateTopicStatusFromTopic,
+  moveTopicCategory,
+  renderEditTopic,
+  updateTopic,
+  deleteTopic,
+  renderEditPost,
+  updatePost,
+  deletePost
 };

@@ -5,6 +5,11 @@ const {
 } = require("../controllers/playerDashboardController");
 
 const {
+  renderPlayerOrders,
+  renderPlayerOrderDetails
+} = require("../controllers/playerOrdersController");
+
+const {
   renderRegister,
   registerPlayer,
   renderLogin,
@@ -26,5 +31,7 @@ router.post("/entrar", redirectIfPlayerLogged, loginPlayer);
 router.get("/sair", requirePlayer, logoutPlayer);
 
 router.get("/painel", requirePlayer, renderPlayerDashboard);
+router.get("/painel/pedidos", requirePlayer, renderPlayerOrders);
+router.get("/painel/pedidos/:id", requirePlayer, renderPlayerOrderDetails);
 
 module.exports = router;

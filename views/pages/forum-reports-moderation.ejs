@@ -20,30 +20,33 @@
 
         <div class="forum-header">
           <span class="section-tag">Staff SurvivalZ</span>
-
-          <h1>Denúncias</h1>
-
-          <p>
-            Analise denúncias abertas pelos jogadores, confira acusado, motivo,
-            provas e altere o status conforme a decisão da staff.
-          </p>
+          <h1>Denuncias</h1>
+          <p>Analise denuncias abertas pelos jogadores com acusado, motivo, autor, status, data e provas em uma lista mais direta.</p>
 
           <div class="forum-staff-links">
-            <a href="/forum/moderacao" class="btn-secondary">Todos os tópicos</a>
-            <a href="/forum/categoria/denuncias" class="btn-secondary">Ver categoria pública</a>
+            <a href="/forum/moderacao" class="btn-secondary">Hub Staff</a>
+            <a href="/forum/categoria/denuncias" class="btn-secondary">Ver categoria</a>
           </div>
         </div>
+
+        <nav class="staff-status-filters">
+          <a class="<%= status === 'ALL' ? 'active' : '' %>" href="/forum/moderacao/denuncias">Todas</a>
+          <a class="<%= status === 'OPEN' ? 'active' : '' %>" href="/forum/moderacao/denuncias?status=OPEN">Abertas</a>
+          <a class="<%= status === 'PINNED' ? 'active' : '' %>" href="/forum/moderacao/denuncias?status=PINNED">Fixadas</a>
+          <a class="<%= status === 'CLOSED' ? 'active' : '' %>" href="/forum/moderacao/denuncias?status=CLOSED">Fechadas</a>
+          <a class="<%= status === 'ARCHIVED' ? 'active' : '' %>" href="/forum/moderacao/denuncias?status=ARCHIVED">Arquivadas</a>
+        </nav>
 
         <div class="forum-reports-list">
           <% if (reports.length === 0) { %>
             <div class="forum-empty-box">
-              <h2>Nenhuma denúncia encontrada</h2>
-              <p>Quando jogadores criarem denúncias, elas aparecerão aqui.</p>
+              <h2>Nenhuma denuncia encontrada</h2>
+              <p>Nao ha denuncias para este filtro. Quando jogadores criarem denuncias, elas aparecerao aqui.</p>
             </div>
           <% } %>
 
           <% reports.forEach((report) => { %>
-            <article class="forum-report-moderation-card">
+            <article class="forum-report-moderation-card <%= ['OPEN', 'PINNED'].includes(report.status) ? 'needs-attention' : '' %>">
               <div class="forum-report-moderation-main">
                 <span class="forum-topic-status status-<%= report.status.toLowerCase() %>">
                   <%= topicStatusLabel(report.status) %>
@@ -51,35 +54,27 @@
 
                 <h2>
                   <a href="/forum/topico/<%= report.id %>">
-                    <%= report.title %>
+                    Denuncia contra <%= report.reportAccusedNick || "acusado nao informado" %>
                   </a>
                 </h2>
 
                 <div class="forum-report-moderation-grid">
-                  <div>
-                    <span>Acusado</span>
-                    <strong><%= report.reportAccusedNick || "Não informado" %></strong>
-                  </div>
-
-                  <div>
-                    <span>Motivo</span>
-                    <strong><%= report.reportReason || "Não informado" %></strong>
-                  </div>
-
-                  <div>
-                    <span>Autor</span>
-                    <strong><%= report.author.name %></strong>
-                  </div>
-
-                  <div>
-                    <span>Respostas</span>
-                    <strong><%= report._count.posts %></strong>
-                  </div>
+                  <div><span>Acusado</span><strong><%= report.reportAccusedNick || "Nao informado" %></strong></div>
+                  <div><span>Motivo</span><strong><%= report.reportReason || "Nao informado" %></strong></div>
+                  <div><span>Autor</span><strong><%= report.author.name %></strong></div>
+                  <div><span>Data</span><strong><%= formatDateTime(report.createdAt) %></strong></div>
+                  <div><span>Status</span><strong><%= topicStatusLabel(report.status) %></strong></div>
+                  <div><span>Respostas</span><strong><%= report._count.posts %></strong></div>
                 </div>
 
                 <div class="forum-report-proof-preview">
                   <span>Provas</span>
-                  <p><%- renderUserText(report.reportEvidence || "Nenhuma prova informada.") %></p>
+                  <p><%- renderFormattedUserText(report.reportEvidence || "Nenhuma prova informada.") %></p>
+                </div>
+
+                <div class="forum-report-staff-decision-preview">
+                  <span>Decisao da staff</span>
+                  <p>Decisao da staff em breve. Use as respostas do topico para registrar orientacoes e conclusoes.</p>
                 </div>
               </div>
 
@@ -91,13 +86,8 @@
                   <option value="ARCHIVED" <%= report.status === "ARCHIVED" ? "selected" : "" %>>Arquivada</option>
                 </select>
 
-                <button type="submit" class="btn-primary">
-                  Salvar
-                </button>
-
-                <a href="/forum/topico/<%= report.id %>" class="btn-secondary">
-                  Abrir
-                </a>
+                <button type="submit" class="btn-primary">Salvar</button>
+                <a href="/forum/topico/<%= report.id %>" class="btn-secondary">Abrir detalhes</a>
               </form>
             </article>
           <% }) %>

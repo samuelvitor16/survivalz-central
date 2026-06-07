@@ -1,8 +1,13 @@
 const prisma = require("../config/prisma");
+const { getOrdersByUserId } = require("../models/orderModel");
 
 const renderPlayerDashboard = async (req, res) => {
   try {
     const playerId = req.session.playerId;
+    const playerOrders = getOrdersByUserId(playerId);
+    const recentOrders = [...playerOrders]
+      .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+      .slice(0, 3);
 
     const [user, topics, reports, recentReplies, repliesCount] = await Promise.all([
       prisma.user.findUnique({
@@ -96,7 +101,12 @@ const renderPlayerDashboard = async (req, res) => {
       topics,
       reports,
       recentReplies,
-      repliesCount
+      repliesCount,
+      orderStats: {
+        total: playerOrders.length,
+        recent: recentOrders.length
+      },
+      recentOrders
     });
   } catch (error) {
     console.log("Erro ao carregar painel do jogador:", error);

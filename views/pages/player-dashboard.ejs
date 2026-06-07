@@ -18,160 +18,330 @@
     <section class="player-dashboard-section">
       <div class="container">
 
-        <div class="dashboard-v2-hero">
-          <div class="dashboard-v2-profile">
-            <a href="/perfil/<%= user.id %>" class="dashboard-v2-avatar">
+        <% const gameStats = getGameStats(user); %>
+
+        <section class="sz-dashboard-hero">
+
+          <div class="sz-dashboard-profile">
+
+            <a href="/perfil/<%= user.id %>" class="sz-dashboard-avatar">
               <% if (user.avatarUrl) { %>
                 <img
                   src="<%= user.avatarUrl %>"
                   alt="Avatar de <%= user.name %>"
                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
-                <span style="display:none;"><%= user.name.charAt(0).toUpperCase() %></span>
+
+                <span style="display:none;">
+                  <%= user.name.charAt(0).toUpperCase() %>
+                </span>
               <% } else { %>
                 <span><%= user.name.charAt(0).toUpperCase() %></span>
               <% } %>
             </a>
 
-            <div>
-              <span class="section-tag">Meu painel</span>
+            <div class="sz-dashboard-main-info">
+              <span class="sz-dashboard-kicker">Meu painel</span>
+
               <h1>Bem-vindo, <%= user.name %></h1>
+
               <p>
-                Acompanhe seu perfil, suas medalhas, topicos, denuncias,
-                respostas recentes e atalhos principais da Central SurvivalZ.
+                Gerencie seu perfil, acompanhe suas atividades, veja suas medalhas
+                e acesse rapidamente as áreas principais da Central SurvivalZ.
               </p>
 
-              <div class="dashboard-v2-badges">
-                <span class="role-badge role-<%= user.role.toLowerCase() %>"><%= roleLabel(user.role) %></span>
-                <span>Nick: <%= user.sampNick || "Nao informado" %></span>
-                <span>Reputacao: <%= user.reputation || 0 %></span>
+              <div class="sz-dashboard-rank sz-dashboard-rank-<%= user.role.toLowerCase() %>">
+                <div class="sz-dashboard-rank-icon">
+                  <% if (user.role === "OWNER") { %>
+                    👑
+                  <% } else if (user.role === "ADMIN") { %>
+                    🛡️
+                  <% } else if (user.role === "STAFF" || user.role === "MODERADOR") { %>
+                    ⚔️
+                  <% } else { %>
+                    ☣
+                  <% } %>
+                </div>
+
+                <div>
+                  <span>Cargo</span>
+                  <strong><%= roleDisplayLabel(user.role) %></strong>
+                </div>
+              </div>
+
+              <div class="sz-dashboard-user-tags">
+                <span>Nick: <strong><%= user.sampNick || "Não informado" %></strong></span>
+                <span>Reputação: <strong><%= user.reputation || 0 %></strong></span>
+                <span>Medalhas: <strong><%= user.medals ? user.medals.length : 0 %></strong></span>
               </div>
             </div>
+
           </div>
 
-          <a href="/sair" class="btn-secondary">Sair da conta</a>
-        </div>
+          <div class="sz-dashboard-side-actions">
+            <a href="/perfil/<%= user.id %>">Meu perfil</a>
+            <a href="/perfil/editar">Editar perfil</a>
+            <a href="/sair" class="danger">Sair</a>
+          </div>
 
-        <div class="dashboard-v2-quick-links">
-          <a href="/perfil/editar">Editar perfil</a>
-          <a href="/perfil/<%= user.id %>">Meu perfil</a>
-          <a href="/comunidade">Comunidade</a>
-          <a href="/forum/categoria/denuncias/novo">Criar denuncia</a>
-          <a href="/forum">Forum</a>
-          <a href="/loja">Loja</a>
-        </div>
+        </section>
 
-        <div class="player-dashboard-grid">
-          <div class="player-panel-card">
-            <span>☣</span>
+        <nav class="sz-dashboard-shortcuts">
+          <a href="/comunidade">
+            <span>🌐</span>
+            Comunidade
+          </a>
+
+          <a href="/forum">
+            <span>💬</span>
+            Fórum
+          </a>
+
+          <a href="/forum/categoria/comunidade/novo">
+            <span>✍️</span>
+            Criar tópico
+          </a>
+
+          <a href="/forum/categoria/denuncias/novo">
+            <span>⚠️</span>
+            Criar denúncia
+          </a>
+
+          <a href="/loja">
+            <span>🛒</span>
+            Loja
+          </a>
+          <a href="/painel/pedidos">
+            <span>$</span>
+            Meus pedidos
+          </a>
+        </nav>
+
+        <section class="sz-dashboard-game-card">
+          <div class="sz-dashboard-section-header">
+            <div>
+              <span>Dados do servidor</span>
+              <h2>Personagem SurvivalZ</h2>
+            </div>
+
+            <strong>Preparado para sync SA-MP</strong>
+          </div>
+
+          <div class="sz-dashboard-game-grid">
+            <div>
+              <span>ZCoins</span>
+              <strong><%= gameStats.zCoins %></strong>
+            </div>
+
+            <div>
+              <span>Nível</span>
+              <strong><%= gameStats.level %></strong>
+            </div>
+
+            <div>
+              <span>XP</span>
+              <strong><%= gameStats.xp %></strong>
+            </div>
+
+            <div>
+              <span>VIP</span>
+              <strong><%= gameStats.vip %></strong>
+            </div>
+
+            <div>
+              <span>Clã / Facção</span>
+              <strong><%= gameStats.clan %></strong>
+            </div>
+
+            <div>
+              <span>Kills</span>
+              <strong><%= gameStats.kills %></strong>
+            </div>
+
+            <div>
+              <span>Mortes</span>
+              <strong><%= gameStats.deaths %></strong>
+            </div>
+
+            <div>
+              <span>Tempo jogado</span>
+              <strong><%= gameStats.playtime %></strong>
+            </div>
+
+            <div>
+              <span>Último login</span>
+              <strong><%= gameStats.lastGameLogin %></strong>
+            </div>
+
+            <div>
+              <span>Status</span>
+              <strong><%= gameStats.onlineStatus %></strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="sz-dashboard-overview-grid">
+
+          <article class="sz-dashboard-card">
+            <div class="sz-dashboard-card-icon">☣</div>
+            <span>Conta</span>
             <h2>Perfil</h2>
+
             <p>
               <strong>E-mail:</strong> <%= user.email %><br>
-              <strong>Discord:</strong> <%= user.discord || "Nao informado" %><br>
-              <strong>Cargo:</strong> <%= roleLabel(user.role) %>
+              <strong>Discord:</strong> <%= user.discord || "Não informado" %><br>
+              <strong>Cargo:</strong> <%= roleDisplayLabel(user.role) %>
             </p>
-          </div>
+          </article>
 
-          <div class="player-panel-card">
-            <span>◆</span>
+          <article class="sz-dashboard-card">
+            <div class="sz-dashboard-card-icon">🏅</div>
+            <span>Conquistas</span>
             <h2>Medalhas recentes</h2>
 
             <% if (!user.medals || user.medals.length === 0) { %>
-              <p>Suas medalhas aparecerao aqui quando forem concedidas pela staff.</p>
+              <p>Suas medalhas aparecerão aqui quando forem concedidas pela staff.</p>
             <% } else { %>
-              <div class="dashboard-v2-medals">
-                <% user.medals.forEach((userMedal) => { %>
+              <div class="sz-dashboard-medals">
+                <% user.medals.slice(0, 8).forEach((userMedal) => { %>
                   <span
-                    class="forum-post-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
-                    title="<%= userMedal.medal.name %>"
+                    class="sz-dashboard-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+                    title="<%= medalTooltip(userMedal) %>"
+                    data-tooltip="<%= medalTooltip(userMedal) %>"
                   >
-                    <%= userMedal.medal.icon || "★" %>
+                    <%= userMedal.medal.icon || "🏅" %>
                   </span>
                 <% }) %>
               </div>
             <% } %>
-          </div>
+          </article>
 
-          <div class="player-panel-card">
-            <span>▣</span>
-            <h2>Topicos</h2>
-            <p>Voce possui <strong><%= topics.length %></strong> topico(s) publico(s) recente(s).</p>
-            <a href="/forum">Acessar forum</a>
-          </div>
+          <article class="sz-dashboard-card">
+            <div class="sz-dashboard-card-icon">▣</div>
+            <span>Fórum</span>
+            <h2>Tópicos</h2>
 
-          <div class="player-panel-card">
-            <span>!</span>
-            <h2>Denuncias</h2>
-            <p>Voce possui <strong><%= reports.length %></strong> denuncia(s) recente(s).</p>
-            <a href="/forum/categoria/denuncias">Ver denuncias</a>
-          </div>
-        </div>
+            <p>
+              Você possui <strong><%= topics.length %></strong> tópico(s) público(s) recente(s).
+            </p>
 
-        <div class="player-dashboard-content-grid dashboard-v2-content-grid">
-          <div class="player-dashboard-list-card">
-            <div class="player-list-header">
-              <h2>Topicos recentes</h2>
-              <a href="/forum/categoria/comunidade/novo">Criar topico</a>
+            <a href="/forum">Acessar fórum</a>
+          </article>
+
+          <article class="sz-dashboard-card">
+            <div class="sz-dashboard-card-icon">!</div>
+            <span>Central</span>
+            <h2>Denúncias</h2>
+
+            <p>
+              Você possui <strong><%= reports.length %></strong> denúncia(s) recente(s).
+            </p>
+
+            <a href="/forum/categoria/denuncias">Ver denúncias</a>
+          </article>
+
+          <article class="sz-dashboard-card">
+            <div class="sz-dashboard-card-icon">$</div>
+            <span>Loja Beta</span>
+            <h2>Meus pedidos</h2>
+
+            <p>
+              Voce possui <strong><%= orderStats.total %></strong> pedido(s) vinculado(s) a sua conta.
+              <% if (recentOrders.length > 0) { %>
+                Ultimo pedido: <strong><%= recentOrders[0].code %></strong>.
+              <% } %>
+            </p>
+
+            <a href="/painel/pedidos">Ver pedidos</a>
+          </article>
+
+        </section>
+
+        <section class="sz-dashboard-content-grid">
+
+          <div class="sz-dashboard-list-card">
+            <div class="sz-dashboard-section-header">
+              <div>
+                <span>Fórum</span>
+                <h2>Tópicos recentes</h2>
+              </div>
+
+              <a href="/forum/categoria/comunidade/novo">Criar tópico</a>
             </div>
 
             <% if (topics.length === 0) { %>
-              <p class="player-empty-text">Voce ainda nao criou topicos publicos.</p>
+              <p class="player-empty-text">Você ainda não criou tópicos públicos.</p>
             <% } %>
 
-            <% topics.forEach((topic) => { %>
-              <a href="/forum/topico/<%= topic.id %>" class="player-dashboard-topic-item">
-                <div>
-                  <strong><%= topic.title %></strong>
-                  <span><%= topic.category.name %> • <%= topic._count.posts %> resposta(s)</span>
-                </div>
+            <div class="sz-dashboard-list">
+              <% topics.forEach((topic) => { %>
+                <a href="/forum/topico/<%= topic.id %>" class="sz-dashboard-list-item">
+                  <div>
+                    <strong><%= topic.title %></strong>
+                    <span><%= topic.category.name %> • <%= topic._count.posts %> resposta(s)</span>
+                  </div>
 
-                <small><%= topicStatusLabel(topic.status) %></small>
-              </a>
-            <% }) %>
+                  <small><%= topicStatusLabel(topic.status) %></small>
+                </a>
+              <% }) %>
+            </div>
           </div>
 
-          <div class="player-dashboard-list-card">
-            <div class="player-list-header">
-              <h2>Denuncias recentes</h2>
-              <a href="/forum/categoria/denuncias/novo">Criar denuncia</a>
+          <div class="sz-dashboard-list-card">
+            <div class="sz-dashboard-section-header">
+              <div>
+                <span>Denúncias</span>
+                <h2>Denúncias recentes</h2>
+              </div>
+
+              <a href="/forum/categoria/denuncias/novo">Criar denúncia</a>
             </div>
 
             <% if (reports.length === 0) { %>
-              <p class="player-empty-text">Voce ainda nao abriu nenhuma denuncia.</p>
+              <p class="player-empty-text">Você ainda não abriu nenhuma denúncia.</p>
             <% } %>
 
-            <% reports.forEach((report) => { %>
-              <a href="/forum/topico/<%= report.id %>" class="player-dashboard-topic-item">
-                <div>
-                  <strong><%= report.title %></strong>
-                  <span>Acusado: <%= report.reportAccusedNick || "Nao informado" %></span>
-                </div>
+            <div class="sz-dashboard-list">
+              <% reports.forEach((report) => { %>
+                <a href="/forum/topico/<%= report.id %>" class="sz-dashboard-list-item">
+                  <div>
+                    <strong><%= report.title %></strong>
+                    <span>Acusado: <%= report.reportAccusedNick || "Não informado" %></span>
+                  </div>
 
-                <small><%= topicStatusLabel(report.status) %></small>
-              </a>
-            <% }) %>
+                  <small><%= topicStatusLabel(report.status) %></small>
+                </a>
+              <% }) %>
+            </div>
           </div>
 
-          <div class="player-dashboard-list-card dashboard-v2-wide-card">
-            <div class="player-list-header">
-              <h2>Respostas recentes</h2>
-              <span><%= repliesCount %> resposta(s)</span>
+          <div class="sz-dashboard-list-card sz-dashboard-wide">
+            <div class="sz-dashboard-section-header">
+              <div>
+                <span>Atividade</span>
+                <h2>Respostas recentes</h2>
+              </div>
+
+              <strong><%= repliesCount %> resposta(s)</strong>
             </div>
 
             <% if (recentReplies.length === 0) { %>
-              <p class="player-empty-text">Voce ainda nao respondeu topicos do forum.</p>
+              <p class="player-empty-text">Você ainda não respondeu tópicos do fórum.</p>
             <% } %>
 
-            <% recentReplies.forEach((reply) => { %>
-              <a href="/forum/topico/<%= reply.topic.id %>" class="player-dashboard-topic-item">
-                <div>
-                  <strong><%= reply.topic.title %></strong>
-                  <span><%= reply.topic.category.name %> • respondido em <%= formatDate(reply.createdAt) %></span>
-                </div>
-              </a>
-            <% }) %>
+            <div class="sz-dashboard-list">
+              <% recentReplies.forEach((reply) => { %>
+                <a href="/forum/topico/<%= reply.topic.id %>" class="sz-dashboard-list-item">
+                  <div>
+                    <strong><%= reply.topic.title %></strong>
+                    <span><%= reply.topic.category.name %> • respondido em <%= formatDate(reply.createdAt) %></span>
+                  </div>
+                </a>
+              <% }) %>
+            </div>
           </div>
-        </div>
+
+        </section>
 
       </div>
     </section>

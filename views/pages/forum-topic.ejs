@@ -18,46 +18,76 @@
     <section class="forum-section">
       <div class="container">
 
-        <div class="forum-topic-page-header">
-          <a href="/forum/categoria/<%= topic.category.slug %>" class="forum-back-link">
-            Voltar para <%= topic.category.name %>
-          </a>
+        <div class="forum-topic-page-header topic-header-v2">
+          <div>
+            <a href="/forum/categoria/<%= topic.category.slug %>" class="forum-back-link">
+              Voltar para <%= topic.category.name %>
+            </a>
 
-          <span class="section-tag"><%= topic.category.icon || "☣" %> <%= topic.category.name %></span>
+            <div class="forum-topic-heading-row">
+              <span class="section-tag"><%= topic.category.icon || "SZ" %> <%= topic.category.name %></span>
+              <span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
+                <%= topicStatusLabel(topic.status) %>
+              </span>
+            </div>
 
-          <span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
-            <%= topicStatusLabel(topic.status) %>
-          </span>
+            <h1><%= topic.title %></h1>
 
-          <h1><%= topic.title %></h1>
+            <p>
+              Criado por <a href="/perfil/<%= topic.author.id %>"><strong><%= topic.author.name %></strong></a>
+              | <%= formatDateTime(topic.createdAt) %>
+              | <%= topic.views + 1 %> visualizacoes
+            </p>
+          </div>
 
-          <p>
-            Criado por <a href="/perfil/<%= topic.author.id %>"><strong><%= topic.author.name %></strong></a>
-            • <%= formatDate(topic.createdAt) %>
-            • <%= topic.views + 1 %> visualizacoes
-          </p>
+          <% if (canManageTopic || canEditOwnTopic) { %>
+            <div class="forum-topic-action-menu" data-action-menu>
+              <button type="button" class="forum-topic-action-trigger" data-action-trigger aria-label="Abrir acoes do topico">
+                ...
+              </button>
 
-          <% if (["STAFF", "ADMIN", "OWNER"].includes(playerRole)) { %>
-            <div class="forum-topic-staff-actions">
-              <form action="/forum/topico/<%= topic.id %>/status" method="POST">
-                <input type="hidden" name="status" value="OPEN">
-                <button type="submit" class="<%= topic.status === 'OPEN' ? 'active' : '' %>">Abrir</button>
-              </form>
+              <div class="forum-topic-action-panel" data-action-panel>
+                <% if (canManageTopic) { %>
+                  <form action="/forum/topico/<%= topic.id %>/status" method="POST">
+                    <input type="hidden" name="status" value="OPEN">
+                    <button type="submit">Abrir topico</button>
+                  </form>
+                  <form action="/forum/topico/<%= topic.id %>/status" method="POST">
+                    <input type="hidden" name="status" value="CLOSED">
+                    <button type="submit">Fechar topico</button>
+                  </form>
+                  <form action="/forum/topico/<%= topic.id %>/status" method="POST">
+                    <input type="hidden" name="status" value="PINNED">
+                    <button type="submit">Fixar topico</button>
+                  </form>
+                  <form action="/forum/topico/<%= topic.id %>/status" method="POST">
+                    <input type="hidden" name="status" value="ARCHIVED">
+                    <button type="submit">Arquivar topico</button>
+                  </form>
 
-              <form action="/forum/topico/<%= topic.id %>/status" method="POST">
-                <input type="hidden" name="status" value="CLOSED">
-                <button type="submit" class="<%= topic.status === 'CLOSED' ? 'active' : '' %>">Fechar</button>
-              </form>
+                  <form action="/forum/topico/<%= topic.id %>/mover" method="POST" class="forum-topic-move-form">
+                    <label for="categoryId">Mover categoria</label>
+                    <select id="categoryId" name="categoryId">
+                      <% categories.forEach((category) => { %>
+                        <option value="<%= category.id %>" <%= category.id === topic.categoryId ? "selected" : "" %>>
+                          <%= category.name %>
+                        </option>
+                      <% }) %>
+                    </select>
+                    <button type="submit">Mover</button>
+                  </form>
+                <% } %>
 
-              <form action="/forum/topico/<%= topic.id %>/status" method="POST">
-                <input type="hidden" name="status" value="PINNED">
-                <button type="submit" class="<%= topic.status === 'PINNED' ? 'active' : '' %>">Fixar</button>
-              </form>
+                <% if (canEditOwnTopic) { %>
+                  <a href="/forum/topico/<%= topic.id %>/editar" class="forum-action-link">Editar topico</a>
+                <% } %>
 
-              <form action="/forum/topico/<%= topic.id %>/status" method="POST">
-                <input type="hidden" name="status" value="ARCHIVED">
-                <button type="submit" class="<%= topic.status === 'ARCHIVED' ? 'active' : '' %>">Arquivar</button>
-              </form>
+                <% if (canDeleteOwnTopic) { %>
+                  <form action="/forum/topico/<%= topic.id %>/apagar" method="POST" data-confirm-action="Apagar este topico?">
+                    <button type="submit" class="danger">Apagar topico</button>
+                  </form>
+                <% } %>
+              </div>
             </div>
           <% } %>
         </div>
@@ -76,11 +106,36 @@
                 <span>Motivo</span>
                 <strong><%= topic.reportReason || "Nao informado" %></strong>
               </div>
+
+              <div>
+                <span>Autor</span>
+                <strong><%= topic.author.name %></strong>
+              </div>
+
+              <div>
+                <span>Status</span>
+                <strong><%= topicStatusLabel(topic.status) %></strong>
+              </div>
+
+              <div>
+                <span>Data</span>
+                <strong><%= formatDateTime(topic.createdAt) %></strong>
+              </div>
+
+              <div>
+                <span>Respostas da staff</span>
+                <strong><%= topic.posts.length %></strong>
+              </div>
             </div>
 
             <div class="forum-report-evidence">
               <span>Provas</span>
-              <p><%- renderUserText(topic.reportEvidence || "Nenhuma prova informada.") %></p>
+              <p><%- renderFormattedUserText(topic.reportEvidence || "Nenhuma prova informada.") %></p>
+            </div>
+
+            <div class="forum-report-decision">
+              <span>Decisao da staff</span>
+              <p>Decisao da staff em breve. Acompanhe as respostas oficiais neste topico.</p>
             </div>
           </div>
         <% } %>
@@ -90,7 +145,10 @@
           content: topic.content,
           postedAt: topic.createdAt,
           postNumber: 1,
-          dateLabel: "Postado em"
+          dateLabel: "Postado em",
+          editHref: canEditOwnTopic ? `/forum/topico/${topic.id}/editar` : null,
+          deleteAction: canDeleteOwnTopic ? `/forum/topico/${topic.id}/apagar` : null,
+          deleteLabel: "Apagar topico"
         }) %>
 
         <% topic.posts.forEach((post, index) => { %>
@@ -100,7 +158,10 @@
             postedAt: post.createdAt,
             postNumber: index + 2,
             dateLabel: "Respondido em",
-            isReply: true
+            isReply: true,
+            editHref: (canManageTopic || (isPlayerLogged && post.authorId === currentPlayerId && topic.status !== "CLOSED" && topic.status !== "ARCHIVED")) ? `/forum/resposta/${post.id}/editar` : null,
+            deleteAction: (canManageTopic || (isPlayerLogged && post.authorId === currentPlayerId && topic.status !== "CLOSED" && topic.status !== "ARCHIVED")) ? `/forum/resposta/${post.id}/apagar` : null,
+            deleteLabel: "Apagar resposta"
           }) %>
         <% }) %>
 
@@ -118,16 +179,27 @@
           <% } else if (isPlayerLogged) { %>
             <h2>Responder topico</h2>
 
-            <form action="/forum/topico/<%= topic.id %>/responder" method="POST" class="forum-form">
-              <div class="form-group">
-                <label for="content">Sua resposta</label>
-                <textarea id="content" name="content" placeholder="Escreva sua resposta..." required></textarea>
-              </div>
+<form action="/forum/topico/<%= topic.id %>/responder" method="POST" class="forum-form">
+  <div class="form-group">
+    <label>Sua resposta</label>
 
-              <button type="submit" class="btn-primary forum-submit-btn">
-                Enviar resposta
-              </button>
-            </form>
+    <%- include("../partials/forum-editor-toolbar", {
+      textareaId: "content",
+      previewId: "replyPreview",
+      value: ""
+    }) %>
+  </div>
+
+  <div class="forum-reply-actions">
+    <button
+      type="submit"
+      class="btn-primary forum-submit-btn"
+      data-confirm-action="Enviar esta resposta?"
+    >
+      Enviar resposta
+    </button>
+  </div>
+</form>
           <% } else { %>
             <h2>Entre para responder</h2>
             <p>Voce precisa estar logado para participar deste topico.</p>
@@ -140,6 +212,7 @@
   </main>
 
   <%- include("../partials/footer") %>
+  <script src="/js/forumEditor.js"></script>
 
 </body>
 </html>

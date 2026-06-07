@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/admin.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="admin-home-section">
+      <div class="container">
+
+        <div class="admin-home-header">
+          <div>
+            <span class="section-tag">Painel Desenvolvedor</span>
+            <h1>Usuarios</h1>
+            <p>Busque contas cadastradas, veja cargos, atividade, medalhas e acesse detalhes administrativos.</p>
+          </div>
+
+          <a href="/admin" class="btn-secondary">Voltar ao painel</a>
+        </div>
+
+        <% if (error) { %>
+          <div class="admin-user-message error"><%= error %></div>
+        <% } %>
+
+        <% if (success) { %>
+          <div class="admin-user-message success"><%= success %></div>
+        <% } %>
+
+        <form action="/admin/usuarios" method="GET" class="admin-users-filter">
+          <input
+            type="search"
+            name="q"
+            value="<%= search %>"
+            maxlength="80"
+            placeholder="Buscar por nome, e-mail, nick ou Discord"
+          >
+
+          <select name="role">
+            <option value="">Todos os cargos</option>
+            <% roleOptions.forEach((roleOption) => { %>
+              <option value="<%= roleOption %>" <%= role === roleOption ? "selected" : "" %>>
+                <%= roleLabel(roleOption) %><%= supportedRoleOptions.includes(roleOption) ? "" : " (indisponivel)" %>
+              </option>
+            <% }) %>
+          </select>
+
+          <button type="submit">Filtrar</button>
+          <a href="/admin/usuarios">Limpar</a>
+        </form>
+
+        <% if (users.length === 0) { %>
+          <section class="admin-users-empty">
+            <strong>Nenhum usuario encontrado.</strong>
+            <p>Tente limpar os filtros ou buscar por outro termo.</p>
+          </section>
+        <% } else { %>
+          <section class="admin-users-grid">
+            <% users.forEach((user) => { %>
+              <article class="admin-user-card">
+                <div class="admin-user-main">
+                  <a href="/perfil/<%= user.id %>" class="admin-user-avatar">
+                    <% if (user.avatarUrl) { %>
+                      <img
+                        src="<%= user.avatarUrl %>"
+                        alt="Avatar de <%= user.name %>"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                      >
+                      <span style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                    <% } else { %>
+                      <span><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                    <% } %>
+                  </a>
+
+                  <div>
+                    <span class="admin-user-role role-<%= String(user.role || 'PLAYER').toLowerCase() %>">
+                      <%= roleLabel(user.role) %>
+                    </span>
+                    <h2><%= user.name %></h2>
+                    <p><%= user.email %></p>
+                  </div>
+                </div>
+
+                <div class="admin-user-meta">
+                  <div><span>Nick</span><strong><%= user.sampNick || "Nao informado" %></strong></div>
+                  <div><span>Discord</span><strong><%= user.discord || "Nao informado" %></strong></div>
+                  <div><span>Reputacao</span><strong><%= user.reputation || 0 %></strong></div>
+                  <div><span>Topicos</span><strong><%= user._count.topics %></strong></div>
+                  <div><span>Respostas</span><strong><%= user._count.posts %></strong></div>
+                  <div><span>Cadastro</span><strong><%= formatDate(user.createdAt) %></strong></div>
+                </div>
+
+                <div class="admin-user-medals">
+                  <% if (!user.medals || user.medals.length === 0) { %>
+                    <span class="admin-user-no-medals">Sem medalhas recentes</span>
+                  <% } else { %>
+                    <% user.medals.forEach((userMedal) => { %>
+                      <span
+                        class="admin-user-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+                        title="<%= medalTooltip(userMedal) %>"
+                      >
+                        <%= userMedal.medal.icon || "M" %>
+                      </span>
+                    <% }) %>
+                  <% } %>
+                </div>
+
+                <div class="admin-user-actions">
+                  <a href="/perfil/<%= user.id %>">Ver perfil</a>
+                  <a href="/admin/usuarios/<%= user.id %>">Ver detalhes</a>
+                </div>
+              </article>
+            <% }) %>
+          </section>
+        <% } %>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

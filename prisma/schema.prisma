@@ -45,6 +45,18 @@ model User {
   signatureImageUrl String?
   reputation        Int     @default(0)
 
+  // Future SA-MP sync fields. The website shows placeholders until the game bridge writes real data.
+  zCoins          Int       @default(0)
+  gameLevel       Int       @default(1)
+  gameXp          Int       @default(0)
+  vipTier         String?
+  clanName        String?
+  kills           Int       @default(0)
+  deaths          Int       @default(0)
+  playtimeMinutes Int       @default(0)
+  lastGameLogin   DateTime?
+  isOnlineInGame  Boolean   @default(false)
+
   role     UserRole @default(PLAYER)
   isBanned Boolean  @default(false)
 

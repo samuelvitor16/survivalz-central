@@ -38,10 +38,15 @@ const findUserByLookup = (lookup) => {
 
 const renderForumModeration = async (req, res) => {
   try {
+    const status = validStatuses.includes(req.query.status) ? req.query.status : "ALL";
+    const where = status === "ALL" ? {} : { status };
+
     const topics = await prisma.forumTopic.findMany({
+      where,
       orderBy: {
         updatedAt: "desc"
       },
+      take: 20,
       include: {
         author: true,
         category: true,
@@ -53,9 +58,37 @@ const renderForumModeration = async (req, res) => {
       }
     });
 
+    const [openReports, usersCount, medalsCount, categories] = await Promise.all([
+      prisma.forumTopic.count({
+        where: {
+          category: {
+            slug: "denuncias"
+          },
+          status: {
+            in: ["OPEN", "PINNED"]
+          }
+        }
+      }),
+      prisma.user.count(),
+      prisma.medal.count(),
+      prisma.forumCategory.findMany({
+        orderBy: {
+          position: "asc"
+        }
+      })
+    ]);
+
     res.render("pages/forum-moderation", {
       title: "Moderação do Fórum - SurvivalZ",
-      topics
+      topics,
+      status,
+      categories,
+      overview: {
+        openReports,
+        usersCount,
+        medalsCount,
+        topicsCount: topics.length
+      }
     });
   } catch (error) {
     console.log("Erro ao carregar moderação:", error);
@@ -90,11 +123,15 @@ const updateTopicStatus = async (req, res) => {
 
 const renderReportsModeration = async (req, res) => {
   try {
+    const status = validStatuses.includes(req.query.status) ? req.query.status : "ALL";
+    const statusWhere = status === "ALL" ? {} : { status };
+
     const reports = await prisma.forumTopic.findMany({
       where: {
         category: {
           slug: "denuncias"
-        }
+        },
+        ...statusWhere
       },
       orderBy: {
         updatedAt: "desc"
@@ -112,7 +149,8 @@ const renderReportsModeration = async (req, res) => {
 
     res.render("pages/forum-reports-moderation", {
       title: "Denúncias - Moderação SurvivalZ",
-      reports
+      reports,
+      status
     });
   } catch (error) {
     console.log("Erro ao carregar denúncias:", error);

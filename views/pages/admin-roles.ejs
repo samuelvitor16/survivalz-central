@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/admin.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="admin-home-section">
+      <div class="container">
+
+        <div class="admin-home-header">
+          <div>
+            <span class="section-tag">Painel Desenvolvedor</span>
+            <h1>Equipe e cargos</h1>
+            <p>Busque uma conta e atualize rapidamente o cargo usado no perfil, forum, membros e painel.</p>
+          </div>
+
+          <div class="admin-user-detail-actions">
+            <a href="/admin/usuarios" class="btn-secondary">Usuarios</a>
+            <a href="/admin" class="btn-secondary">Voltar ao painel</a>
+          </div>
+        </div>
+
+        <% if (error) { %>
+          <div class="admin-user-message error"><%= error %></div>
+        <% } %>
+
+        <% if (success) { %>
+          <div class="admin-user-message success"><%= success %></div>
+        <% } %>
+
+        <form action="/admin/cargos" method="GET" class="admin-users-filter admin-roles-search">
+          <input
+            type="search"
+            name="q"
+            value="<%= search %>"
+            maxlength="80"
+            placeholder="Buscar por nome, e-mail, nick ou Discord"
+            required
+          >
+
+          <button type="submit">Buscar</button>
+          <a href="/admin/cargos">Limpar</a>
+        </form>
+
+        <% if (!search) { %>
+          <section class="admin-users-empty">
+            <strong>Busque um usuario para alterar cargo.</strong>
+            <p>Use nome, e-mail, nick ou Discord. Nenhum hash de senha e exibido nesta tela.</p>
+          </section>
+        <% } else if (users.length === 0) { %>
+          <section class="admin-users-empty">
+            <strong>Nenhum usuario encontrado.</strong>
+            <p>Confira o termo digitado e tente novamente.</p>
+          </section>
+        <% } else { %>
+          <section class="admin-roles-list">
+            <% users.forEach((user) => { %>
+              <article class="admin-roles-card">
+                <div class="admin-user-main">
+                  <a href="/perfil/<%= user.id %>" class="admin-user-avatar">
+                    <% if (user.avatarUrl) { %>
+                      <img
+                        src="<%= user.avatarUrl %>"
+                        alt="Avatar de <%= user.name %>"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                      >
+                      <span style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                    <% } else { %>
+                      <span><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                    <% } %>
+                  </a>
+
+                  <div>
+                    <span class="admin-user-role role-<%= String(user.role || 'PLAYER').toLowerCase() %>">
+                      <%= roleLabel(user.role) %>
+                    </span>
+                    <h2><%= user.name %></h2>
+                    <p><%= user.email %></p>
+                    <small>Nick: <%= user.sampNick || "Nao informado" %> | Discord: <%= user.discord || "Nao informado" %></small>
+                  </div>
+                </div>
+
+                <form action="/admin/cargos" method="POST" class="admin-user-role-form admin-roles-form">
+                  <input type="hidden" name="userId" value="<%= user.id %>">
+                  <input type="hidden" name="q" value="<%= search %>">
+
+                  <label for="role-<%= user.id %>">Novo cargo</label>
+                  <select id="role-<%= user.id %>" name="role">
+                    <% roleOptions.forEach((roleOption) => { %>
+                      <option value="<%= roleOption %>" <%= user.role === roleOption ? "selected" : "" %>>
+                        <%= roleLabel(roleOption) %>
+                      </option>
+                    <% }) %>
+                  </select>
+
+                  <button type="submit" class="admin-action-btn">Atualizar cargo</button>
+                </form>
+
+                <div class="admin-user-actions">
+                  <a href="/perfil/<%= user.id %>">Ver perfil</a>
+                  <a href="/admin/usuarios/<%= user.id %>">Detalhes</a>
+                </div>
+              </article>
+            <% }) %>
+          </section>
+        <% } %>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

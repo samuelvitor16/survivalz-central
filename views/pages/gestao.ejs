@@ -6,6 +6,7 @@
 
   <title><%= title %></title>
 
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pages/gestao.css">
 </head>
@@ -14,124 +15,154 @@
   <%- include("../partials/header") %>
 
   <main>
-  <section class="page-hero">
-    <div class="container">
-      <span class="section-tag">Gestão SurvivalZ</span>
-      <h1>Uma administração criada para manter o servidor organizado.</h1>
-      <p>
-        A gestão do SurvivalZ trabalha para construir um servidor sério, justo e imersivo,
-        com foco na comunidade, na transparência e na evolução constante do projeto.
-      </p>
-    </div>
-  </section>
+    <section class="sz-management-hero">
+      <div class="container">
+        <div class="sz-management-hero-grid">
+          <div>
+            <span class="sz-management-kicker">Gestão SurvivalZ</span>
 
-  <section class="management-section">
-    <div class="container">
-      <span class="section-tag">Equipe principal</span>
-      <h2>Fundadores do projeto</h2>
-
-      <div class="management-grid">
-        <div class="manager-card">
-          <div class="manager-avatar">L</div>
-
-          <div class="manager-info">
-            <h3>LEAD</h3>
-            <span>Fundador • Desenvolvimento • Servidor</span>
+            <h1>Equipe organizada para manter o projeto em evolução.</h1>
 
             <p>
-              Responsável por áreas técnicas do projeto, desenvolvimento interno, funcionamento do
-              servidor e sistemas que fazem parte da estrutura do SurvivalZ.
+              A gestão acompanha comunidade, desenvolvimento, moderação, loja beta,
+              denúncias, comunicação e as próximas fases da integração com o servidor.
             </p>
+
+            <div class="sz-management-actions">
+              <a href="/comunidade">Comunidade</a>
+              <a href="/forum">Fórum</a>
+              <a href="/sobre">Sobre o projeto</a>
+            </div>
           </div>
-        </div>
-        <div class="manager-card">
-          <div class="manager-avatar">D</div>
 
-          <div class="manager-info">
-            <h3>DybalaX</h3>
-            <span>Fundador • Comunidade • Organização</span>
-
+          <div class="sz-management-status-card">
+            <span>Status da gestão</span>
+            <strong>Projeto em Beta</strong>
             <p>
-              Responsável pela organização geral da comunidade, comunicação, estrutura da central,
-              planejamento do servidor e acompanhamento da experiência dos jogadores.
+              Estrutura em construção com foco em organização, testes,
+              comunidade e evolução por etapas.
             </p>
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="sz-management-section">
+      <div class="container">
+        <div class="sz-management-section-header">
+          <span class="sz-management-kicker">Equipe principal</span>
+          <h2>Responsáveis pelo projeto</h2>
+          <p>
+            A gestão principal acompanha a parte técnica, a organização da comunidade
+            e o desenvolvimento da Central SurvivalZ.
+          </p>
+        </div>
+
+        <div class="sz-management-team-grid">
+          <article class="sz-manager-card lead sz-manager-card-with-art">
+  <div class="sz-manager-art lead-art">
+    <img src="/images/team/lead-skin94.png" alt="Personagem do LEAD no SurvivalZ">
+  </div>
+
+  <div class="sz-manager-info">
+    <span>Fundador • Desenvolvimento • Servidor</span>
+    <h3>LEAD</h3>
+
+    <p>
+      Responsável por sistemas, estrutura técnica, desenvolvimento do servidor
+      e evolução da base principal do SurvivalZ.
+    </p>
+
+    <div class="sz-manager-tags">
+      <strong>Servidor</strong>
+      <strong>Sistemas</strong>
+      <strong>Desenvolvimento</strong>
     </div>
-  </section>
+  </div>
+</article>
 
-  <section class="principles-section">
-    <div class="container">
-      <span class="section-tag">Nossa postura</span>
-      <h2>Como a gestão pretende atuar</h2>
+          <article class="sz-manager-card samuel sz-manager-card-with-art">
+  <div class="sz-manager-art">
+    <img src="/images/team/samuel-skin160.png" alt="Personagem de Samuel no SurvivalZ">
+  </div>
 
-      <div class="cards">
-        <div class="card">
-          <h3>🛡 Justiça</h3>
-          <p>
-            Denúncias, punições e decisões importantes devem ser analisadas com calma,
-            provas e responsabilidade.
-          </p>
-        </div>
+  <div class="sz-manager-info">
+    <span>Gestão • Comunidade • Organização</span>
+    <h3>DybalaX</h3>
 
-        <div class="card">
-          <h3>📌 Organização</h3>
-          <p>
-            O SurvivalZ será administrado com regras claras, canais corretos e sistemas próprios
-            para evitar bagunça.
-          </p>
-        </div>
+    <p>
+      Responsável pela organização da comunidade, comunicação, suporte,
+      estrutura da Central e acompanhamento dos jogadores.
+    </p>
 
-        <div class="card">
-          <h3>👥 Comunidade</h3>
-          <p>
-            A opinião dos jogadores será importante para melhorias, ajustes e evolução do servidor.
-          </p>
-        </div>
-
-        <div class="card">
-          <h3>🚧 Evolução constante</h3>
-          <p>
-            O projeto será melhorado por fases, com novas funções, correções e atualizações conforme
-            o servidor crescer.
-          </p>
-        </div>
-
-        <div class="card">
-          <h3>⚠ Responsabilidade</h3>
-          <p>
-            A staff deve atuar com postura, respeito e foco em resolver problemas, não criar conflitos.
-          </p>
-        </div>
-
-        <div class="card">
-          <h3>☣ Identidade</h3>
-          <p>
-            Cada decisão será pensada para fortalecer a atmosfera pós-apocalíptica e a marca SurvivalZ.
-          </p>
+    <div class="sz-manager-tags">
+      <strong>Comunidade</strong>
+      <strong>Suporte</strong>
+      <strong>Central</strong>
+    </div>
+  </div>
+</article>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="cta-section">
-    <div class="container cta-box">
-      <div>
-        <span class="section-tag">Central oficial</span>
-        <h2>Um projeto feito para crescer com a comunidade.</h2>
-        <p>
-          Acompanhe o desenvolvimento, participe do Discord e fique por dentro das novidades oficiais.
-        </p>
-      </div>
+    <section class="sz-management-section">
+      <div class="container">
+        <div class="sz-management-section-header">
+          <span class="sz-management-kicker">Postura</span>
+          <h2>Como a equipe deve atuar</h2>
+          <p>
+            O objetivo é manter uma comunidade organizada, com decisões mais claras,
+            moderação responsável e comunicação oficial.
+          </p>
+        </div>
 
-      <div class="cta-buttons">
-        <a href="#" class="btn-primary">Entrar no Discord</a>
-        <a href="#" class="btn-secondary">Ver Guia</a>
+        <div class="sz-management-principles-grid">
+          <article>
+            <span>⚖️</span>
+            <h3>Justiça</h3>
+            <p>Denúncias e punições devem ser analisadas com provas, contexto e calma.</p>
+          </article>
+
+          <article>
+            <span>📢</span>
+            <h3>Transparência</h3>
+            <p>Avisos e mudanças importantes devem passar pelos canais oficiais.</p>
+          </article>
+
+          <article>
+            <span>🛡️</span>
+            <h3>Responsabilidade</h3>
+            <p>A staff deve resolver problemas, preservar a comunidade e manter postura.</p>
+          </article>
+
+          <article>
+            <span>⚙️</span>
+            <h3>Desenvolvimento</h3>
+            <p>Novas funções devem entrar por fases, com testes e ajustes constantes.</p>
+          </article>
+        </div>
       </div>
-    </div>
-  </section>
-</main>
+    </section>
+
+    <section class="sz-management-section">
+      <div class="container">
+        <div class="sz-management-operation">
+          <div>
+            <span class="sz-management-kicker">Operação</span>
+            <h2>Áreas acompanhadas pela gestão</h2>
+          </div>
+
+          <div class="sz-management-operation-grid">
+            <div><strong>Comunidade</strong><span>Fórum, perfis, tópicos e atividade pública.</span></div>
+            <div><strong>Moderação</strong><span>Denúncias, status de tópicos e ações staff.</span></div>
+            <div><strong>Loja Beta</strong><span>Pedidos manuais, consulta e entregas futuras.</span></div>
+            <div><strong>Desenvolvimento</strong><span>Central, sistemas, integrações e melhorias.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <%- include("../partials/footer") %>
 

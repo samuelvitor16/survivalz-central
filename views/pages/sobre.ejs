@@ -6,86 +6,145 @@
 
   <title><%= title %></title>
 
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
   <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/pages/sobre.css">
+  <link rel="stylesheet" href="/css/pages/sobre.css">
 </head>
 <body>
 
   <%- include("../partials/header") %>
 
   <main>
-    <section class="page-hero">
+    <section class="sz-about-hero">
       <div class="container">
-        <span class="section-tag">Sobre o servidor</span>
-        <h1>Um mundo destruído. Uma nova forma de sobreviver.</h1>
-        <p>
-          O SurvivalZ é um servidor SAMP com temática pós-apocalíptica, criado para entregar
-          uma experiência de sobrevivência mais imersiva, organizada e diferente dos servidores comuns.
-        </p>
-      </div>
-    </section>
+        <div class="sz-about-hero-grid">
+          <div>
+            <span class="sz-about-kicker">Sobre o SurvivalZ</span>
 
-    <section class="about-section">
-      <div class="container about-grid">
-        <div class="about-text">
-          <span class="section-tag">A proposta</span>
-          <h2>Sobreviver não será apenas entrar e jogar.</h2>
+            <h1>Sobrevivência pós-apocalíptica dentro do SA-MP.</h1>
 
-          <p>
-            A ideia do SurvivalZ é construir um ambiente onde cada jogador tenha uma jornada.
-            O foco do servidor será exploração, evolução, risco, estratégia, interação com outros
-            sobreviventes e decisões que realmente importam dentro do mundo.
-          </p>
+            <p>
+              O SurvivalZ nasceu para transformar o GTA San Andreas Multiplayer
+              em uma experiência de sobrevivência, comunidade, progressão e organização.
+            </p>
 
-          <p>
-            Em vez de ser apenas mais um servidor comum de SAMP, o SurvivalZ busca trazer uma
-            identidade própria, com sistemas planejados, áreas especiais, regras organizadas e uma
-            comunidade acompanhada de perto pela gestão.
-          </p>
-        </div>
+            <div class="sz-about-actions">
+              <a href="/forum">Acessar fórum</a>
+              <a href="/comunidade">Ver comunidade</a>
+              <a href="/loja">Loja Beta</a>
+            </div>
+          </div>
 
-        <div class="about-card">
-          <h3>☣ Identidade SurvivalZ</h3>
-
-          <ul>
-            <li>Servidor SAMP com tema pós-apocalíptico</li>
-            <li>Inspiração em sobrevivência estilo DayZ</li>
-            <li>Foco em imersão e progressão</li>
-            <li>Comunidade organizada</li>
-            <li>Sistemas próprios em desenvolvimento</li>
-          </ul>
+          <div class="sz-about-status-card">
+            <span>Operação atual</span>
+            <strong>Beta Manual</strong>
+            <p>
+              Loja, fórum, denúncias, perfis, medalhas e estrutura preparada
+              para integração futura com o servidor.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="pillars-section">
+    <section class="sz-about-section">
       <div class="container">
-        <span class="section-tag">Nossos pilares</span>
-        <h2>O que queremos construir</h2>
+        <div class="sz-about-grid">
+          <article class="sz-about-main-card">
+            <span class="sz-about-kicker">O que é o SurvivalZ</span>
 
-        <div class="cards">
-          <div class="card">
-            <h3>🌆 Imersão</h3>
+            <h2>Um servidor em construção para quem gosta de risco, evolução e comunidade.</h2>
+
             <p>
-              Criar um ambiente com clima de sobrevivência, áreas marcantes, perigos reais
-              e sensação de mundo devastado.
+              A proposta é levar o jogador para um ambiente pós-apocalíptico,
+              onde cada escolha importa: sobreviver, evoluir, interagir, formar alianças,
+              participar da comunidade e acompanhar seu progresso.
             </p>
+
+            <p>
+              A Central SurvivalZ existe para organizar tudo em um só lugar:
+              avisos, suporte, denúncias privadas, perfis, medalhas, loja beta,
+              fórum e futuramente dados vindos diretamente do jogo.
+            </p>
+          </article>
+
+          <aside class="sz-about-side-card">
+            <h3>Identidade SurvivalZ</h3>
+
+            <div class="sz-about-feature-list">
+              <div><span>☣</span><strong>Ambiente pós-apocalíptico</strong></div>
+              <div><span>📈</span><strong>Progressão e economia planejadas</strong></div>
+              <div><span>💬</span><strong>Fórum, perfis e comunidade</strong></div>
+              <div><span>⚠️</span><strong>Denúncias privadas e moderação</strong></div>
+              <div><span>🔗</span><strong>Base pronta para integração SA-MP</strong></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="sz-about-section">
+      <div class="container">
+        <div class="sz-about-section-header">
+          <span class="sz-about-kicker">Pilares</span>
+          <h2>O que guia o projeto</h2>
+          <p>
+            O SurvivalZ está sendo construído por fases, com foco em comunidade,
+            estabilidade e sistemas que façam sentido para o servidor.
+          </p>
+        </div>
+
+        <div class="sz-about-pillar-grid">
+          <article>
+            <span>01</span>
+            <h3>Sobrevivência</h3>
+            <p>
+              Exploração, risco, escolhas, escassez e progresso dentro de um mundo hostil.
+            </p>
+          </article>
+
+          <article>
+            <span>02</span>
+            <h3>Organização</h3>
+            <p>
+              Fórum, denúncias, regras, loja, staff e comunidade reunidos em uma central clara.
+            </p>
+          </article>
+
+          <article>
+            <span>03</span>
+            <h3>Evolução</h3>
+            <p>
+              Sistemas preparados para crescer por etapas, sem prometer o que ainda não foi integrado.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="sz-about-section">
+      <div class="container">
+        <div class="sz-about-roadmap">
+          <div>
+            <span class="sz-about-kicker">Próximas fases</span>
+            <h2>Central preparada para crescer junto com o servidor.</h2>
           </div>
 
-          <div class="card">
-            <h3>⚔ Sobrevivência</h3>
-            <p>
-              O jogador precisará pensar, explorar, evoluir e tomar decisões para se manter vivo
-              dentro do servidor.
-            </p>
-          </div>
+          <div class="sz-about-roadmap-list">
+            <div>
+              <strong>Fase atual</strong>
+              <span>Fórum, loja beta, perfis, medalhas e denúncias.</span>
+            </div>
 
-          <div class="card">
-            <h3>🛡 Organização</h3>
-            <p>
-              Regras, denúncias, suporte, guias e gestão centralizados para evitar bagunça
-              e melhorar a experiência da comunidade.
-            </p>
+            <div>
+              <strong>Próxima fase</strong>
+              <span>Pedidos vinculados à conta, melhorias no painel e uploads reais.</span>
+            </div>
+
+            <div>
+              <strong>Futuro</strong>
+              <span>Integração com SA-MP, dados do personagem e sistemas automáticos.</span>
+            </div>
           </div>
         </div>
       </div>

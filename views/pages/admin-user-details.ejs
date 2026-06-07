@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/admin.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="admin-home-section">
+      <div class="container">
+
+        <div class="admin-home-header">
+          <div>
+            <span class="section-tag">Detalhe do usuario</span>
+            <h1><%= user.name %></h1>
+            <p>Dados publicos, atividade, pedidos vinculados, medalhas e cargo da conta.</p>
+          </div>
+
+          <div class="admin-user-detail-actions">
+            <a href="/perfil/<%= user.id %>" class="btn-secondary">Ver perfil publico</a>
+            <a href="/admin/usuarios" class="btn-secondary">Voltar</a>
+          </div>
+        </div>
+
+        <% if (error) { %>
+          <div class="admin-user-message error"><%= error %></div>
+        <% } %>
+
+        <% if (success) { %>
+          <div class="admin-user-message success"><%= success %></div>
+        <% } %>
+
+        <section class="admin-user-detail-grid">
+          <article class="admin-user-detail-card">
+            <div class="admin-user-main">
+              <a href="/perfil/<%= user.id %>" class="admin-user-avatar large">
+                <% if (user.avatarUrl) { %>
+                  <img
+                    src="<%= user.avatarUrl %>"
+                    alt="Avatar de <%= user.name %>"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                  >
+                  <span style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                <% } else { %>
+                  <span><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                <% } %>
+              </a>
+
+              <div>
+                <span class="admin-user-role role-<%= String(user.role || 'PLAYER').toLowerCase() %>">
+                  <%= roleLabel(user.role) %>
+                </span>
+                <h2><%= user.name %></h2>
+                <p><%= user.email %></p>
+              </div>
+            </div>
+
+            <div class="admin-user-meta">
+              <div><span>ID</span><strong><%= user.id %></strong></div>
+              <div><span>Nick</span><strong><%= user.sampNick || "Nao informado" %></strong></div>
+              <div><span>Discord</span><strong><%= user.discord || "Nao informado" %></strong></div>
+              <div><span>Localizacao</span><strong><%= user.location || "Nao informado" %></strong></div>
+              <div><span>Reputacao</span><strong><%= user.reputation || 0 %></strong></div>
+              <div><span>Banido</span><strong><%= user.isBanned ? "Sim" : "Nao" %></strong></div>
+              <div><span>Cadastro</span><strong><%= formatDateTime(user.createdAt) %></strong></div>
+              <div><span>Atualizado</span><strong><%= formatDateTime(user.updatedAt) %></strong></div>
+            </div>
+          </article>
+
+          <article class="admin-user-detail-card">
+            <div class="admin-box-header">
+              <h2>Alterar cargo</h2>
+              <span>Seguranca</span>
+            </div>
+
+            <form action="/admin/usuarios/<%= user.id %>/role" method="POST" class="admin-user-role-form">
+              <label for="role">Cargo</label>
+              <select id="role" name="role">
+                <% roleOptions.forEach((roleOption) => { %>
+                  <option
+                    value="<%= roleOption %>"
+                    <%= user.role === roleOption ? "selected" : "" %>
+                    <%= supportedRoleOptions.includes(roleOption) ? "" : "disabled" %>
+                  >
+                    <%= roleLabel(roleOption) %><%= supportedRoleOptions.includes(roleOption) ? "" : " (indisponivel no schema)" %>
+                  </option>
+                <% }) %>
+              </select>
+
+              <button type="submit" class="admin-action-btn">Salvar cargo</button>
+              <small>Nao e permitido remover o ultimo OWNER. Senhas nao sao alteradas nesta sprint.</small>
+            </form>
+          </article>
+        </section>
+
+        <section class="admin-user-detail-card">
+          <div class="admin-box-header">
+            <h2>Pedidos vinculados</h2>
+            <span><%= linkedOrders.length %> pedido(s)</span>
+          </div>
+
+          <% if (linkedOrders.length === 0) { %>
+            <p class="admin-user-empty-line">Nenhum pedido vinculado a esta conta.</p>
+          <% } else { %>
+            <div class="admin-user-orders-list">
+              <% linkedOrders.forEach((order) => { %>
+                <a href="/admin/pedidos/<%= order.id %>">
+                  <strong><%= order.code %></strong>
+                  <span><%= formatDateTime(order.createdAt) %></span>
+                  <span><%= String(order.status || "pendente").replace(/_/g, " ") %></span>
+                  <b><%= formatPrice(order.total) %></b>
+                </a>
+              <% }) %>
+            </div>
+          <% } %>
+        </section>
+
+        <section class="admin-user-detail-grid">
+          <article class="admin-user-detail-card">
+            <div class="admin-box-header">
+              <h2>Topicos recentes</h2>
+              <span><%= user._count.topics %> total</span>
+            </div>
+
+            <% if (user.topics.length === 0) { %>
+              <p class="admin-user-empty-line">Nenhum topico criado.</p>
+            <% } %>
+
+            <div class="admin-user-activity-list">
+              <% user.topics.forEach((topic) => { %>
+                <a href="/forum/topico/<%= topic.id %>">
+                  <strong><%= topic.title %></strong>
+                  <span><%= topic.category.name %> | <%= topicStatusLabel(topic.status) %> | <%= topic._count.posts %> resposta(s)</span>
+                </a>
+              <% }) %>
+            </div>
+          </article>
+
+          <article class="admin-user-detail-card">
+            <div class="admin-box-header">
+              <h2>Respostas recentes</h2>
+              <span><%= user._count.posts %> total</span>
+            </div>
+
+            <% if (user.posts.length === 0) { %>
+              <p class="admin-user-empty-line">Nenhuma resposta criada.</p>
+            <% } %>
+
+            <div class="admin-user-activity-list">
+              <% user.posts.forEach((post) => { %>
+                <a href="/forum/topico/<%= post.topic.id %>">
+                  <strong><%= post.topic.title %></strong>
+                  <span><%= post.topic.category.name %> | <%= formatDateTime(post.createdAt) %></span>
+                </a>
+              <% }) %>
+            </div>
+          </article>
+        </section>
+
+        <section class="admin-user-detail-card">
+          <div class="admin-box-header">
+            <h2>Medalhas</h2>
+            <span><%= user.medals.length %> medalha(s)</span>
+          </div>
+
+          <% if (user.medals.length === 0) { %>
+            <p class="admin-user-empty-line">Nenhuma medalha concedida.</p>
+          <% } else { %>
+            <div class="admin-user-medal-list">
+              <% user.medals.forEach((userMedal) => { %>
+                <div>
+                  <span class="admin-user-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>">
+                    <%= userMedal.medal.icon || "M" %>
+                  </span>
+                  <div>
+                    <strong><%= userMedal.medal.name %></strong>
+                    <small>
+                      <%= medalRarityLabel(userMedal.medal.rarity) %>
+                      <% if (userMedal.awardedBy) { %>
+                        | por <%= userMedal.awardedBy.name %>
+                      <% } %>
+                      | <%= formatDate(userMedal.createdAt) %>
+                    </small>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

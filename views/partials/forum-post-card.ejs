@@ -1,57 +1,86 @@
-<article class="forum-post-layout <%= typeof isReply !== 'undefined' && isReply ? 'forum-reply-post' : '' %>">
-  <aside class="forum-post-author-card">
-    <a href="/perfil/<%= author.id %>" class="forum-post-avatar-link">
+<article class="sz-post <%= typeof isReply !== 'undefined' && isReply ? 'sz-post-reply' : '' %>">
+
+  <aside class="sz-author-panel">
+
+    <a href="/perfil/<%= author.id %>" class="sz-author-avatar">
       <% if (author.avatarUrl) { %>
         <img
           src="<%= author.avatarUrl %>"
           alt="Avatar de <%= author.name %>"
-          class="forum-post-avatar-img"
           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
         >
-        <div class="forum-post-avatar-fallback" style="display:none;">
+
+        <div class="sz-author-avatar-fallback" style="display:none;">
           <%= author.name.charAt(0).toUpperCase() %>
         </div>
       <% } else { %>
-        <div class="forum-post-avatar-fallback">
+        <div class="sz-author-avatar-fallback">
           <%= author.name.charAt(0).toUpperCase() %>
         </div>
       <% } %>
     </a>
 
-    <a href="/perfil/<%= author.id %>" class="forum-post-author-name">
+    <div class="sz-author-name">
       <%= author.name %>
-    </a>
+    </div>
 
-    <span class="forum-post-role role-<%= author.role.toLowerCase() %>">
-      <%= roleLabel(author.role) %>
-    </span>
+    <div class="sz-author-rank sz-author-rank-<%= author.role.toLowerCase() %>">
+      <div class="sz-author-rank-icon">
+        <% if (author.role === "OWNER") { %>
+          👑
+        <% } else if (author.role === "ADMIN") { %>
+          🛡️
+        <% } else if (author.role === "STAFF" || author.role === "MODERADOR") { %>
+          ⚔️
+        <% } else { %>
+          ☣
+        <% } %>
+      </div>
+
+      <div class="sz-author-rank-text">
+        <span>Cargo</span>
+        <strong><%= roleDisplayLabel(author.role) %></strong>
+      </div>
+    </div>
 
     <% if (author.medals && author.medals.length > 0) { %>
-      <div class="forum-post-medals">
-        <% author.medals.forEach((userMedal) => { %>
-          <span
-            class="forum-post-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
-            title="<%= userMedal.medal.name %> - <%= userMedal.medal.description || 'Medalha SurvivalZ' %>"
-          >
-            <%= userMedal.medal.icon || "★" %>
-          </span>
-        <% }) %>
+      <div class="sz-author-insignias">
+        <span class="sz-author-box-title">Insígnias</span>
+
+        <div class="sz-author-insignia-list">
+          <% author.medals.slice(0, 6).forEach((userMedal) => { %>
+            <span
+              class="sz-author-insignia medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+              title="<%= medalTooltip(userMedal) %>"
+              data-tooltip="<%= medalTooltip(userMedal) %>"
+            >
+              <%= userMedal.medal.icon || "🏅" %>
+            </span>
+          <% }) %>
+        </div>
       </div>
     <% } %>
 
-    <div class="forum-post-author-info">
-      <span>Nick</span>
-      <strong><%= author.sampNick || "Nao informado" %></strong>
+    <div class="sz-author-info-list">
+      <div class="sz-author-info-row">
+        <span>Nick</span>
+        <strong><%= author.sampNick || "Não informado" %></strong>
+      </div>
+
+      <div class="sz-author-info-row">
+        <span>Reputação</span>
+        <strong><%= author.reputation || 0 %></strong>
+      </div>
+
+      <div class="sz-author-info-row">
+        <span>Registro</span>
+        <strong><%= formatDate(author.createdAt) %></strong>
+      </div>
     </div>
 
-    <div class="forum-post-author-info">
-      <span>Reputacao</span>
-      <strong><%= author.reputation || 0 %></strong>
-    </div>
-
-    <div class="forum-post-author-stats">
+    <div class="sz-author-stats">
       <div>
-        <span>Topicos</span>
+        <span>Tópicos</span>
         <strong><%= author._count ? author._count.topics : 0 %></strong>
       </div>
 
@@ -60,24 +89,61 @@
         <strong><%= author._count ? author._count.posts : 0 %></strong>
       </div>
     </div>
+
+    <a href="/perfil/<%= author.id %>" class="sz-author-profile-link">
+      Ver perfil
+    </a>
+
   </aside>
 
-  <div class="forum-post-body">
-    <div class="forum-post-top">
+  <div class="sz-post-main">
+
+    <div class="sz-post-top">
       <span><%= dateLabel %> <%= formatDate(postedAt) %></span>
-      <strong>#<%= postNumber %></strong>
+
+      <div class="sz-post-actions">
+        <% if (typeof editHref !== "undefined" && editHref) { %>
+          <a
+            href="<%= editHref %>"
+            class="sz-post-action"
+            title="Editar"
+            aria-label="Editar publicação"
+          >
+            ✎
+          </a>
+        <% } %>
+
+        <% if (typeof deleteAction !== "undefined" && deleteAction) { %>
+          <form
+            action="<%= deleteAction %>"
+            method="POST"
+            data-confirm-action="<%= deleteLabel || 'Apagar publicação' %>?"
+          >
+            <button
+              type="submit"
+              class="sz-post-action sz-post-action-danger"
+              title="<%= deleteLabel || 'Apagar' %>"
+              aria-label="<%= deleteLabel || 'Apagar' %>"
+            >
+              🗑
+            </button>
+          </form>
+        <% } %>
+
+        <strong>#<%= postNumber %></strong>
+      </div>
     </div>
 
-    <div class="forum-post-content">
-      <%- renderUserText(content) %>
+    <div class="sz-post-content">
+      <%- renderFormattedUserText(content) %>
     </div>
 
     <% if (author.signatureText || author.signatureImageUrl) { %>
-      <div class="forum-post-signature">
+      <div class="sz-post-signature">
         <span>Assinatura</span>
 
         <% if (author.signatureText) { %>
-          <p><%- renderUserText(author.signatureText) %></p>
+          <p><%- renderFormattedUserText(author.signatureText) %></p>
         <% } %>
 
         <% if (author.signatureImageUrl) { %>
@@ -85,5 +151,7 @@
         <% } %>
       </div>
     <% } %>
+
   </div>
+
 </article>

@@ -13,6 +13,7 @@ const playerRoutes = require("./routes/playerRoutes");
 const forumRoutes = require("./routes/forumRoutes");
 const forumModerationRoutes = require("./routes/forumModerationRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 const viewHelpers = require("./utils/viewHelpers");
 
 const { renderNotFound } = require("./controllers/errorController");
@@ -74,6 +75,7 @@ app.use("/denuncias", reportRoutes);
 app.use("/staff", staffRoutes);
 app.use("/admin", adminRoutes);
 app.use("/loja", shopRoutes);
+app.use("/uploads", uploadRoutes);
 app.use("/forum/moderacao", forumModerationRoutes);
 app.use("/forum", forumRoutes);
 

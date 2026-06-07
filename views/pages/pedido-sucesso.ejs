@@ -45,20 +45,34 @@
                 <strong><%= formatPrice(order.total) %></strong>
               </div>
 
-              <% if (pix) { %>
-                <div class="pix-qrcode-box">
-                  <img src="<%= pix.qrCodeImage %>" alt="QR Code Pix do pedido <%= order.code %>">
-                </div>
+              <% if (pix && pix.pixCopyPaste) { %>
+                <% if (pix.pixQrCode) { %>
+                  <div class="pix-qrcode-box">
+                    <img src="<%= pix.pixQrCode %>" alt="QR Code Pix do pedido <%= order.code %>">
+                  </div>
+                <% } else { %>
+                  <div class="success-warning">
+                    <strong>QR Code indisponivel:</strong>
+                    <span>Use o Pix Copia e Cola abaixo para pagar este pedido.</span>
+                  </div>
+                <% } %>
 
                 <div class="pix-copy-box">
                   <label for="pixPayload">Pix Copia e Cola</label>
 
-                  <textarea id="pixPayload" readonly><%= pix.payload %></textarea>
+                  <textarea id="pixPayload" readonly><%= pix.pixCopyPaste %></textarea>
 
                   <button type="button" class="btn-primary pix-copy-btn" id="copyPixButton">
                     Copiar Pix
                   </button>
                 </div>
+
+                <% if (pix.pixError) { %>
+                  <div class="success-warning">
+                    <strong>Aviso Pix:</strong>
+                    <span><%= pix.pixError %></span>
+                  </div>
+                <% } %>
               <% } else { %>
                 <div class="success-warning">
                   <strong>⚠ Pix não configurado:</strong>

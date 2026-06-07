@@ -1,69 +1,265 @@
-/* ================= ABOUT PAGE ================= */
+/* =========================================================
+   SURVIVALZ SOBRE - CLASSES ISOLADAS
+   ========================================================= */
 
-.about-section,
-.pillars-section {
-  padding: 80px 0;
+.sz-about-hero {
+  padding: 90px 0 34px;
 }
 
-.about-section {
-  background-color: #080808;
+.sz-about-hero-grid,
+.sz-about-grid,
+.sz-about-roadmap {
+  max-width: 1120px;
+  margin: 0 auto;
 }
 
-.about-grid {
+.sz-about-hero-grid {
+  padding: 34px;
+  border-radius: 26px;
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 50px;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  gap: 26px;
   align-items: center;
+  background:
+    radial-gradient(circle at top left, rgba(255, 43, 43, 0.24), transparent 35%),
+    linear-gradient(145deg, rgba(255, 43, 43, 0.05), transparent 42%),
+    rgba(8, 8, 8, 0.97);
+  border: 1px solid rgba(255, 43, 43, 0.24);
 }
 
-.about-text h2,
-.pillars-section h2 {
-  font-size: 36px;
-  margin-bottom: 20px;
-}
-
-.about-text p {
-  color: #cfcfcf;
-  margin-bottom: 18px;
-  max-width: 760px;
-}
-
-.about-card {
-  background: rgba(17, 17, 17, 0.95);
-  border: 1px solid rgba(255, 43, 43, 0.3);
-  border-radius: 18px;
-  padding: 30px;
-  box-shadow: 0 0 35px rgba(255, 0, 0, 0.08);
-}
-
-.about-card h3 {
+.sz-about-kicker {
   color: #ff2b2b;
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+}
+
+.sz-about-hero h1 {
+  font-size: clamp(42px, 6vw, 76px);
+  line-height: 0.95;
+  margin: 12px 0;
+  max-width: 780px;
+}
+
+.sz-about-hero p,
+.sz-about-main-card p,
+.sz-about-section-header p,
+.sz-about-pillar-grid p {
+  color: #cfcfcf;
+  line-height: 1.65;
+}
+
+.sz-about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.sz-about-actions a {
+  min-height: 42px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255, 43, 43, 0.10);
+  border: 1px solid rgba(255, 43, 43, 0.26);
+  color: #fff;
+  font-weight: 950;
+  font-size: 13px;
+}
+
+.sz-about-actions a:hover {
+  background: rgba(255, 43, 43, 0.18);
+  border-color: rgba(255, 43, 43, 0.42);
+}
+
+.sz-about-status-card,
+.sz-about-main-card,
+.sz-about-side-card,
+.sz-about-pillar-grid article,
+.sz-about-roadmap {
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.04), transparent 42%),
+    rgba(10, 10, 10, 0.96);
+  border: 1px solid rgba(255, 43, 43, 0.20);
+  border-radius: 20px;
+}
+
+.sz-about-status-card {
+  padding: 20px;
+}
+
+.sz-about-status-card span {
+  color: #aaa;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.sz-about-status-card strong {
+  display: block;
+  color: #ff2b2b;
+  font-size: 25px;
+  margin: 8px 0;
+}
+
+.sz-about-status-card p {
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.sz-about-section {
+  padding: 24px 0;
+}
+
+.sz-about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+}
+
+.sz-about-main-card,
+.sz-about-side-card {
+  padding: 26px;
+}
+
+.sz-about-main-card h2,
+.sz-about-section-header h2,
+.sz-about-roadmap h2 {
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1;
+  margin: 10px 0 14px;
+}
+
+.sz-about-side-card h3 {
+  font-size: 26px;
+  margin-bottom: 14px;
+}
+
+.sz-about-feature-list {
+  display: grid;
+  gap: 10px;
+}
+
+.sz-about-feature-list div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 13px;
+  background: rgba(0, 0, 0, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.sz-about-feature-list span {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 43, 43, 0.10);
+  border: 1px solid rgba(255, 43, 43, 0.24);
+}
+
+.sz-about-feature-list strong {
+  color: #fff;
+  font-size: 13px;
+}
+
+.sz-about-section-header {
+  max-width: 800px;
   margin-bottom: 18px;
+}
+
+.sz-about-pillar-grid {
+  max-width: 1120px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.sz-about-pillar-grid article {
+  padding: 22px;
+}
+
+.sz-about-pillar-grid article > span {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 43, 43, 0.10);
+  border: 1px solid rgba(255, 43, 43, 0.24);
+  color: #ff2b2b;
+  font-weight: 950;
+  margin-bottom: 14px;
+}
+
+.sz-about-pillar-grid h3 {
   font-size: 24px;
+  margin-bottom: 9px;
 }
 
-.about-card ul {
-  list-style: none;
+.sz-about-roadmap {
+  padding: 26px;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
 }
 
-.about-card li {
-  padding: 12px 0;
-  color: #d0d0d0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+.sz-about-roadmap-list {
+  display: grid;
+  gap: 10px;
 }
 
-.about-card li:last-child {
-  border-bottom: none;
+.sz-about-roadmap-list div {
+  padding: 15px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.pillars-section {
-  background: linear-gradient(180deg, #050505 0%, #0d0d0d 100%);
+.sz-about-roadmap-list strong {
+  display: block;
+  color: #ff2b2b;
+  margin-bottom: 5px;
 }
 
-/* ================= RESPONSIVE ABOUT ================= */
+.sz-about-roadmap-list span {
+  color: #aaa;
+  font-size: 13px;
+}
 
 @media (max-width: 900px) {
-  .about-grid {
+  .sz-about-hero-grid,
+  .sz-about-grid,
+  .sz-about-roadmap {
     grid-template-columns: 1fr;
+  }
+
+  .sz-about-pillar-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .sz-about-hero {
+    padding-top: 70px;
+  }
+
+  .sz-about-hero-grid,
+  .sz-about-main-card,
+  .sz-about-side-card,
+  .sz-about-roadmap {
+    padding: 20px;
+  }
+
+  .sz-about-actions {
+    flex-direction: column;
+  }
+
+  .sz-about-actions a {
+    text-align: center;
   }
 }

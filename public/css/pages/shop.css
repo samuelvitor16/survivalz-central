@@ -3620,3 +3620,73 @@
 .checkout-checkbox a:hover {
   color: #ff5555 !important;
 }
+
+.shop-promo-banner {
+  background:
+    linear-gradient(90deg, rgba(196, 0, 0, 0.30), rgba(10, 10, 10, 0.98)),
+    rgba(8, 8, 8, 0.98);
+  border-bottom: 1px solid rgba(255, 43, 43, 0.24);
+  padding: 16px 0;
+}
+
+.shop-promo-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.shop-promo-inner span {
+  display: block;
+  color: #f5b942;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.shop-promo-inner strong {
+  display: block;
+  color: #fff;
+  font-size: 22px;
+}
+
+.shop-promo-inner p {
+  color: #d0d0d0;
+  margin: 3px 0 0;
+}
+
+.shop-promo-inner code {
+  border: 1px solid rgba(245, 185, 66, 0.35);
+  background: rgba(245, 185, 66, 0.10);
+  color: #f5b942;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 650px) {
+  .shop-promo-inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .shop-promo-inner code {
+    width: 100%;
+    text-align: center;
+  }
+}
+.checkout-account-link {
+  background: rgba(53, 208, 111, 0.10);
+  border: 1px solid rgba(53, 208, 111, 0.30);
+  border-radius: 14px;
+  color: #c9ffd9;
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 14px 0;
+  padding: 12px 14px;
+}
+
+.checkout-account-link strong {
+  color: #fff;
+}

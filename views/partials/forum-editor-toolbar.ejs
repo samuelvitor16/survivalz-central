@@ -1,0 +1,87 @@
+<div class="sz-rich-editor" data-rich-editor data-editor-for="<%= textareaId %>">
+  <textarea
+    id="<%= textareaId %>"
+    name="content"
+    class="sz-editor-source"
+    hidden
+  ><%= typeof value !== "undefined" ? value : "" %></textarea>
+
+  <input
+    type="file"
+    class="sz-editor-file-input"
+    accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
+    hidden
+  >
+
+  <div class="sz-editor-toolbar">
+    <button type="button" data-editor-command="bold" title="Negrito"><b>B</b></button>
+    <button type="button" data-editor-command="italic" title="Italico"><i>I</i></button>
+    <button type="button" data-editor-command="underline" title="Sublinhado"><u>U</u></button>
+    <button type="button" data-editor-command="strikeThrough" title="Riscado"><s>S</s></button>
+
+    <span></span>
+
+    <button type="button" data-editor-command="justifyLeft" title="Alinhar esquerda">Esq.</button>
+    <button type="button" data-editor-command="justifyCenter" title="Centralizar">Centro</button>
+    <button type="button" data-editor-command="justifyRight" title="Alinhar direita">Dir.</button>
+
+    <span></span>
+
+    <button type="button" data-editor-insert="quote" title="Citacao">Quote</button>
+    <button type="button" data-editor-insert="spoiler" title="Spoiler">Spoiler</button>
+    <button type="button" data-editor-insert="link" title="Link">Link</button>
+    <button type="button" data-editor-insert="image-url" title="Imagem por URL">Imagem URL</button>
+    <button type="button" data-editor-insert="image-upload" title="Upload de imagem">Upload</button>
+
+    <div class="sz-editor-color-picker">
+      <button type="button" data-color-trigger>Cor</button>
+
+      <div class="sz-editor-color-menu" hidden>
+        <button type="button" data-editor-color="#ffffff" style="--c:#ffffff;">Branco</button>
+        <button type="button" data-editor-color="#ff2b2b" style="--c:#ff2b2b;">Vermelho</button>
+        <button type="button" data-editor-color="#ffd166" style="--c:#ffd166;">Amarelo</button>
+        <button type="button" data-editor-color="#35d06f" style="--c:#35d06f;">Verde</button>
+        <button type="button" data-editor-color="#4da3ff" style="--c:#4da3ff;">Azul</button>
+        <button type="button" data-editor-color="#c77dff" style="--c:#c77dff;">Roxo</button>
+        <button type="button" data-editor-color="#ff7a1a" style="--c:#ff7a1a;">Laranja</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sz-editor-help">
+    <strong>Dica:</strong>
+    edite visualmente. O forum salva a formatacao automaticamente de forma segura.
+  </div>
+
+  <div
+    class="sz-editor-surface"
+    contenteditable="true"
+    data-placeholder="Escreva sua mensagem..."
+  ></div>
+
+  <div class="sz-editor-actions">
+    <button
+      type="button"
+      class="btn-secondary sz-editor-preview-btn"
+      data-editor-for="<%= textareaId %>"
+      data-preview-target="<%= previewId %>"
+    >
+      Pre-visualizar
+    </button>
+  </div>
+
+  <div id="<%= previewId %>" class="sz-editor-preview" hidden>
+    <div class="sz-editor-preview-header">
+      <span>Pre-visualizacao</span>
+      <button
+        type="button"
+        class="sz-editor-preview-hide"
+        data-preview-hide
+      >
+        Ocultar preview
+      </button>
+    </div>
+
+    <div class="sz-editor-preview-content"></div>
+  </div>
+</div>

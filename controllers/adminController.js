@@ -6,16 +6,36 @@ const {
 } = require("../models/orderModel");
 
 const { formatPrice } = require("../data/products");
+const { getPixInfoForOrder } = require("../utils/pixUtils");
+const prisma = require("../config/prisma");
 
-const renderAdminHome = (req, res) => {
+const renderAdminHome = async (req, res) => {
   const orders = getAllOrders();
+  const [usersCount, topicsCount, reportsCount, medalsCount] = await Promise.all([
+    prisma.user.count(),
+    prisma.forumTopic.count(),
+    prisma.forumTopic.count({
+      where: {
+        category: {
+          slug: "denuncias"
+        }
+      }
+    }),
+    prisma.medal.count()
+  ]);
 
   res.render("pages/admin-home", {
-    title: "Painel Admin - Central SurvivalZ",
+    title: "Painel Desenvolvedor - Central SurvivalZ",
     totalOrders: orders.length,
     pendingOrders: orders.filter((order) => order.status === "pendente").length,
     paidOrders: orders.filter((order) => order.status === "pago").length,
-    deliveredOrders: orders.filter((order) => order.status === "entregue").length
+    deliveredOrders: orders.filter((order) => order.status === "entregue").length,
+    siteOverview: {
+      usersCount,
+      topicsCount,
+      reportsCount,
+      medalsCount
+    }
   });
 };
 
@@ -67,7 +87,7 @@ const renderAdminOrders = (req, res) => {
   });
 };
 
-const renderAdminOrderDetails = (req, res) => {
+const renderAdminOrderDetails = async (req, res) => {
   const order = getOrderById(req.params.id);
 
   if (!order) {
@@ -79,6 +99,7 @@ const renderAdminOrderDetails = (req, res) => {
   res.render("pages/admin-pedido-detalhes", {
     title: `Pedido ${order.code} - Painel Admin`,
     order,
+    pixInfo: await getPixInfoForOrder(order),
     formatPrice
   });
 };

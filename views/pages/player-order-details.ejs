@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/player.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="player-dashboard-section">
+      <div class="container">
+
+        <div class="player-dashboard-header sz-player-orders-header">
+          <div>
+            <span class="section-tag">Detalhes do pedido</span>
+            <h1>Pedido <%= order.code %></h1>
+            <p>Resumo do pedido vinculado a sua conta SurvivalZ.</p>
+          </div>
+
+          <a href="/painel/pedidos" class="btn-secondary">Voltar aos pedidos</a>
+        </div>
+
+        <section class="sz-player-order-detail-grid">
+          <article class="sz-player-order-detail-card">
+            <div class="sz-player-order-detail-head">
+              <h2>Status</h2>
+              <strong class="sz-player-order-status status-<%= String(order.status || 'pendente').toLowerCase() %>">
+                <%= String(order.status || "pendente").replace(/_/g, " ") %>
+              </strong>
+            </div>
+
+            <div class="sz-player-order-detail-list">
+              <div>
+                <span>Data</span>
+                <strong><%= new Date(order.createdAt).toLocaleString("pt-BR") %></strong>
+              </div>
+
+              <div>
+                <span>Pagamento</span>
+                <strong><%= String(order.paymentStatus || "aguardando_pagamento").replace(/_/g, " ") %></strong>
+              </div>
+
+              <div>
+                <span>Entrega</span>
+                <strong><%= String(order.deliveryStatus || "pendente").replace(/_/g, " ") %></strong>
+              </div>
+
+              <div>
+                <span>Metodo</span>
+                <strong><%= order.paymentMethod === "pix" || !order.paymentMethod ? "Pix manual" : order.paymentMethod %></strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="sz-player-order-detail-card">
+            <div class="sz-player-order-detail-head">
+              <h2>Valores</h2>
+              <span><%= order.coupon || "Sem cupom" %></span>
+            </div>
+
+            <div class="sz-player-order-price-list">
+              <div>
+                <span>Subtotal</span>
+                <strong><%= formatPrice(order.subtotal) %></strong>
+              </div>
+
+              <div>
+                <span>Desconto</span>
+                <strong>- <%= formatPrice(order.discount || 0) %></strong>
+              </div>
+
+              <div class="total">
+                <span>Total</span>
+                <strong><%= formatPrice(order.total) %></strong>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="sz-player-order-detail-card sz-player-order-pix-card">
+          <div class="sz-player-order-detail-head">
+            <h2>Pix do pedido</h2>
+            <span><%= pixInfo && pixInfo.pixCopyPaste ? "Disponivel" : "Pendente" %></span>
+          </div>
+
+          <% if (pixInfo && pixInfo.pixCopyPaste) { %>
+            <% if (pixInfo.pixQrCode) { %>
+              <div class="sz-player-order-pix-qr">
+                <img src="<%= pixInfo.pixQrCode %>" alt="QR Code Pix do pedido <%= order.code %>">
+              </div>
+            <% } else { %>
+              <p class="sz-player-order-pix-warning">QR Code indisponivel. Use o Pix Copia e Cola abaixo.</p>
+            <% } %>
+
+            <label class="sz-player-order-pix-copy">
+              <span>Pix Copia e Cola</span>
+              <textarea readonly><%= pixInfo.pixCopyPaste %></textarea>
+            </label>
+
+            <% if (pixInfo.pixError) { %>
+              <p class="sz-player-order-pix-warning"><%= pixInfo.pixError %></p>
+            <% } %>
+          <% } else { %>
+            <p class="sz-player-order-pix-warning">
+              Pix ainda nao configurado para este pedido. Entre em contato com a gestao informando o codigo <strong><%= order.code %></strong>.
+            </p>
+          <% } %>
+        </section>
+
+        <section class="sz-player-order-detail-card">
+          <div class="sz-player-order-detail-head">
+            <h2>Itens</h2>
+            <span><%= order.items.length %> item(ns)</span>
+          </div>
+
+          <div class="sz-player-order-detail-items">
+            <% order.items.forEach((item) => { %>
+              <div>
+                <div>
+                  <strong><%= item.name %></strong>
+                  <span>ID: <%= item.id %></span>
+                </div>
+
+                <div>
+                  <span>Quantidade</span>
+                  <strong><%= item.quantity %></strong>
+                </div>
+
+                <div>
+                  <span>Unitario</span>
+                  <strong><%= formatPrice(item.priceCents) %></strong>
+                </div>
+
+                <div>
+                  <span>Total</span>
+                  <strong><%= formatPrice(item.totalCents) %></strong>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

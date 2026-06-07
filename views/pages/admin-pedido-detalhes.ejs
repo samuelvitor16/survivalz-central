@@ -125,6 +125,78 @@
             </div>
           </div>
 
+          <div class="admin-order-detail-box">
+            <div class="admin-box-header">
+              <h2>Conta vinculada</h2>
+              <span>Jogador</span>
+            </div>
+
+            <% if (order.userId) { %>
+              <div class="admin-detail-list">
+                <div>
+                  <span>Nome da conta</span>
+                  <strong><%= order.userName || order.customer.name || "Nao informado" %></strong>
+                </div>
+
+                <div>
+                  <span>E-mail da conta</span>
+                  <strong><%= order.userEmail || order.customer.email || "Nao informado" %></strong>
+                </div>
+
+                <div>
+                  <span>Nick</span>
+                  <strong><%= order.userSampNick || order.customer.sampNick || "Nao informado" %></strong>
+                </div>
+
+                <div>
+                  <span>Discord</span>
+                  <strong><%= order.userDiscord || order.customer.discord || "Nao informado" %></strong>
+                </div>
+
+                <div>
+                  <span>Perfil</span>
+                  <strong><a href="/perfil/<%= order.userId %>">Abrir perfil</a></strong>
+                </div>
+              </div>
+            <% } else { %>
+              <div class="admin-linked-account-empty">
+                Pedido sem conta vinculada.
+              </div>
+            <% } %>
+          </div>
+
+        </section>
+
+        <section class="admin-order-detail-box admin-order-pix-box">
+          <div class="admin-box-header">
+            <h2>Pagamento Pix</h2>
+            <span><%= pixInfo && pixInfo.pixCopyPaste ? "Configurado" : "Atencao" %></span>
+          </div>
+
+          <% if (pixInfo && pixInfo.pixCopyPaste) { %>
+            <div class="admin-detail-list">
+              <div>
+                <span>Pix Copia e Cola</span>
+                <strong class="admin-pix-copy"><%= pixInfo.pixCopyPaste %></strong>
+              </div>
+
+              <div>
+                <span>QR Code</span>
+                <strong><%= pixInfo.pixQrCode ? "Disponivel" : "Indisponivel, usar Copia e Cola" %></strong>
+              </div>
+
+              <% if (pixInfo.pixError) { %>
+                <div>
+                  <span>Aviso</span>
+                  <strong><%= pixInfo.pixError %></strong>
+                </div>
+              <% } %>
+            </div>
+          <% } else { %>
+            <div class="admin-linked-account-empty">
+              Pedido sem Pix Copia e Cola. Verifique PIX_KEY, PIX_MERCHANT_NAME e PIX_MERCHANT_CITY no ambiente.
+            </div>
+          <% } %>
         </section>
 
         <section class="admin-order-detail-box">

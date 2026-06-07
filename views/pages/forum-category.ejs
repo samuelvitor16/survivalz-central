@@ -19,112 +19,161 @@
       <div class="container">
 
         <div class="forum-category-page-header">
-          <a href="/forum" class="forum-back-link">← Voltar ao fórum</a>
+          <a href="/forum" class="forum-back-link">Voltar ao forum</a>
 
           <div>
-            <span class="section-tag"><%= category.icon || "☣" %> Categoria</span>
-
+            <span class="section-tag"><%= category.icon || "SZ" %> Categoria</span>
             <h1><%= category.name %></h1>
-
-            <p><%= category.description || "Tópicos da categoria." %></p>
+            <p><%= category.description || "Topicos da categoria." %></p>
           </div>
 
           <% const staffRoles = ["STAFF", "ADMIN", "OWNER"]; %>
           <%
-  const actionLabels = {
-    "duvidas": "Criar dúvida",
-    "sugestoes": "Enviar sugestão",
-    "denuncias": "Criar denúncia",
-    "revisao-punicao": "Solicitar revisão",
-    "guias-tutoriais": "Criar guia",
-    "comunidade": "Criar tópico",
-    "avisos-oficiais": "Criar aviso"
-  };
+            const actionLabels = {
+              "duvidas": "Criar duvida",
+              "sugestoes": "Enviar sugestao",
+              "denuncias": "Criar denuncia",
+              "revisao-punicao": "Solicitar revisao",
+              "guias-tutoriais": "Criar guia",
+              "comunidade": "Criar topico",
+              "avisos-oficiais": "Criar aviso"
+            };
 
-  const createTopicLabel = actionLabels[category.slug] || "Criar tópico";
-%>
-<% if (!isPlayerLogged) { %>
-  <a href="/entrar" class="btn-primary">
-    Entrar para postar
-  </a>
-<% } else if (category.slug === "avisos-oficiais" && !staffRoles.includes(playerRole)) { %>
-  <span class="forum-locked-badge">
-    Somente staff
-  </span>
-<% } else if (category.isLocked) { %>
-  <span class="forum-locked-badge">
-    Categoria bloqueada
-  </span>
-<% } else { %>
-  <a href="/forum/categoria/<%= category.slug %>/novo" class="btn-primary">
-  <%= createTopicLabel %>
-</a>
-<% } %>
+            const createTopicLabel = actionLabels[category.slug] || "Criar topico";
+          %>
+
+          <% if (!isPlayerLogged) { %>
+            <a href="/entrar" class="btn-primary">Entrar para postar</a>
+          <% } else if (category.slug === "avisos-oficiais" && !staffRoles.includes(playerRole)) { %>
+            <span class="forum-locked-badge">Somente staff</span>
+          <% } else if (category.isLocked) { %>
+            <span class="forum-locked-badge">Categoria bloqueada</span>
+          <% } else { %>
+            <a href="/forum/categoria/<%= category.slug %>/novo" class="btn-primary"><%= createTopicLabel %></a>
+          <% } %>
         </div>
 
-            <% if (permissionError) { %>
-  <div class="forum-permission-alert">
-    <strong>⚠ Acesso negado</strong>
-    <span><%= permissionError %></span>
-  </div>
-<% } %>
+        <% if (permissionError) { %>
+          <div class="forum-permission-alert">
+            <strong>Acesso negado</strong>
+            <span><%= permissionError %></span>
+          </div>
+        <% } %>
 
-<% if (privateCategoryMessage) { %>
-  <div class="forum-permission-alert">
-    <strong>🔒 Categoria privada</strong>
-    <span><%= privateCategoryMessage %></span>
-  </div>
-<% } %>
-        
+        <% if (privateCategoryMessage) { %>
+          <div class="forum-permission-alert">
+            <strong>Categoria privada</strong>
+            <span><%= privateCategoryMessage %></span>
+          </div>
+        <% } %>
+
         <div class="forum-topic-list">
           <% if (category.topics.length === 0) { %>
             <div class="forum-empty-box">
-              <h2>Nenhum tópico por aqui ainda</h2>
-              <p>
-                Esta categoria ainda não possui tópicos. Seja o primeiro a criar uma publicação.
-              </p>
+              <h2>Nenhum topico por aqui ainda</h2>
+              <p>Esta categoria ainda nao possui publicacoes. Quando alguem postar, os topicos aparecerao aqui com autor, respostas e ultimo movimento.</p>
             </div>
           <% } %>
 
           <% category.topics.forEach((topic) => { %>
-  <article class="forum-topic-card">
-    <div>
-      <%
-        const topicStatusLabels = {
-          OPEN: "Aberto",
-          CLOSED: "Fechado",
-          PINNED: "Fixado",
-          ARCHIVED: "Arquivado"
-        };
+            <% const lastReply = topic.posts && topic.posts.length ? topic.posts[0] : null; %>
+            <% const isReportTopic = category.slug === "denuncias"; %>
+            <article class="sz-topic-card <%= topic.status === 'PINNED' ? 'sz-topic-pinned' : '' %> <%= isReportTopic ? 'sz-topic-report' : '' %>">
 
-        const topicStatusLabel = topicStatusLabels[topic.status] || "Aberto";
-      %>
+  <div class="sz-topic-main">
 
-      <span class="forum-topic-status status-<%= topic.status.toLowerCase() %>">
-        <%= topicStatusLabel %>
-      </span>
+    <div class="sz-topic-topline">
+      <div class="sz-topic-badges">
+        <span class="sz-topic-status sz-status-<%= topic.status.toLowerCase() %>">
+          <%= topicStatusLabel(topic.status) %>
+        </span>
 
-      <h2>
-        <a href="/forum/topico/<%= topic.id %>" class="forum-topic-title-link">
-          <%= topic.title %>
-        </a>
-      </h2>
+        <% if (topic.status === "PINNED") { %>
+          <span class="sz-topic-pin">Fixado</span>
+        <% } %>
 
-      <p>
-        Criado por
-        <a href="/perfil/<%= topic.author.id %>" class="forum-author-link">
-          <strong><%= topic.author.name %></strong>
-        </a>
-        • <%= new Date(topic.createdAt).toLocaleDateString("pt-BR") %>
+        <span class="sz-topic-category">
+          <%= topic.category.icon || category.icon || "☣" %>
+          <%= topic.category.name || category.name %>
+        </span>
+      </div>
+    </div>
+
+    <h2 class="sz-topic-title">
+      <a href="/forum/topico/<%= topic.id %>">
+        <%= isReportTopic && topic.reportAccusedNick ? `Denúncia contra ${topic.reportAccusedNick}` : topic.title %>
+      </a>
+    </h2>
+
+    <% if (isReportTopic) { %>
+      <div class="sz-topic-report-info">
+        <span>Acusado: <strong><%= topic.reportAccusedNick || "Não informado" %></strong></span>
+        <span>Motivo: <strong><%= topic.reportReason || "Não informado" %></strong></span>
+      </div>
+    <% } else if (topic.content) { %>
+      <p class="sz-topic-preview">
+        <%= plainTextExcerpt(topic.content, 150) %>
       </p>
+    <% } %>
+
+    <div class="sz-topic-author-line">
+      <a href="/perfil/<%= topic.author.id %>" class="sz-topic-author">
+        <% if (topic.author.avatarUrl) { %>
+          <img src="<%= topic.author.avatarUrl %>" alt="Avatar de <%= topic.author.name %>">
+        <% } else { %>
+          <span><%= topic.author.name.charAt(0).toUpperCase() %></span>
+        <% } %>
+
+        <strong><%= topic.author.name %></strong>
+      </a>
+
+      <small><%= formatDateTime(topic.createdAt) %></small>
     </div>
 
-    <div class="forum-topic-stats">
-      <span><%= topic.views %> views</span>
-      <span><%= topic._count ? topic._count.posts : 0 %> resposta(s)</span>
+  </div>
+
+  <aside class="sz-topic-side">
+
+    <div class="sz-topic-stats">
+      <div>
+        <span>Respostas</span>
+        <strong><%= topic._count ? topic._count.posts : 0 %></strong>
+      </div>
+
+      <div>
+        <span>Views</span>
+        <strong><%= topic.views %></strong>
+      </div>
+
+      <div>
+        <span>Movimento</span>
+        <strong><%= formatDate(topic.updatedAt) %></strong>
+      </div>
     </div>
-  </article>
-<% }) %>
+
+    <div class="sz-topic-last">
+      <span>Última resposta</span>
+
+      <% if (lastReply) { %>
+        <a href="/perfil/<%= lastReply.author.id %>">
+          <%= lastReply.author.name %>
+        </a>
+
+        <small><%= formatDateTime(lastReply.createdAt) %></small>
+      <% } else { %>
+        <strong>Sem respostas ainda</strong>
+        <small>Seja o primeiro a participar</small>
+      <% } %>
+
+      <a href="/forum/topico/<%= topic.id %>" class="sz-topic-details">
+        Ver detalhes
+      </a>
+    </div>
+
+  </aside>
+
+</article>
+          <% }) %>
         </div>
 
       </div>

@@ -1,4 +1,5 @@
 const prisma = require("../config/prisma");
+const { UserRole } = require("@prisma/client");
 
 const publicTopicWhere = {
   category: {
@@ -17,6 +18,9 @@ const includeTopicCardData = {
     }
   }
 };
+
+const MEMBER_ROLE_OPTIONS = ["OWNER", "ADMIN", "STAFF", "PLAYER"];
+const MEMBER_SORT_OPTIONS = ["recent", "reputation", "topics", "posts", "medals"];
 
 const renderHome = (req, res) => {
   res.render("pages/home", {
@@ -133,6 +137,127 @@ const renderComunidade = async (req, res) => {
   }
 };
 
+const renderMembers = async (req, res) => {
+  try {
+    const search = String(req.query.search || "").trim().slice(0, 80);
+    const requestedRole = String(req.query.role || "").trim().toUpperCase();
+    const role = MEMBER_ROLE_OPTIONS.includes(requestedRole) ? requestedRole : "";
+    const requestedSort = String(req.query.sort || "").trim().toLowerCase();
+    const sort = MEMBER_SORT_OPTIONS.includes(requestedSort) ? requestedSort : "recent";
+    const supportedDbRoles = new Set(Object.values(UserRole || {}));
+
+    const where = {};
+
+    if (search) {
+      where.OR = [
+        {
+          name: {
+            contains: search
+          }
+        },
+        {
+          sampNick: {
+            contains: search
+          }
+        }
+      ];
+    }
+
+    if (role && supportedDbRoles.has(role)) {
+      where.role = role;
+    }
+
+    let members = [];
+
+    if (!role || supportedDbRoles.has(role)) {
+      members = await prisma.user.findMany({
+        where,
+        orderBy: sort === "reputation"
+          ? [
+              {
+                reputation: "desc"
+              },
+              {
+                createdAt: "desc"
+              }
+            ]
+          : {
+              createdAt: "desc"
+            },
+        select: {
+          id: true,
+          name: true,
+          sampNick: true,
+          avatarUrl: true,
+          role: true,
+          reputation: true,
+          createdAt: true,
+          medals: {
+            orderBy: {
+              createdAt: "desc"
+            },
+            take: 4,
+            select: {
+              medal: {
+                select: {
+                  id: true,
+                  name: true,
+                  description: true,
+                  icon: true,
+                  rarity: true
+                }
+              },
+              createdAt: true
+            }
+          },
+          _count: {
+            select: {
+              topics: true,
+              posts: true,
+              medals: true
+            }
+          }
+        }
+      });
+    }
+
+    const sortedMembers = [...members].sort((a, b) => {
+      if (sort === "topics") {
+        return b._count.topics - a._count.topics || b.createdAt - a.createdAt;
+      }
+
+      if (sort === "posts") {
+        return b._count.posts - a._count.posts || b.createdAt - a.createdAt;
+      }
+
+      if (sort === "medals") {
+        return b._count.medals - a._count.medals || b.createdAt - a.createdAt;
+      }
+
+      if (sort === "reputation") {
+        return b.reputation - a.reputation || b.createdAt - a.createdAt;
+      }
+
+      return b.createdAt - a.createdAt;
+    });
+
+    res.render("pages/members", {
+      title: "Membros da Comunidade - SurvivalZ",
+      members: sortedMembers,
+      filters: {
+        search,
+        role,
+        sort
+      },
+      roleOptions: MEMBER_ROLE_OPTIONS,
+      sortOptions: MEMBER_SORT_OPTIONS
+    });
+  } catch (error) {
+    console.log("Erro ao carregar membros:", error);
+    res.status(500).send("Erro ao carregar membros.");
+  }
+};
+
 const renderSobre = (req, res) => {
   res.render("pages/sobre", {
     title: "Sobre o SurvivalZ"
@@ -166,6 +291,7 @@ const renderPainel = (req, res) => {
 module.exports = {
   renderHome,
   renderComunidade,
+  renderMembers,
   renderSobre,
   renderGestao,
   renderLogin,

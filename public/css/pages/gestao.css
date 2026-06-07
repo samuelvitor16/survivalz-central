@@ -1,85 +1,385 @@
-/* ================= MANAGEMENT PAGE ================= */
+/* =========================================================
+   SURVIVALZ GESTAO - CLASSES ISOLADAS
+   ========================================================= */
 
-.management-section,
-.principles-section {
-  padding: 80px 0;
+.sz-management-hero {
+  padding: 90px 0 34px;
 }
 
-.management-section {
-  background-color: #080808;
+.sz-management-hero-grid,
+.sz-management-section-header,
+.sz-management-team-grid,
+.sz-management-principles-grid,
+.sz-management-operation {
+  max-width: 1120px;
+  margin: 0 auto;
 }
 
-.management-section h2,
-.principles-section h2 {
-  font-size: 36px;
-  margin-bottom: 30px;
-}
-
-.management-grid {
+.sz-management-hero-grid {
+  padding: 34px;
+  border-radius: 26px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
-.manager-card {
-  background: rgba(17, 17, 17, 0.95);
-  border: 1px solid rgba(255, 43, 43, 0.28);
-  border-radius: 18px;
-  padding: 28px;
-  display: flex;
-  gap: 22px;
-  align-items: flex-start;
-  box-shadow: 0 0 35px rgba(255, 0, 0, 0.06);
-  transition: 0.2s ease;
-}
-
-.manager-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(255, 43, 43, 0.55);
-}
-
-.manager-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  background-color: #c40000;
-  color: white;
-  display: flex;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  gap: 26px;
   align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  font-weight: bold;
-  flex-shrink: 0;
+  background:
+    radial-gradient(circle at top left, rgba(255, 43, 43, 0.24), transparent 35%),
+    linear-gradient(145deg, rgba(255, 43, 43, 0.05), transparent 42%),
+    rgba(8, 8, 8, 0.97);
+  border: 1px solid rgba(255, 43, 43, 0.24);
 }
 
-.manager-info h3 {
-  font-size: 26px;
-  margin-bottom: 4px;
-}
-
-.manager-info span {
-  display: inline-block;
+.sz-management-kicker {
   color: #ff2b2b;
-  font-weight: bold;
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+}
+
+.sz-management-hero h1 {
+  font-size: clamp(42px, 6vw, 76px);
+  line-height: 0.95;
+  margin: 12px 0;
+  max-width: 780px;
+}
+
+.sz-management-hero p,
+.sz-management-section-header p,
+.sz-manager-info p,
+.sz-management-principles-grid p {
+  color: #cfcfcf;
+  line-height: 1.65;
+}
+
+.sz-management-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.sz-management-actions a {
+  min-height: 42px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255, 43, 43, 0.10);
+  border: 1px solid rgba(255, 43, 43, 0.26);
+  color: #fff;
+  font-weight: 950;
+  font-size: 13px;
+}
+
+.sz-management-status-card,
+.sz-manager-card,
+.sz-management-principles-grid article,
+.sz-management-operation {
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.04), transparent 42%),
+    rgba(10, 10, 10, 0.96);
+  border: 1px solid rgba(255, 43, 43, 0.20);
+  border-radius: 20px;
+}
+
+.sz-management-status-card {
+  padding: 20px;
+}
+
+.sz-management-status-card span {
+  color: #aaa;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.sz-management-status-card strong {
+  display: block;
+  color: #ff2b2b;
+  font-size: 25px;
+  margin: 8px 0;
+}
+
+.sz-management-status-card p {
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.sz-management-section {
+  padding: 24px 0;
+}
+
+.sz-management-section-header {
+  margin-bottom: 18px;
+}
+
+.sz-management-section-header h2,
+.sz-management-operation h2 {
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1;
+  margin: 10px 0 14px;
+}
+
+.sz-management-team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.sz-manager-card {
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 18px;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.sz-manager-card::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  opacity: 0.18;
+  background: radial-gradient(circle, rgba(255, 43, 43, 0.9), transparent 55%);
+  pointer-events: none;
+}
+
+.sz-manager-avatar,
+.sz-manager-info {
+  position: relative;
+  z-index: 2;
+}
+
+.sz-manager-avatar {
+  width: 92px;
+  height: 92px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #7a0000, #ff2b2b);
+  border: 2px solid rgba(255, 43, 43, 0.44);
+  box-shadow: 0 0 24px rgba(255, 43, 43, 0.18);
+  color: #fff;
+  font-size: 42px;
+  font-weight: 950;
+}
+
+.sz-manager-info > span {
+  color: #ff2b2b;
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.sz-manager-info h3 {
+  font-size: 34px;
+  margin: 6px 0 8px;
+}
+
+.sz-manager-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.sz-manager-tags strong {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 43, 43, 0.09);
+  border: 1px solid rgba(255, 43, 43, 0.20);
+  color: #ff5555;
+  font-size: 11px;
+}
+
+.sz-management-principles-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.sz-management-principles-grid article {
+  padding: 22px;
+}
+
+.sz-management-principles-grid article > span {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 43, 43, 0.10);
+  border: 1px solid rgba(255, 43, 43, 0.24);
   margin-bottom: 14px;
 }
 
-.manager-info p {
-  color: #cfcfcf;
+.sz-management-principles-grid h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
 }
 
-.principles-section {
-  background: linear-gradient(180deg, #050505 0%, #0d0d0d 100%);
+.sz-management-operation {
+  padding: 26px;
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  gap: 24px;
 }
 
-/* ================= RESPONSIVE MANAGEMENT ================= */
+.sz-management-operation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
 
-@media (max-width: 900px) {
-  .management-grid {
+.sz-management-operation-grid div {
+  padding: 15px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.sz-management-operation-grid strong {
+  display: block;
+  color: #ff2b2b;
+  margin-bottom: 5px;
+}
+
+.sz-management-operation-grid span {
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (max-width: 950px) {
+  .sz-management-hero-grid,
+  .sz-management-team-grid,
+  .sz-management-operation {
     grid-template-columns: 1fr;
   }
 
-  .manager-card {
+  .sz-management-principles-grid,
+  .sz-management-operation-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .sz-management-hero {
+    padding-top: 70px;
+  }
+
+  .sz-management-hero-grid,
+  .sz-manager-card,
+  .sz-management-operation {
+    padding: 20px;
+  }
+
+  .sz-manager-card {
+    grid-template-columns: 1fr;
+  }
+
+  .sz-management-principles-grid,
+  .sz-management-operation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sz-management-actions {
     flex-direction: column;
   }
+
+  .sz-management-actions a {
+    text-align: center;
+  }
+}
+
+/* =========================================================
+   SURVIVALZ GESTÃO - MANAGER ART CARD
+   ========================================================= */
+
+.sz-manager-card-with-art {
+  grid-template-columns: 170px 1fr !important;
+  align-items: stretch !important;
+  min-height: 260px;
+}
+
+.sz-manager-art {
+  position: relative;
+  min-height: 240px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #050505;
+  border: 1px solid rgba(255, 43, 43, 0.35);
+  box-shadow:
+    0 0 0 4px rgba(0, 0, 0, 0.55),
+    0 0 28px rgba(255, 43, 43, 0.18);
+}
+
+.sz-manager-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.88) 100%),
+    radial-gradient(circle at center, transparent 48%, rgba(0, 0, 0, 0.45) 100%);
+  pointer-events: none;
+}
+
+.sz-manager-art img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.sz-manager-card-with-art .sz-manager-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Versão mobile */
+@media (max-width: 620px) {
+  .sz-manager-card-with-art {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sz-manager-art {
+    width: 100%;
+    min-height: 320px;
+  }
+
+  .sz-manager-art img {
+    object-position: center top;
+  }
+}
+
+/* =========================================================
+   AJUSTE DE CROP DAS ARTES DA GESTÃO
+   ========================================================= */
+
+.sz-manager-art img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Samuel */
+.sz-manager-card.samuel .sz-manager-art img {
+  object-position: center 18%;
+  transform: scale(1.08);
+}
+
+/* LEAD */
+.sz-manager-card.lead .sz-manager-art img,
+.sz-manager-art.lead-art img {
+  object-position: center 5%;
+  transform: scale(1.08);
+}
+
+/* evita que o zoom saia do card */
+.sz-manager-art {
+  overflow: hidden;
 }

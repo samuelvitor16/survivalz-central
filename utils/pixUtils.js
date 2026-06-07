@@ -79,12 +79,19 @@ const generatePixPayload = ({ pixKey, merchantName, merchantCity, amountCents, t
 };
 
 const generatePixPayment = async ({ code, totalCents }) => {
-  const pixKey = process.env.PIX_KEY;
+  const pixKey = String(process.env.PIX_KEY || "").trim();
   const merchantName = process.env.PIX_MERCHANT_NAME || "SURVIVALZ";
   const merchantCity = process.env.PIX_MERCHANT_CITY || "SAO PAULO";
 
   if (!pixKey) {
-    return null;
+    return {
+      pixConfigured: false,
+      pixCopyPaste: "",
+      pixQrCode: "",
+      payload: "",
+      qrCodeImage: "",
+      pixError: "PIX_KEY nao configurada no ambiente."
+    };
   }
 
   const payload = generatePixPayload({
@@ -95,17 +102,71 @@ const generatePixPayment = async ({ code, totalCents }) => {
     txid: code
   });
 
-  const qrCodeImage = await QRCode.toDataURL(payload, {
-    margin: 1,
-    width: 260
+  let qrCodeImage = "";
+  let pixError = null;
+
+  try {
+    qrCodeImage = await QRCode.toDataURL(payload, {
+      margin: 1,
+      width: 260
+    });
+  } catch (error) {
+    console.log("Erro ao gerar QR Code Pix:", error);
+    pixError = "QR Code Pix indisponivel. Use o Pix Copia e Cola.";
+  }
+
+  return {
+    pixConfigured: true,
+    pixCopyPaste: payload,
+    pixQrCode: qrCodeImage,
+    payload,
+    qrCodeImage,
+    pixError
+  };
+};
+
+const getStoredPixInfo = (order = {}) => {
+  const payment = order.payment || {};
+  const pixCopyPaste = order.pixCopyPaste || payment.pixCopyPaste || payment.payload || "";
+  const pixQrCode = order.pixQrCode || order.qrCodeImage || payment.pixQrCode || payment.qrCodeImage || "";
+  const pixError = order.pixError || payment.pixError || null;
+  const hasExplicitConfig = typeof order.pixConfigured === "boolean" || typeof payment.pixConfigured === "boolean";
+  const pixConfigured = hasExplicitConfig
+    ? order.pixConfigured !== false && payment.pixConfigured !== false
+    : Boolean(pixCopyPaste);
+
+  return {
+    pixConfigured,
+    pixCopyPaste,
+    pixQrCode,
+    pixError,
+    hasPixData: Boolean(pixCopyPaste || pixQrCode)
+  };
+};
+
+const getPixInfoForOrder = async (order) => {
+  const storedPix = getStoredPixInfo(order);
+
+  if (storedPix.hasPixData) {
+    return storedPix;
+  }
+
+  const generatedPix = await generatePixPayment({
+    code: order.code,
+    totalCents: order.total
   });
 
   return {
-    payload,
-    qrCodeImage
+    pixConfigured: generatedPix.pixConfigured,
+    pixCopyPaste: generatedPix.pixCopyPaste,
+    pixQrCode: generatedPix.pixQrCode,
+    pixError: generatedPix.pixError || storedPix.pixError,
+    hasPixData: Boolean(generatedPix.pixCopyPaste || generatedPix.pixQrCode)
   };
 };
 
 module.exports = {
-  generatePixPayment
+  generatePixPayment,
+  getPixInfoForOrder,
+  getStoredPixInfo
 };

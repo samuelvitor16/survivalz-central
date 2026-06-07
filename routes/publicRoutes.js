@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   renderHome,
   renderComunidade,
+  renderMembers,
   renderSobre,
   renderGestao,
   renderLogin,
@@ -12,6 +13,7 @@ const {
 
 router.get("/", renderHome);
 router.get("/comunidade", renderComunidade);
+router.get("/membros", renderMembers);
 router.get("/sobre", renderSobre);
 router.get("/gestao", renderGestao);
 router.get("/login", renderLogin);

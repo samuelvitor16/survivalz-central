@@ -14,6 +14,19 @@
   <%- include("../partials/header") %>
 
   <main>
+    <% if (shopPromo) { %>
+      <section class="shop-promo-banner">
+        <div class="container shop-promo-inner">
+          <div>
+            <span><%= shopPromo.eyebrow %></span>
+            <strong><%= shopPromo.title %></strong>
+            <p><%= shopPromo.text %></p>
+          </div>
+          <code><%= shopPromo.coupon %></code>
+        </div>
+      </section>
+    <% } %>
+
     <section class="shop-hero">
       <div class="container shop-hero-grid">
 

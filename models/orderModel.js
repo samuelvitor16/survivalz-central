@@ -17,7 +17,7 @@ const readOrders = () => {
     fs.writeFileSync(ordersPath, "[]");
   }
 
-  const data = fs.readFileSync(ordersPath, "utf-8");
+  const data = fs.readFileSync(ordersPath, "utf-8").replace(/^\uFEFF/, "");
   return JSON.parse(data);
 };
 
@@ -41,15 +41,22 @@ const saveOrders = (orders) => {
   fs.writeFileSync(ordersPath, JSON.stringify(orders, null, 2));
 };
 
-const createOrder = (orderData) => {
+const createOrder = async (orderData) => {
   const orders = readOrders();
-
-  const newOrder = {
+  const baseOrder = {
     id: orders.length + 1,
     code: `SZ-${String(orders.length + 1).padStart(4, "0")}`,
     status: "pendente",
-    createdAt: new Date().toISOString(),
-    ...orderData
+    createdAt: new Date().toISOString()
+  };
+
+  const resolvedOrderData = typeof orderData === "function"
+    ? await orderData(baseOrder)
+    : orderData;
+
+  const newOrder = {
+    ...baseOrder,
+    ...resolvedOrderData
   };
 
   orders.push(newOrder);
@@ -65,6 +72,27 @@ const getAllOrders = () => {
 const getOrderById = (id) => {
   const orders = readOrders();
   return orders.find((order) => order.id === Number(id));
+};
+
+const getOrdersByUserId = (userId) => {
+  const orders = readOrders();
+  const normalizedUserId = String(userId || "");
+
+  if (!normalizedUserId) return [];
+
+  return orders.filter((order) => {
+    return String(order.userId || "") === normalizedUserId;
+  });
+};
+
+const getOrderByIdForUser = (id, userId) => {
+  const order = getOrderById(id);
+
+  if (!order || String(order.userId || "") !== String(userId || "")) {
+    return null;
+  }
+
+  return order;
 };
 
 const updateOrderStatus = (id, updateData) => {
@@ -119,6 +147,8 @@ module.exports = {
   createOrder,
   getAllOrders,
   getOrderById,
+  getOrdersByUserId,
+  getOrderByIdForUser,
   getOrderByCode,
   updateOrderStatus,
   updateOrderNotes

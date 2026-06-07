@@ -6,6 +6,7 @@
 
   <title><%= title %></title>
 
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pages/admin.css">
 </head>
@@ -17,193 +18,195 @@
     <section class="admin-home-section">
       <div class="container">
 
-        <div class="admin-home-header">
+        <section class="sz-dev-hero">
           <div>
-            <span class="section-tag">Painel administrativo</span>
-
-            <h1>Central Admin SurvivalZ</h1>
+            <span class="sz-dev-kicker">Painel Desenvolvedor</span>
+            <h1>Central Dev SurvivalZ</h1>
 
             <p>
-              Área reservada para gestão principal do servidor. Aqui serão controlados
-              usuários, permissões, denúncias, loja, compras, logs e configurações
-              importantes da Central SurvivalZ.
+              Área principal para gestão da Central: loja beta, pedidos, fórum,
+              denúncias, medalhas, usuários e futuras integrações com o servidor.
             </p>
           </div>
 
-          <div class="admin-access-card">
+          <div class="sz-dev-access-card">
             <span>Nível de acesso</span>
-            <strong>Administrador</strong>
+            <strong>Desenvolvedor/Admin</strong>
+            <small>Operação interna da Central</small>
           </div>
-        </div>
-
-       <section class="admin-overview-grid">
-  <div class="admin-overview-card">
-    <span>Total de pedidos</span>
-    <strong><%= totalOrders %></strong>
-    <p>Pedidos enviados pela Loja Beta.</p>
-  </div>
-
-  <div class="admin-overview-card">
-    <span>Pedidos pendentes</span>
-    <strong><%= pendingOrders %></strong>
-    <p>Aguardando análise da gestão.</p>
-  </div>
-
-  <div class="admin-overview-card">
-    <span>Pedidos pagos</span>
-    <strong><%= paidOrders %></strong>
-    <p>Pedidos marcados como pagos.</p>
-  </div>
-
-  <div class="admin-overview-card">
-    <span>Pedidos entregues</span>
-    <strong><%= deliveredOrders %></strong>
-    <p>Pedidos já liberados manualmente.</p>
-  </div>
-</section>
-
-        <section class="admin-panel-grid">
-
-          <a href="#" class="admin-panel-card disabled">
-            <div class="admin-panel-icon">👥</div>
-
-            <div>
-              <h2>Usuários</h2>
-              <p>
-                Gerenciar contas, cargos, permissões e status dos usuários cadastrados
-                na Central SurvivalZ.
-              </p>
-            </div>
-          </a>
-
-          <a href="/staff/denuncias" class="admin-panel-card">
-            <div class="admin-panel-icon">⚠</div>
-
-            <div>
-              <h2>Denúncias</h2>
-              <p>
-                Acompanhar todas as denúncias abertas, em análise, recusadas e fechadas
-                pela equipe.
-              </p>
-            </div>
-          </a>
-
-          <a href="#" class="admin-panel-card disabled">
-            <div class="admin-panel-icon">🛒</div>
-
-            <div>
-              <h2>Loja</h2>
-              <p>
-                Criar produtos, editar valores, controlar disponibilidade e preparar
-                a futura entrega automática no servidor.
-              </p>
-            </div>
-          </a>
-
-          <a href="/admin/pedidos" class="admin-panel-card">
-        <div class="admin-panel-icon">💳</div>
-
-        <div>
-          <h2>Pedidos da Loja</h2>
-          <p>
-            Ver pedidos enviados pelos jogadores, conferir carrinho, cupom aplicado,
-            dados do comprador e alterar status de pagamento/entrega.
-          </p>
-        </div>
-      </a>
-
-          <a href="#" class="admin-panel-card disabled">
-            <div class="admin-panel-icon">📋</div>
-
-            <div>
-              <h2>Logs</h2>
-              <p>
-                Consultar ações importantes feitas por staff, administradores e pelo
-                próprio sistema.
-              </p>
-            </div>
-          </a>
-
-          <a href="#" class="admin-panel-card disabled">
-            <div class="admin-panel-icon">⚙</div>
-
-            <div>
-              <h2>Configurações</h2>
-              <p>
-                Ajustar informações internas, permissões, integrações e opções avançadas
-                da central.
-              </p>
-            </div>
-          </a>
-
         </section>
 
-        <section class="admin-content-grid">
+        <section class="sz-dev-overview">
+          <article>
+            <span>Total de pedidos</span>
+            <strong><%= totalOrders %></strong>
+            <small>Pedidos enviados pela Loja Beta</small>
+          </article>
 
-          <div class="admin-box">
-            <div class="admin-box-header">
-              <h2>Resumo da gestão</h2>
-              <span>Prévia visual</span>
+          <article>
+            <span>Pendentes</span>
+            <strong><%= pendingOrders %></strong>
+            <small>Aguardando análise</small>
+          </article>
+
+          <article>
+            <span>Pagos</span>
+            <strong><%= paidOrders %></strong>
+            <small>Marcados como pagos</small>
+          </article>
+
+          <article>
+            <span>Entregues</span>
+            <strong><%= deliveredOrders %></strong>
+            <small>Liberados manualmente</small>
+          </article>
+
+          <article>
+            <span>Usuários</span>
+            <strong><%= siteOverview.usersCount %></strong>
+            <small>Contas registradas</small>
+          </article>
+
+          <article>
+            <span>Fórum</span>
+            <strong><%= siteOverview.topicsCount %></strong>
+            <small>Tópicos criados</small>
+          </article>
+
+          <article>
+            <span>Denúncias</span>
+            <strong><%= siteOverview.reportsCount %></strong>
+            <small>Casos registrados</small>
+          </article>
+
+          <article>
+            <span>Medalhas</span>
+            <strong><%= siteOverview.medalsCount %></strong>
+            <small>Insígnias cadastradas</small>
+          </article>
+        </section>
+
+        <section class="sz-dev-actions">
+          <a href="/admin/pedidos">
+            <span>R$</span>
+            <div>
+              <strong>Pedidos da Loja</strong>
+              <small>Conferir compras, cupom, dados do comprador e status.</small>
+            </div>
+          </a>
+
+          <a href="/forum/moderacao">
+            <span>💬</span>
+            <div>
+              <strong>Hub Staff</strong>
+              <small>Moderador central para tópicos, filtros e ações rápidas.</small>
+            </div>
+          </a>
+
+          <a href="/forum/moderacao/denuncias">
+            <span>⚠️</span>
+            <div>
+              <strong>Denúncias</strong>
+              <small>Acompanhar casos privados, provas e movimentações.</small>
+            </div>
+          </a>
+
+          <a href="/forum/moderacao/medalhas">
+            <span>🏅</span>
+            <div>
+              <strong>Medalhas</strong>
+              <small>Conceder e remover insígnias dos usuários.</small>
+            </div>
+          </a>
+
+          <a href="/admin/usuarios">
+            <span>👤</span>
+            <div>
+              <strong>Usuários</strong>
+              <small>Buscar contas, ver atividade, pedidos vinculados e cargos.</small>
+            </div>
+          </a>
+
+          <a href="/admin/cargos">
+            <span>STAFF</span>
+            <div>
+              <strong>Equipe e cargos</strong>
+              <small>Promover staff, ajustar admins e proteger o ultimo Owner.</small>
+            </div>
+          </a>
+
+          <a href="#" class="is-disabled">
+            <span>⚙️</span>
+            <div>
+              <strong>Configurações</strong>
+              <small>Integrações, parâmetros, logs e sistemas futuros.</small>
+            </div>
+          </a>
+        </section>
+
+        <section class="sz-dev-content-grid">
+
+          <article class="sz-dev-box">
+            <div class="sz-dev-box-header">
+              <div>
+                <span>Operação atual</span>
+                <h2>Resumo do site</h2>
+              </div>
             </div>
 
-            <div class="admin-summary-list">
-              <div class="admin-summary-item">
-                <strong>Servidor</strong>
-                <span>Em desenvolvimento</span>
+            <div class="sz-dev-summary-list">
+              <div>
+                <strong>Loja Beta</strong>
+                <span>Pedidos manuais ativos</span>
               </div>
 
-              <div class="admin-summary-item">
-                <strong>Integração SAMP</strong>
-                <span>Planejada</span>
+              <div>
+                <strong>Fórum</strong>
+                <span>Moderação via Hub Staff</span>
               </div>
 
-              <div class="admin-summary-item">
-                <strong>Loja automática</strong>
-                <span>Fase futura</span>
+              <div>
+                <strong>Dados do jogo</strong>
+                <span>Campos preparados no banco</span>
               </div>
 
-              <div class="admin-summary-item">
-                <strong>Sistema de denúncias</strong>
-                <span>Visual pronto</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="admin-box">
-            <div class="admin-box-header">
-              <h2>Atividade administrativa</h2>
-              <span>Logs futuros</span>
-            </div>
-
-            <div class="admin-activity-list">
-              <div class="admin-activity-item">
-                <span class="activity-dot"></span>
-
-                <div>
-                  <strong>Painel Admin criado</strong>
-                  <p>Estrutura visual inicial da gestão foi adicionada.</p>
-                </div>
-              </div>
-
-              <div class="admin-activity-item">
-                <span class="activity-dot"></span>
-
-                <div>
-                  <strong>Denúncias conectadas ao painel</strong>
-                  <p>Administradores poderão acompanhar casos pela central.</p>
-                </div>
-              </div>
-
-              <div class="admin-activity-item">
-                <span class="activity-dot"></span>
-
-                <div>
-                  <strong>Loja marcada como fase futura</strong>
-                  <p>Área será criada após login, banco de dados e permissões.</p>
-                </div>
+              <div>
+                <strong>Integração SA-MP</strong>
+                <span>Planejada para próxima fase</span>
               </div>
             </div>
-          </div>
+          </article>
+
+          <article class="sz-dev-box">
+            <div class="sz-dev-box-header">
+              <div>
+                <span>Atalhos internos</span>
+                <h2>Links rápidos</h2>
+              </div>
+            </div>
+
+            <div class="sz-dev-summary-list">
+              <a href="/loja">
+                <strong>Loja pública</strong>
+                <span>Ver vitrine da Loja Beta</span>
+              </a>
+
+              <a href="/comunidade">
+                <strong>Comunidade</strong>
+                <span>Ver atividade pública</span>
+              </a>
+
+              <a href="/forum/categoria/avisos-oficiais/novo">
+                <strong>Novo aviso</strong>
+                <span>Publicar comunicado oficial</span>
+              </a>
+
+              <a href="/admin/pedidos/export/json">
+                <strong>Exportar pedidos</strong>
+                <span>Baixar JSON da loja</span>
+              </a>
+            </div>
+          </article>
 
         </section>
 

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/forum.css">
+</head>
+<body>
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="forum-section">
+      <div class="container">
+        <div class="forum-form-header">
+          <a href="/forum/topico/<%= post.topicId %>" class="forum-back-link">Voltar ao topico</a>
+          <span class="section-tag">Editar resposta</span>
+          <h1>Editar resposta</h1>
+          <p>Atualize sua resposta antes de salvar.</p>
+        </div>
+
+        <div class="forum-form-card">
+          <% if (error) { %>
+            <div class="forum-form-error"><%= error %></div>
+          <% } %>
+
+          <form action="/forum/resposta/<%= post.id %>/editar" method="POST" class="forum-form">
+            <div class="form-group">
+              <label for="content">Resposta</label>
+              <%- include("../partials/forum-editor-toolbar", {
+  textareaId: "content",
+  previewId: "editPreview",
+  value: post.content
+}) %>
+            </div>
+
+            <button type="submit" class="btn-primary forum-submit-btn">Salvar resposta</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+  <script src="/js/forumEditor.js"></script>
+</body>
+</html>

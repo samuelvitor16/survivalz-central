@@ -15,9 +15,20 @@ const {
 } = require("../controllers/adminController");
 
 const {
-  requireAdmin,
   redirectIfAdminLogged
 } = require("../middlewares/authMiddleware");
+
+const {
+  requireAdminRole
+} = require("../middlewares/playerAuthMiddleware");
+
+const {
+  renderAdminUsers,
+  renderAdminUserDetails,
+  updateAdminUserRole,
+  renderAdminRoles,
+  updateAdminRoleQuick
+} = require("../controllers/adminUsersController");
 
 // Login admin
 router.get("/login", redirectIfAdminLogged, renderAdminLogin);
@@ -26,11 +37,16 @@ router.post("/login", redirectIfAdminLogged, loginAdmin);
 // Logout admin
 router.get("/logout", logoutAdmin);
 
-// Protege tudo abaixo daqui
-router.use(requireAdmin);
+// Protege tudo abaixo daqui: apenas ADMIN/OWNER ou sessao dev sem jogador comum.
+router.use(requireAdminRole);
 
 // Painel admin
 router.get("/", renderAdminHome);
+router.get("/cargos", renderAdminRoles);
+router.post("/cargos", updateAdminRoleQuick);
+router.get("/usuarios", renderAdminUsers);
+router.get("/usuarios/:id", renderAdminUserDetails);
+router.post("/usuarios/:id/role", updateAdminUserRole);
 router.get("/pedidos", renderAdminOrders);
 
 // Exportação precisa vir ANTES de /pedidos/:id

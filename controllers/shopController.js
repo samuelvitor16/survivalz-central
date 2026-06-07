@@ -3,12 +3,33 @@ const {
   getProductById,
   formatPrice
 } = require("../data/products");
-const { generatePixPayment } = require("../utils/pixUtils");
+const {
+  generatePixPayment,
+  getPixInfoForOrder
+} = require("../utils/pixUtils");
 const {
   createOrder,
   getAllOrders,
   getOrderByCode
 } = require("../models/orderModel");
+const prisma = require("../config/prisma");
+
+const getCheckoutUser = async (req) => {
+  if (!req.session.playerId) return null;
+
+  return prisma.user.findUnique({
+    where: {
+      id: req.session.playerId
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      discord: true,
+      sampNick: true
+    }
+  });
+};
 
 const renderShop = (req, res) => {
   const products = getAvailableProducts();
@@ -24,6 +45,12 @@ const renderShop = (req, res) => {
     vips,
     zcoins,
     vehicles,
+    shopPromo: {
+      eyebrow: "Promocao ativa",
+      title: "Cupom BETA25 ativo",
+      text: "Aproveite 25% de desconto na primeira compra elegivel durante o Beta. Promocoes especiais podem aparecer aqui sem alterar a loja.",
+      coupon: "BETA25"
+    },
     formatPrice
   });
 };
@@ -44,7 +71,7 @@ const renderProduct = (req, res) => {
   });
 };
 
-const renderCheckout = (req, res) => {
+const renderCheckout = async (req, res) => {
   const product = getProductById(req.params.id);
 
   if (!product || !product.available) {
@@ -56,17 +83,19 @@ const renderCheckout = (req, res) => {
   res.render("pages/checkout", {
     title: "Finalizar Pedido - Loja Beta SurvivalZ",
     product,
-    formatPrice
+    formatPrice,
+    checkoutUser: await getCheckoutUser(req)
   });
 };
 
-const renderCartCheckout = (req, res) => {
+const renderCartCheckout = async (req, res) => {
   res.render("pages/checkout", {
-    title: "Checkout - Loja Beta SurvivalZ"
+    title: "Checkout - Loja Beta SurvivalZ",
+    checkoutUser: await getCheckoutUser(req)
   });
 };
 
-const createCheckoutOrder = (req, res) => {
+const createCheckoutOrder = async (req, res) => {
   try {
     const { customer, items, coupon } = req.body;
 
@@ -87,17 +116,21 @@ const createCheckoutOrder = (req, res) => {
     const normalizedEmail = customer.email.trim().toLowerCase();
     const normalizedDiscord = customer.discord.trim().toLowerCase();
     const normalizedNick = customer.sampNick.trim().toLowerCase();
+    const accountUser = await getCheckoutUser(req);
+    const accountUserId = accountUser ? accountUser.id : null;
 
     const allOrders = getAllOrders();
 
     const alreadyUsedCoupon = allOrders.some((order) => {
       if (order.coupon !== "BETA25") return false;
 
-      const orderEmail = order.customer.email.trim().toLowerCase();
-      const orderDiscord = order.customer.discord.trim().toLowerCase();
-      const orderNick = order.customer.sampNick.trim().toLowerCase();
+      const orderEmail = String(order.customer && order.customer.email || "").trim().toLowerCase();
+      const orderDiscord = String(order.customer && order.customer.discord || "").trim().toLowerCase();
+      const orderNick = String(order.customer && order.customer.sampNick || "").trim().toLowerCase();
+      const orderUserId = String(order.userId || "");
 
       return (
+        (accountUserId && orderUserId === accountUserId) ||
         orderEmail === normalizedEmail ||
         orderDiscord === normalizedDiscord ||
         orderNick === normalizedNick
@@ -110,8 +143,10 @@ const createCheckoutOrder = (req, res) => {
   const orderEmail = String(order.customer.email || "").trim().toLowerCase();
   const orderDiscord = String(order.customer.discord || "").trim().toLowerCase();
   const orderNick = String(order.customer.sampNick || "").trim().toLowerCase();
+  const orderUserId = String(order.userId || "");
 
   return (
+    (accountUserId && orderUserId === accountUserId) ||
     orderEmail === normalizedEmail ||
     orderDiscord === normalizedDiscord ||
     orderNick === normalizedNick
@@ -259,7 +294,13 @@ for (const productId of Object.keys(requestedItems)) {
     const discount = shouldApplyCoupon ? Math.round(subtotal * 0.25) : 0;
     const total = subtotal - discount;
 
-    const order = createOrder({
+    const order = await createOrder(async (baseOrder) => {
+      const pixPayment = await generatePixPayment({
+        code: baseOrder.code,
+        totalCents: total
+      });
+
+      return {
       customer: {
         name: customer.name.trim(),
         discord: customer.discord.trim(),
@@ -272,8 +313,27 @@ for (const productId of Object.keys(requestedItems)) {
       discount,
       total,
       coupon: shouldApplyCoupon ? "BETA25" : null,
+      paymentMethod: "pix",
       paymentStatus: "aguardando_pagamento",
-      deliveryStatus: "pendente"
+      pixCopyPaste: pixPayment.pixCopyPaste,
+      pixQrCode: pixPayment.pixQrCode,
+      pixConfigured: pixPayment.pixConfigured,
+      pixError: pixPayment.pixError,
+      payment: {
+        method: "pix",
+        pixCopyPaste: pixPayment.pixCopyPaste,
+        pixQrCode: pixPayment.pixQrCode,
+        pixConfigured: pixPayment.pixConfigured,
+        pixError: pixPayment.pixError,
+        generatedAt: new Date().toISOString()
+      },
+      deliveryStatus: "pendente",
+      userId: accountUser ? accountUser.id : null,
+      userName: accountUser ? accountUser.name : null,
+      userEmail: accountUser ? accountUser.email : null,
+      userSampNick: accountUser ? accountUser.sampNick : null,
+      userDiscord: accountUser ? accountUser.discord : null
+    };
     });
 
     return res.status(201).json({
@@ -302,10 +362,7 @@ const renderSuccess = async (req, res) => {
     order = getOrderByCode(orderCode);
 
     if (order) {
-      pix = await generatePixPayment({
-        code: order.code,
-        totalCents: order.total
-      });
+      pix = await getPixInfoForOrder(order);
     }
   }
 
