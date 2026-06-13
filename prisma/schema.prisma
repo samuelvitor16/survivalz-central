@@ -190,3 +190,37 @@ model UserMedal {
   @@unique([userId, medalId])
   @@map("user_medals")
 }
+
+model StoreProduct {
+  id String @id @default(cuid())
+
+  code String @unique
+  name String
+  slug String @unique
+
+  category String
+  type String?
+
+  priceZCoins Int?
+  referencePriceCents Int?
+
+  description String? @db.Text
+  benefits Json?
+
+  imageUrl String?
+
+  modelId Int?
+  capacityKg Int?
+  armorTier String?
+  collection String?
+
+  stock Int?
+  isActive Boolean @default(true)
+  isFeatured Boolean @default(false)
+  position Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("store_products")
+}

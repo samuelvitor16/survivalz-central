@@ -1,0 +1,75 @@
+<section class="admin-page">
+  <div class="admin-page-header">
+    <div>
+      <p class="admin-eyebrow">Loja</p>
+      <h1>Produtos da Loja</h1>
+      <p>Gerencie os produtos exibidos na loja da Central SurvivalZ.</p>
+    </div>
+
+    <a class="admin-btn admin-btn-primary" href="/admin/loja/produtos/novo">
+      + Novo produto
+    </a>
+  </div>
+
+  <div class="admin-card">
+    <% if (!products.length) { %>
+      <p>Nenhum produto cadastrado ainda.</p>
+    <% } else { %>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Categoria</th>
+              <th>ZCoins</th>
+              <th>Referência</th>
+              <th>Status</th>
+              <th>Destaque</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% products.forEach((product) => { %>
+              <tr>
+                <td>
+                  <strong><%= product.name %></strong><br>
+                  <small><%= product.code %></small>
+                </td>
+
+                <td><%= product.category %></td>
+
+                <td>
+                  <%= product.priceZCoins ? product.priceZCoins.toLocaleString("pt-BR") + " ZCoins" : "A definir" %>
+                </td>
+
+                <td>
+                  <% if (product.referencePriceCents) { %>
+                    <%= (product.referencePriceCents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) %>
+                  <% } else { %>
+                    —
+                  <% } %>
+                </td>
+
+                <td><%= product.isActive ? "Ativo" : "Inativo" %></td>
+                <td><%= product.isFeatured ? "Sim" : "Não" %></td>
+
+                <td>
+                  <a class="admin-link" href="/admin/loja/produtos/<%= product.id %>/editar">
+                    Editar
+                  </a>
+
+                  <form method="POST" action="/admin/loja/produtos/<%= product.id %>/toggle" style="display:inline;">
+                    <button class="admin-link" type="submit">
+                      <%= product.isActive ? "Desativar" : "Ativar" %>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</section>
