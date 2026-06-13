@@ -2,3 +2,10 @@ node_modules
 .env
 data/backups
 /generated/prisma
+
+# Local runtime data and generated files
+.codex-*.log
+public/uploads/
+public/**/*.log
+data/orders*.json
+data/*backup*.json

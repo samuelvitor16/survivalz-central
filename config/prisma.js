@@ -8,6 +8,10 @@ const toNumber = (value, fallback) => {
   return Number.isFinite(number) ? number : fallback;
 };
 
+if (process.env.NODE_ENV === "production" && !process.env.DB_PASSWORD) {
+  throw new Error("DB_PASSWORD precisa estar configurado em producao.");
+}
+
 const adapter = new PrismaMariaDb({
   host: process.env.DB_HOST || "127.0.0.1",
   port: toNumber(process.env.DB_PORT, 3306),

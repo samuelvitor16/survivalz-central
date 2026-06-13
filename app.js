@@ -21,6 +21,11 @@ const { renderNotFound } = require("./controllers/errorController");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+const sessionSecret = process.env.SESSION_SECRET || "survivalz_secret_dev";
+
+if (process.env.NODE_ENV === "production" && !process.env.SESSION_SECRET) {
+  throw new Error("SESSION_SECRET precisa estar configurado em producao.");
+}
 
 // Configurar EJS como motor de visualização
 app.set("view engine", "ejs");
@@ -38,7 +43,7 @@ app.use(express.json());
 app.set("trust proxy", 1);
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || "survivalz_secret_dev",
+  secret: sessionSecret,
   resave: false,
   saveUninitialized: false,
   cookie: {
