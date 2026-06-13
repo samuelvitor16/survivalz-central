@@ -6,26 +6,8 @@
 
   <title><%= title %></title>
   <link rel="icon" type="image/png" href="/images/logo/favicon.png">
-
-<meta name="description" content="SurvivalZ é um servidor SA-MP pós-apocalíptico com sobrevivência, progressão, veículos, loja Beta e comunidade organizada.">
-
-<meta property="og:title" content="SurvivalZ Central">
-<meta property="og:description" content="Sobreviva ao fim do mundo. Entre no Beta de SurvivalZ.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://networking-olympus-racks-unfortunately.trycloudflare.com">
-
-<meta property="og:image" content="https://networking-olympus-racks-unfortunately.trycloudflare.com/images/home/preview.png?v=1">
-<meta property="og:image:secure_url" content="https://networking-olympus-racks-unfortunately.trycloudflare.com/images/home/preview.png?v=1">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="SurvivalZ Central">
-<meta name="twitter:description" content="Sobreviva ao fim do mundo. Entre no Beta de SurvivalZ.">
-<meta name="twitter:image" content="https://networking-olympus-racks-unfortunately.trycloudflare.com/images/home/preview.png?v=1">
-
-<meta name="theme-color" content="#c40000">
+  <meta name="description" content="SurvivalZ e o portal oficial do servidor SA-MP pos-apocaliptico com Beta, forum, loja e comunidade.">
+  <meta name="theme-color" content="#c40000">
 
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pages/home.css">
@@ -35,325 +17,345 @@
   <%- include("../partials/header") %>
 
   <main>
+    <section class="home-hero">
+      <div class="home-hero-backdrop" aria-hidden="true"></div>
 
-    <section class="home-v2-hero">
-      <div class="home-v2-overlay"></div>
-
-      <div class="container home-v2-hero-grid">
-
-        <div class="home-v2-hero-content">
-          <span class="home-v2-badge">
-            ☣ SERVIDOR SAMP • SOBREVIVÊNCIA • BETA
-          </span>
-
-          <h1>
-            Sobreviva ao fim do mundo.
-            <strong>Entre no Beta SurvivalZ.</strong>
-          </h1>
-
+      <div class="container home-hero-inner">
+        <div class="home-hero-copy">
+          <img src="/images/logo/survivalz-logo.png" alt="SurvivalZ" class="home-hero-logo">
+          <span class="home-kicker">SA-MP Survival Beta</span>
+          <h1>Sobreviva. Evolua. Domine a zona.</h1>
           <p>
-            Um servidor SA-MP pós-apocalíptico com sobrevivência, progressão,
-            veículos, economia, comunidade e uma experiência criada para quem
-            quer algo diferente no universo de GTA San Andreas.
+            Entre na zona pos-apocaliptica do SurvivalZ: forum, loja beta, suporte
+            e comunidade em um so lugar.
           </p>
 
-          <div class="home-v2-hero-actions">
-            <a href="/loja" class="btn-primary">
-              Acessar Loja Beta
-            </a>
-
-            <a href="<%= discordInvite %>" target="_blank" class="btn-secondary">
-              Entrar no Discord
-            </a>
+          <div class="home-hero-actions">
+            <a href="/loja" class="btn-primary">Comprar Beta</a>
+            <a href="/forum" class="btn-secondary">Forum</a>
+            <a href="<%= discordInvite %>" target="_blank" rel="noopener noreferrer" class="btn-secondary">Discord</a>
           </div>
+          
+<div class="home-social-panel">
+  <div class="home-social-panel-head">
+    <span>Redes da comunidade</span>
+    <strong>Acompanhe o SurvivalZ</strong>
+  </div>
 
-          <div class="home-v2-quick-info">
-            <div>
-              <strong>Beta</strong>
-              <span>Loja aberta</span>
-            </div>
+  <div class="home-social-grid">
+    <a href="<%= discordInvite %>" target="_blank" rel="noopener noreferrer" class="home-social-card discord">
+     <span class="home-social-icon" aria-hidden="true">
+  <svg viewBox="0 0 24 24">
+    <path d="M20.317 4.369A19.791 19.791 0 0 0 15.885 3c-.191.328-.403.769-.553 1.116a18.27 18.27 0 0 0-5.327 0A11.64 11.64 0 0 0 9.45 3a19.736 19.736 0 0 0-4.433 1.369C2.21 8.558 1.449 12.642 1.82 16.669A19.9 19.9 0 0 0 7.1 19.364a14.3 14.3 0 0 0 1.13-1.84 12.83 12.83 0 0 1-1.778-.87c.149-.108.295-.221.436-.338 3.43 1.61 7.15 1.61 10.54 0 .142.117.288.23.437.338-.567.33-1.162.622-1.778.87.325.65.704 1.266 1.13 1.84a19.84 19.84 0 0 0 5.282-2.695c.438-4.667-.749-8.714-2.182-12.3ZM9.954 14.89c-1.03 0-1.875-.95-1.875-2.116 0-1.166.826-2.116 1.875-2.116 1.058 0 1.894.959 1.875 2.116 0 1.166-.827 2.116-1.875 2.116Zm4.093 0c-1.03 0-1.875-.95-1.875-2.116 0-1.166.826-2.116 1.875-2.116 1.058 0 1.894.959 1.875 2.116 0 1.166-.817 2.116-1.875 2.116Z"/>
+  </svg>
+</span>
+      <div>
+        <strong>Discord</strong>
+        <small>Comunidade e suporte</small>
+      </div>
+    </a>
 
-            <div>
-              <strong>BETA25</strong>
-              <span>25% na 1ª compra</span>
-            </div>
+    <a href="https://www.instagram.com/survivalzbr/" target="_blank" rel="noopener noreferrer" class="home-social-card instagram">
+      <span class="home-social-icon" aria-hidden="true">
+  <svg viewBox="0 0 24 24">
+    <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.8A3.95 3.95 0 0 0 3.8 7.75v8.5a3.95 3.95 0 0 0 3.95 3.95h8.5a3.95 3.95 0 0 0 3.95-3.95v-8.5a3.95 3.95 0 0 0-3.95-3.95Zm8.95 1.35a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2ZM12 6.7A5.3 5.3 0 1 1 6.7 12 5.3 5.3 0 0 1 12 6.7Zm0 1.8A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 8.5Z"/>
+  </svg>
+</span>
+      <div>
+        <strong>Instagram</strong>
+        <small>Novidades e mídia</small>
+      </div>
+    </a>
 
-            <div>
-              <strong>Pix</strong>
-              <span>QR Code por pedido</span>
-            </div>
-          </div>
+    <a href="https://www.tiktok.com/@survivalzbr" target="_blank" rel="noopener noreferrer" class="home-social-card tiktok">
+      <span class="home-social-icon" aria-hidden="true">
+  <svg viewBox="0 0 24 24">
+    <path d="M14.5 2c.54 1.7 1.78 3.04 3.5 3.6V8a7.08 7.08 0 0 1-3.5-.93v6.11A5.18 5.18 0 1 1 9.32 8v2.65a2.6 2.6 0 1 0 2.58 2.6V2Z"/>
+  </svg>
+</span>
+      <div>
+        <strong>TikTok</strong>
+        <small>Clipes da zona</small>
+      </div>
+    </a>
+
+    <a href="#" target="_blank" rel="noopener noreferrer" class="home-social-card youtube">
+      <span class="home-social-icon" aria-hidden="true">
+  <svg viewBox="0 0 24 24">
+    <path d="M23 12.003s0-3.127-.4-4.634a2.93 2.93 0 0 0-2.064-2.073C19.02 4.9 12 4.9 12 4.9s-7.02 0-8.536.396A2.93 2.93 0 0 0 1.4 7.369C1 8.876 1 12.003 1 12.003s0 3.127.4 4.634a2.93 2.93 0 0 0 2.064 2.073C4.98 19.106 12 19.106 12 19.106s7.02 0 8.536-.396a2.93 2.93 0 0 0 2.064-2.073c.4-1.507.4-4.634.4-4.634ZM9.75 15.5v-7l6 3.5-6 3.5Z"/>
+  </svg>
+</span>
+      <div>
+        <strong>YouTube</strong>
+        <small>Vídeos e trailers</small>
+      </div>
+    </a>
+  </div>
+</div>
         </div>
 
-        <div class="home-v2-status-card">
-          <div class="home-v2-status-header">
-            <span>☣</span>
-
-            <div>
-              <h2>SurvivalZ Central</h2>
-              <p>Operação Beta Manual</p>
-            </div>
+        <div class="home-hero-stage">
+          <div class="home-survivor-card" aria-hidden="true">
+            <img src="/images/team/samuel-skin160.png" alt="">
+            <span class="home-survivor-z">Z</span>
           </div>
 
-          <div class="home-v2-status-list">
-            <div>
-              <span>Status do servidor</span>
-              <strong>Em desenvolvimento</strong>
+          <aside class="home-status-panel" aria-label="Status do SurvivalZ">
+            <div class="home-status-panel-head">
+              <span>Status / Beta</span>
+              <strong>Zona ativa</strong>
             </div>
 
-            <div>
-              <span>Loja Beta</span>
-              <strong>Disponível</strong>
+            <a href="/servidor" class="home-status-row">
+              <span class="home-status-icon">SV</span>
+              <span><small>Servidor</small><strong>Beta em preparacao</strong></span>
+              <em>Beta</em>
+            </a>
+            <a href="/loja" class="home-status-row">
+              <span class="home-status-icon">$</span>
+              <span><small>Loja Beta</small><strong>Em preparação</strong></span>
+              <em>Off</em>
+            </a>
+            <a href="/forum" class="home-status-row">
+              <span class="home-status-icon">FM</span>
+              <span><small>Forum</small><strong>Online</strong></span>
+              <em>On</em>
+            </a>
+            <a href="<%= discordInvite %>" target="_blank" rel="noopener noreferrer" class="home-status-row">
+              <span class="home-status-icon">DC</span>
+              <span><small>Discord</small><strong>Aberto</strong></span>
+              <em>Live</em>
+            </a>
+            <div class="home-status-row home-status-ip">
+              <span class="home-status-icon">IP</span>
+              <span><small>IP</small><strong>Em breve</strong></span>
+              <em>Wait</em>
             </div>
-
-            <div>
-              <span>Pagamento</span>
-              <strong>Pix dinâmico</strong>
-            </div>
-
-            <div>
-              <span>Entrega</span>
-              <strong>Manual pela gestão</strong>
-            </div>
-          </div>
-
-          <a href="/loja/consultar" class="home-v2-status-link">
-            Consultar pedido →
-          </a>
+          </aside>
         </div>
-
       </div>
     </section>
 
-    <section class="home-v2-about">
-      <div class="container">
-
-        <div class="home-v2-section-header">
-          <span class="section-tag">O que é o SurvivalZ?</span>
-
-          <h2>Uma nova experiência de sobrevivência dentro do SA-MP</h2>
-
-          <p>
-            O SurvivalZ nasce com a proposta de transformar o SA-MP em uma
-            experiência pós-apocalíptica mais imersiva, organizada e moderna,
-            unindo sobrevivência, comunidade, progressão e sistemas pensados
-            para evoluir junto com os jogadores.
-          </p>
-        </div>
-
-        <div class="home-v2-feature-grid">
-          <div class="home-v2-feature-card">
-            <span>☣</span>
-            <h3>Sobrevivência</h3>
-            <p>
-              Um mundo devastado onde cada recurso, veículo e decisão pode fazer diferença.
-            </p>
-          </div>
-
-          <div class="home-v2-feature-card">
-            <span>🚗</span>
-            <h3>Veículos e exploração</h3>
-            <p>
-              Veículos, rotas, áreas perigosas e exploração fazem parte da jornada dos sobreviventes.
-            </p>
-          </div>
-
-          <div class="home-v2-feature-card">
-            <span>📈</span>
-            <h3>Economia e progressão</h3>
-            <p>
-              Sistemas planejados para dar propósito, evolução e recompensa dentro do servidor.
-            </p>
-          </div>
-
-          <div class="home-v2-feature-card">
-            <span>🛡</span>
-            <h3>Gestão organizada</h3>
-            <p>
-              Painéis, loja, pedidos e processos internos pensados para manter tudo controlado.
-            </p>
-          </div>
-        </div>
-
+    <section class="home-news-section" id="noticias">
+  <div class="container">
+    <div class="home-news-head">
+      <div>
+        <span class="home-kicker">Notícias & Atualizações</span>
+        <h2>Últimas da comunidade</h2>
+        <p>Novidades, lançamentos, patch notes e mudanças importantes do SurvivalZ.</p>
       </div>
-    </section>
 
-    <section class="home-v2-beta">
-      <div class="container home-v2-beta-grid">
+      <a href="/forum/categoria/noticias" class="home-news-all">Ver notícias</a>
+    </div>
 
-        <div class="home-v2-beta-content">
-          <span class="section-tag">Como funciona o Beta?</span>
+    <% if (homeNewsTopics && homeNewsTopics.length > 0) { %>
+      <div class="home-news-grid">
+        <% homeNewsTopics.forEach((topic, index) => { %>
+          <%
+            const topicImage =
+  extractFirstImageFromText(topic.content) ||
+  "/images/home/hero-bg.png";
 
-          <h2>Entre, apoie o projeto e acompanhe a evolução</h2>
+const cleanNewsContent = (content = "") => {
+  return String(content || "")
+    .replace(/\[img\][\s\S]*?\[\/img\]/gi, "")
+    .replace(/<img[^>]*>/gi, "")
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, "")
+    .replace(/\/uploads\/forum\/[^\s]+\.(jpg|jpeg|png|webp|gif)/gi, "")
+    .replace(/https?:\/\/[^\s]+\.(jpg|jpeg|png|webp|gif)/gi, "")
+    .replace(/^\s*\.(jpg|jpeg|png|webp|gif)\s*$/gim, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+};
 
-          <p>
-            A fase Beta serve para testar sistemas, balancear recursos, ouvir a comunidade
-            e preparar o SurvivalZ para uma abertura mais forte e organizada.
-          </p>
+const newsContent = cleanNewsContent(topic.content);
+const isChangelog = topic.category && topic.category.slug === "changelog";
+          %>
 
-          <div class="home-v2-beta-alert">
-            <strong>⚠ Aviso importante:</strong>
-            <span>
-              Itens, moedas, veículos e benefícios adquiridos durante o Beta poderão ser
-              resetados ao fim da fase de testes. Leia os termos antes de comprar.
+          <button
+            type="button"
+            class="home-news-card <%= index === 0 ? "is-main" : "" %>"
+            data-news-open
+            data-news-title="<%= escapeHtml(topic.title) %>"
+            data-news-category="<%= escapeHtml(topic.category.name) %>"
+            data-news-date="<%= formatDate(topic.updatedAt) %>"
+            data-news-author="<%= escapeHtml(displayUserName(topic.author)) %>"
+            data-news-image="<%= topicImage %>"
+            data-news-url="/forum/topico/<%= topic.id %>"
+            data-news-template="news-template-<%= topic.id %>"
+            style="--news-cover: url('<%= topicImage %>');"
+          >
+            <span class="home-news-label <%= isChangelog ? "is-changelog" : "" %>">
+              <%= isChangelog ? "Changelog" : "Notícia" %>
             </span>
-          </div>
+
+            <strong><%= topic.title %></strong>
+
+            <small>
+              <%= formatDate(topic.updatedAt) %> • <%= displayUserName(topic.author) %>
+            </small>
+          </button>
+          <template id="news-template-<%= topic.id %>">
+  <%- renderFormattedUserText(newsContent) %>
+</template>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="home-news-empty">
+        <strong>Nenhuma notícia publicada ainda.</strong>
+        <p>Quando a equipe publicar novidades ou changelogs no fórum, eles aparecerão aqui.</p>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+    <section class="home-section">
+      <div class="container home-start-grid">
+        <div class="home-section-heading">
+          <span class="home-kicker">Como comecar</span>
+          <h2>Comece em poucos passos</h2>
+          <p>Entre preparado, acompanhe os avisos e garanta seu acesso antes da zona abrir.</p>
         </div>
 
-        <div class="home-v2-steps">
-          <div class="home-v2-step">
-            <strong>1</strong>
-            <div>
-              <h3>Acesse a Loja Beta</h3>
-              <p>Escolha pacotes Beta, VIPs, ZCoins ou veículos disponíveis.</p>
-            </div>
-          </div>
-
-          <div class="home-v2-step">
-            <strong>2</strong>
-            <div>
-              <h3>Monte seu pedido</h3>
-              <p>Adicione produtos ao carrinho e aplique o cupom, se disponível.</p>
-            </div>
-          </div>
-
-          <div class="home-v2-step">
-            <strong>3</strong>
-            <div>
-              <h3>Pague via Pix</h3>
-              <p>O site gera QR Code e Pix Copia e Cola com o valor exato.</p>
-            </div>
-          </div>
-
-          <div class="home-v2-step">
-            <strong>4</strong>
-            <div>
-              <h3>Envie o comprovante</h3>
-              <p>A gestão confirma manualmente e libera os produtos.</p>
-            </div>
-          </div>
+        <div class="home-steps">
+          <article><strong>01</strong><span>Nick</span><h3>Crie sua conta</h3><p>Reserve seu nome na zona.</p></article>
+          <article><strong>02</strong><span>DC</span><h3>Entre no Discord</h3><p>Avisos e suporte rapido.</p></article>
+          <article><strong>03</strong><span>RG</span><h3>Leia o guia</h3><p>Regras antes do confronto.</p></article>
+          <article><strong>04</strong><span>VIP</span><h3>Garanta o Beta</h3><p>Acesso direto pela loja.</p></article>
         </div>
-
       </div>
     </section>
 
-    <section class="home-v2-store">
-      <div class="container home-v2-store-grid">
-
-        <div class="home-v2-store-card">
-          <span>🎫</span>
-          <h3>Pacotes Beta</h3>
-          <p>
-            Garanta seu acesso ao Beta fechado e participe da construção inicial do SurvivalZ.
-          </p>
-        </div>
-
-        <div class="home-v2-store-card featured">
-          <span>🔥</span>
-          <h3>Loja Beta aberta</h3>
-          <p>
-            VIPs, ZCoins, veículos e pacotes especiais com valores promocionais durante o Beta.
-          </p>
-
-          <a href="/loja" class="btn-primary">
-            Comprar agora
-          </a>
-        </div>
-
-        <div class="home-v2-store-card coupon-card">
-          <span class="coupon-icon">🎟️</span>
-          <h3>Cupom BETA25</h3>
-          <p>
-            Use o cupom de primeira compra e receba 25% de desconto no pedido.
-          </p>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="home-v2-differentials">
+    <section class="home-section home-systems-section">
       <div class="container">
-
-        <div class="home-v2-section-header center">
-          <span class="section-tag">Diferenciais</span>
-
-          <h2>Um projeto criado para crescer com a comunidade</h2>
-
-          <p>
-            A Central SurvivalZ foi construída para organizar a experiência dos jogadores
-            e dar suporte para uma evolução real do servidor.
-          </p>
+        <div class="home-section-heading compact">
+          <span class="home-kicker">Sistemas do SurvivalZ</span>
+          <h2>O que te espera na zona</h2>
         </div>
 
-        <div class="home-v2-diff-grid">
-          <div class="home-v2-diff-card">
-            <h3>📖 Guia do Sobrevivente</h3>
-            <p>Regras, tutoriais e informações organizadas para novos jogadores.</p>
-          </div>
-
-          <div class="home-v2-diff-card">
-            <h3>🛒 Loja organizada</h3>
-            <p>Pedidos com código, Pix dinâmico, consulta e painel administrativo.</p>
-          </div>
-
-          <div class="home-v2-diff-card">
-            <h3>⚠ Denúncias futuras</h3>
-            <p>Processo planejado para denúncias com provas, respostas e análise staff.</p>
-          </div>
-
-          <div class="home-v2-diff-card">
-            <h3>🛡 Gestão transparente</h3>
-            <p>Ferramentas internas para acompanhar pedidos, histórico e decisões.</p>
-          </div>
-
-          <div class="home-v2-diff-card">
-            <h3>🚧 Projeto por fases</h3>
-            <p>A Central começa pelo essencial e evolui para sistemas mais avançados.</p>
-          </div>
-
-          <div class="home-v2-diff-card">
-            <h3>☣ Identidade própria</h3>
-            <p>Um servidor pós-apocalíptico com foco em imersão, organização e evolução.</p>
-          </div>
+        <div class="home-systems-grid">
+          <article><span>SZ</span><h3>Sobrevivencia</h3><p>Recursos escassos, risco real e progresso na zona.</p></article>
+          <article><span>$</span><h3>Economia</h3><p>ZCoins, recompensas e apoio ao Beta.</p></article>
+          <article><span>V8</span><h3>Veiculos</h3><p>Rotas, fuga e exploracao por Los Santos destruida.</p></article>
+          <article><span>CL</span><h3>Faccao/Clas</h3><p>Grupos, disputas e dominio de territorio.</p></article>
+          <article><span>!</span><h3>Forum e denuncias</h3><p>Avisos, suporte, provas e moderacao clara.</p></article>
+          <article><span>B</span><h3>Loja Beta</h3><p>Acesso, pedidos e pacotes em um fluxo direto.</p></article>
         </div>
-
       </div>
     </section>
 
-    <section class="home-v2-final-cta">
-      <div class="container home-v2-final-box">
-
-        <div>
-          <span class="section-tag">Prepare-se</span>
-
-          <h2>O mundo acabou. Sua sobrevivência começa agora.</h2>
-
-          <p>
-            Entre no Discord, acompanhe o desenvolvimento e acesse a Loja Beta
-            para apoiar o projeto desde o início.
-          </p>
-        </div>
-
-        <div class="home-v2-final-actions">
-          <a href="/loja" class="btn-primary">
-            Acessar Loja Beta
-          </a>
-
-          <a href="<%= discordInvite %>" target="_blank" class="btn-secondary">
-            Entrar no Discord
-          </a>
-
-          <a href="<%= guideLink %>" target="_blank" class="btn-secondary">
-            Ver Guia
-          </a>
-        </div>
-
+    <section class="home-shots-section" id="zona">
+  <div class="container">
+    <div class="home-shots-head">
+      <div>
+        <span class="home-kicker">Dentro da zona</span>
+        <p>
+          Registros da experiência SurvivalZ: exploração, veículos, áreas especiais,
+          encontros e momentos da comunidade.
+        </p>
       </div>
-    </section>
 
+      <div class="home-shots-controls">
+        <button type="button" id="serverShotsPrev" aria-label="Imagem anterior">‹</button>
+        <button type="button" id="serverShotsNext" aria-label="Próxima imagem">›</button>
+      </div>
+    </div>
+
+    <div class="home-shots-shell">
+      <div class="home-shots-track" id="serverShotsTrack">
+        <article class="home-shot-card is-wide">
+          <img src="/images/server-shots/shot-1.png" alt="Registro SurvivalZ">
+          <div>
+            <span>Exploração</span>
+            <strong>A zona não perdoa distrações</strong>
+          </div>
+        </article>
+
+        <article class="home-shot-card">
+          <img src="/images/server-shots/shot-2.png" alt="Registro SurvivalZ">
+          <div>
+            <span>Sobrevivência</span>
+            <strong>Cada rota pode mudar tudo</strong>
+          </div>
+        </article>
+
+        <article class="home-shot-card">
+          <img src="/images/server-shots/shot-3.png" alt="Registro SurvivalZ">
+          <div>
+            <span>Veículos</span>
+            <strong>Mobilidade dentro do caos</strong>
+          </div>
+        </article>
+
+        <article class="home-shot-card is-tall">
+          <img src="/images/server-shots/shot-4.png" alt="Registro SurvivalZ">
+          <div>
+            <span>Comunidade</span>
+            <strong>Sobreviventes em movimento</strong>
+          </div>
+        </article>
+
+        <article class="home-shot-card">
+          <img src="/images/server-shots/shot-5.png" alt="Registro SurvivalZ">
+          <div>
+            <span>Safezone</span>
+            <strong>Um respiro antes da próxima rota</strong>
+          </div>
+        </article>
+
+        <article class="home-shot-card">
+          <img src="/images/server-shots/shot-6.png" alt="Registro SurvivalZ">
+          <div>
+            <span>Risco</span>
+            <strong>Nem todo encontro termina bem</strong>
+          </div>
+        </article>
+
+        <article class="home-shot-card is-wide">
+          <img src="/images/server-shots/shot-7.png" alt="Registro SurvivalZ">
+          <div>
+            <span>Mapa</span>
+            <strong>Los Santos em ruínas</strong>
+          </div>
+        </article>
+
+        <article class="home-shot-card">
+          <img src="/images/server-shots/shot-8.png" alt="Registro SurvivalZ">
+          <div>
+            <span>Beta</span>
+            <strong>A preparação continua</strong>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
   </main>
+      <div class="home-news-modal" id="homeNewsModal" hidden>
+  <div class="home-news-modal-backdrop" data-news-close></div>
 
+  <article class="home-news-modal-card">
+    <button type="button" class="home-news-modal-close" data-news-close>×</button>
+
+    <div class="home-news-modal-image">
+      <img src="/images/home/hero-bg.png" alt="" id="homeNewsModalImage">
+    </div>
+
+    <div class="home-news-modal-content">
+      <span id="homeNewsModalCategory">Notícia</span>
+      <h2 id="homeNewsModalTitle">Título</h2>
+
+      <small id="homeNewsModalMeta">Data • Autor</small>
+
+      <div class="home-news-modal-text" id="homeNewsModalText"></div>
+
+      <a href="/forum" id="homeNewsModalUrl">Ler no fórum</a>
+    </div>
+  </article>
+</div>
   <%- include("../partials/footer") %>
-<script src="/js/homeAnimations.js"></script>
+  <script src="/js/homeAnimations.js"></script>
+<script src="/js/homeNewsModal.js"></script>
+<script src="/js/serverShotsCarousel.js"></script>
 </body>
 </html>

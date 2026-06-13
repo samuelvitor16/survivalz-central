@@ -1,4 +1,13 @@
-<div class="sz-rich-editor" data-rich-editor data-editor-for="<%= textareaId %>">
+<%
+  const currentRole = typeof playerRole !== "undefined" ? playerRole : "";
+  const canUseStaffEditor = isStaffRole(currentRole);
+%>
+
+<div
+  class="sz-rich-editor <%= canUseStaffEditor ? "is-staff-editor" : "is-player-editor" %>"
+  data-rich-editor
+  data-editor-for="<%= textareaId %>"
+>
   <textarea
     id="<%= textareaId %>"
     name="content"
@@ -13,44 +22,111 @@
     hidden
   >
 
+  <div class="sz-editor-topline">
+    <div>
+      <strong>Editor SurvivalZ</strong>
+      <span>
+        <%= canUseStaffEditor ? "Modo Staff habilitado" : "Modo jogador" %>
+      </span>
+    </div>
+
+    <button
+      type="button"
+      class="sz-editor-preview-btn"
+      data-editor-for="<%= textareaId %>"
+      data-preview-target="<%= previewId %>"
+    >
+      Pré-visualizar
+    </button>
+  </div>
+
   <div class="sz-editor-toolbar">
-    <button type="button" data-editor-command="bold" title="Negrito"><b>B</b></button>
-    <button type="button" data-editor-command="italic" title="Italico"><i>I</i></button>
-    <button type="button" data-editor-command="underline" title="Sublinhado"><u>U</u></button>
-    <button type="button" data-editor-command="strikeThrough" title="Riscado"><s>S</s></button>
 
-    <span></span>
+    <div class="sz-editor-toolgroup">
+      <button type="button" data-editor-command="bold" title="Negrito"><b>B</b></button>
+      <button type="button" data-editor-command="italic" title="Itálico"><i>I</i></button>
+      <button type="button" data-editor-command="underline" title="Sublinhado"><u>U</u></button>
+      <button type="button" data-editor-command="strikeThrough" title="Riscado"><s>S</s></button>
+    </div>
 
-    <button type="button" data-editor-command="justifyLeft" title="Alinhar esquerda">Esq.</button>
-    <button type="button" data-editor-command="justifyCenter" title="Centralizar">Centro</button>
-    <button type="button" data-editor-command="justifyRight" title="Alinhar direita">Dir.</button>
+    <div class="sz-editor-toolgroup">
+      <button type="button" data-editor-command="justifyLeft" title="Alinhar à esquerda">☰</button>
+      <button type="button" data-editor-command="justifyCenter" title="Centralizar">≡</button>
+      <button type="button" data-editor-command="justifyRight" title="Alinhar à direita">☷</button>
+    </div>
 
-    <span></span>
+    <div class="sz-editor-toolgroup">
+      <button type="button" data-editor-command="insertUnorderedList" title="Lista">• Lista</button>
+      <button type="button" data-editor-command="insertOrderedList" title="Lista numerada">1. Lista</button>
+      <button type="button" data-editor-insert="hr" title="Linha divisória">Linha</button>
+    </div>
 
-    <button type="button" data-editor-insert="quote" title="Citacao">Quote</button>
-    <button type="button" data-editor-insert="spoiler" title="Spoiler">Spoiler</button>
-    <button type="button" data-editor-insert="link" title="Link">Link</button>
-    <button type="button" data-editor-insert="image-url" title="Imagem por URL">Imagem URL</button>
-    <button type="button" data-editor-insert="image-upload" title="Upload de imagem">Upload</button>
+    <div class="sz-editor-toolgroup">
+      <select class="sz-editor-select" data-editor-size title="Tamanho da letra">
+        <option value="">Tamanho</option>
+        <option value="12">Pequeno</option>
+        <option value="15">Normal</option>
+        <option value="20">Grande</option>
+        <option value="28">Enorme</option>
+      </select>
+    </div>
+
+    <div class="sz-editor-toolgroup">
+      <button type="button" data-editor-insert="quote" title="Citação">Quote</button>
+      <button type="button" data-editor-insert="spoiler" title="Spoiler">Spoiler</button>
+      <button type="button" data-editor-insert="link" title="Link">Link</button>
+      <button type="button" data-editor-insert="image-url" title="Imagem por URL">Img URL</button>
+      <button type="button" data-editor-insert="image-upload" title="Upload de imagem">Upload</button>
+      <button type="button" data-editor-insert="youtube" title="Vídeo do YouTube">YouTube</button>
+    </div>
 
     <div class="sz-editor-color-picker">
       <button type="button" data-color-trigger>Cor</button>
 
-      <div class="sz-editor-color-menu" hidden>
-        <button type="button" data-editor-color="#ffffff" style="--c:#ffffff;">Branco</button>
-        <button type="button" data-editor-color="#ff2b2b" style="--c:#ff2b2b;">Vermelho</button>
-        <button type="button" data-editor-color="#ffd166" style="--c:#ffd166;">Amarelo</button>
-        <button type="button" data-editor-color="#35d06f" style="--c:#35d06f;">Verde</button>
-        <button type="button" data-editor-color="#4da3ff" style="--c:#4da3ff;">Azul</button>
-        <button type="button" data-editor-color="#c77dff" style="--c:#c77dff;">Roxo</button>
-        <button type="button" data-editor-color="#ff7a1a" style="--c:#ff7a1a;">Laranja</button>
-      </div>
+     <div class="sz-editor-color-menu" hidden>
+  <button type="button" data-editor-color="#ffffff" style="--c:#ffffff;" title="Branco" aria-label="Branco"></button>
+  <button type="button" data-editor-color="#d1d5db" style="--c:#d1d5db;" title="Cinza claro" aria-label="Cinza claro"></button>
+  <button type="button" data-editor-color="#9ca3af" style="--c:#9ca3af;" title="Cinza" aria-label="Cinza"></button>
+  <button type="button" data-editor-color="#111827" style="--c:#111827;" title="Preto" aria-label="Preto"></button>
+
+  <button type="button" data-editor-color="#ff2b2b" style="--c:#ff2b2b;" title="Vermelho" aria-label="Vermelho"></button>
+  <button type="button" data-editor-color="#ff7a1a" style="--c:#ff7a1a;" title="Laranja" aria-label="Laranja"></button>
+  <button type="button" data-editor-color="#ffd166" style="--c:#ffd166;" title="Amarelo" aria-label="Amarelo"></button>
+  <button type="button" data-editor-color="#b6ff00" style="--c:#b6ff00;" title="Verde neon" aria-label="Verde neon"></button>
+
+  <button type="button" data-editor-color="#35d06f" style="--c:#35d06f;" title="Verde" aria-label="Verde"></button>
+  <button type="button" data-editor-color="#00e5ff" style="--c:#00e5ff;" title="Ciano" aria-label="Ciano"></button>
+  <button type="button" data-editor-color="#4da3ff" style="--c:#4da3ff;" title="Azul" aria-label="Azul"></button>
+  <button type="button" data-editor-color="#2563eb" style="--c:#2563eb;" title="Azul forte" aria-label="Azul forte"></button>
+
+  <button type="button" data-editor-color="#c77dff" style="--c:#c77dff;" title="Roxo" aria-label="Roxo"></button>
+  <button type="button" data-editor-color="#8b5cf6" style="--c:#8b5cf6;" title="Violeta" aria-label data-editor-color="#c77dff" style="--c:#c77dff;" title="Roxo="Violeta"></button>
+  <button type="button" data-editor-color="#ff4fa3" style="--c:#ff4fa3;" title="Rosa" aria-label="Rosa"></button>
+  <button type="button" data-editor-color="#f43f5e" style="--c:#f43f5e;" title="Rosa forte" aria-label="Rosa forte"></button>
+
+  <button type="button" data-editor-color="#7c2d12" style="--c:#7c2d12;" title="Marrom" aria-label="Marrom"></button>
+  <button type="button" data-editor-color="#f97316" style="--c:#f97316;" title="Laranja forte" aria-label="Laranja forte"></button>
+  <button type="button" data-editor-color="#22c55e" style="--c:#22c55e;" title="Verde claro" aria-label="Verde claro"></button>
+  <button type="button" data-editor-color="#eab308" style="--c:#eab308;" title="Dourado" aria-label="Dourado"></button>
+</div>
     </div>
+
+    <% if (canUseStaffEditor) { %>
+      <div class="sz-editor-toolgroup staff-tools">
+        <button type="button" data-editor-insert="staff-note" title="Nota oficial">Nota Staff</button>
+        <button type="button" data-editor-insert="box-alert" title="Caixa de alerta">Alerta</button>
+        <button type="button" data-editor-insert="box-success" title="Caixa de sucesso">Sucesso</button>
+        <button type="button" data-editor-insert="box-danger" title="Caixa de erro/punição">Punição</button>
+        <button type="button" data-editor-insert="glow" title="Texto com brilho">Glow</button>
+        <button type="button" data-editor-insert="shadow" title="Texto com sombra">Sombra</button>
+        <button type="button" data-editor-insert="big-title" title="Título grande">Título</button>
+      </div>
+    <% } %>
   </div>
 
   <div class="sz-editor-help">
     <strong>Dica:</strong>
-    edite visualmente. O forum salva a formatacao automaticamente de forma segura.
+    use a pré-visualização antes de publicar. Imagens podem ser centralizadas pelo botão de alinhamento.
   </div>
 
   <div
@@ -59,20 +135,9 @@
     data-placeholder="Escreva sua mensagem..."
   ></div>
 
-  <div class="sz-editor-actions">
-    <button
-      type="button"
-      class="btn-secondary sz-editor-preview-btn"
-      data-editor-for="<%= textareaId %>"
-      data-preview-target="<%= previewId %>"
-    >
-      Pre-visualizar
-    </button>
-  </div>
-
   <div id="<%= previewId %>" class="sz-editor-preview" hidden>
     <div class="sz-editor-preview-header">
-      <span>Pre-visualizacao</span>
+      <span>Pré-visualização</span>
       <button
         type="button"
         class="sz-editor-preview-hide"

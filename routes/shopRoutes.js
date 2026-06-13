@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { onlyDevelopersUntilLaunch } = require("../middlewares/storeAccessMiddleware");
 
 const {
   renderShop,
@@ -12,6 +13,8 @@ const {
   searchOrderConsult,
   renderShopTerms
 } = require("../controllers/shopController");
+
+router.use(onlyDevelopersUntilLaunch);
 
 router.get("/", renderShop);
 router.get("/checkout", renderCartCheckout);

@@ -6,40 +6,162 @@
       <% if (author.avatarUrl) { %>
         <img
           src="<%= author.avatarUrl %>"
-          alt="Avatar de <%= author.name %>"
+          alt="Avatar de <%= displayUserName(author) %>"
           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
         >
 
         <div class="sz-author-avatar-fallback" style="display:none;">
-          <%= author.name.charAt(0).toUpperCase() %>
+          <%= displayInitial(author) %>
         </div>
       <% } else { %>
         <div class="sz-author-avatar-fallback">
-          <%= author.name.charAt(0).toUpperCase() %>
+          <%= displayInitial(author) %>
         </div>
       <% } %>
     </a>
 
     <div class="sz-author-name">
-      <%= author.name %>
+      <%= displayUserName(author) %>
     </div>
 
-    <div class="sz-author-rank sz-author-rank-<%= author.role.toLowerCase() %>">
-      <div class="sz-author-rank-icon">
-        <% if (author.role === "OWNER") { %>
-          👑
-        <% } else if (author.role === "ADMIN") { %>
-          🛡️
-        <% } else if (author.role === "STAFF" || author.role === "MODERADOR") { %>
-          ⚔️
-        <% } else { %>
-          ☣
-        <% } %>
+    <%
+      var postCardAuthorRole = roleClass(author.role);
+
+      var postCardRankMeta = {
+        desenvolvedor: {
+          icon: "💻",
+          level: "5000",
+          tier: "NÚCLEO",
+          className: "rank-core"
+        },
+        diretor: {
+          icon: "👑",
+          level: "2002",
+          tier: "DIREÇÃO",
+          className: "rank-director"
+        },
+        sub_diretor: {
+          icon: "⭐",
+          level: "2001",
+          tier: "DIREÇÃO",
+          className: "rank-subdirector"
+        },
+        gerente: {
+          icon: "💼",
+          level: "2000",
+          tier: "GESTÃO",
+          className: "rank-manager"
+        },
+        coordenador: {
+          icon: "📌",
+          level: "006",
+          tier: "OPERAÇÃO",
+          className: "rank-coordinator"
+        },
+        supervisor: {
+          icon: "👁",
+          level: "005",
+          tier: "OPERAÇÃO",
+          className: "rank-supervisor"
+        },
+        administrador: {
+          icon: "🛡️",
+          level: "004",
+          tier: "STAFF",
+          className: "rank-admin"
+        },
+        moderador: {
+          icon: "⚔️",
+          level: "003",
+          tier: "STAFF",
+          className: "rank-mod"
+        },
+        estagiario: {
+          icon: "🧪",
+          level: "002",
+          tier: "STAFF",
+          className: "rank-trainee"
+        },
+        suporte: {
+          icon: "🎧",
+          level: "001",
+          tier: "SUPORTE",
+          className: "rank-support"
+        },
+        sobrevivente: {
+          icon: "☣",
+          level: "000",
+          tier: "SOBREVIVENTE",
+          className: "rank-player"
+        },
+        premium: {
+          icon: "💎",
+          level: "010",
+          tier: "PREMIUM",
+          className: "rank-premium"
+        },
+        beta_tester: {
+          icon: "🧪",
+          level: "020",
+          tier: "BETA",
+          className: "rank-beta"
+        },
+        youtuber: {
+          icon: "▶️",
+          level: "030",
+          tier: "CRIADOR",
+          className: "rank-youtuber"
+        },
+
+        owner: {
+          icon: "💻",
+          level: "5000",
+          tier: "NÚCLEO",
+          className: "rank-core"
+        },
+        admin: {
+          icon: "🛡️",
+          level: "004",
+          tier: "STAFF",
+          className: "rank-admin"
+        },
+        staff: {
+          icon: "🎧",
+          level: "001",
+          tier: "SUPORTE",
+          className: "rank-support"
+        }
+      };
+
+      var postCardCurrentRank = postCardRankMeta[postCardAuthorRole] || postCardRankMeta.sobrevivente;
+    %>
+
+    <div class="sz-author-rank-v3 sz-author-rank-<%= postCardAuthorRole %> <%= postCardCurrentRank.className %>">
+      <div class="sz-rank-topline">
+        <span><%= postCardCurrentRank.tier %></span>
+        <strong>NV <%= postCardCurrentRank.level %></strong>
       </div>
 
-      <div class="sz-author-rank-text">
-        <span>Cargo</span>
-        <strong><%= roleDisplayLabel(author.role) %></strong>
+      <div class="sz-rank-main">
+        <div class="sz-rank-emblem">
+          <span><%= postCardCurrentRank.icon %></span>
+        </div>
+
+        <div class="sz-rank-info">
+          <small>Cargo SurvivalZ</small>
+          <strong><%= roleDisplayLabel(author.role) %></strong>
+        </div>
+      </div>
+
+      <div class="sz-rank-authority">
+        <span>Autoridade</span>
+        <div>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
       </div>
     </div>
 
@@ -147,7 +269,7 @@
         <% } %>
 
         <% if (author.signatureImageUrl) { %>
-          <img src="<%= author.signatureImageUrl %>" alt="Assinatura de <%= author.name %>">
+          <img src="<%= author.signatureImageUrl %>" alt="Assinatura de <%= displayUserName(author) %>">
         <% } %>
       </div>
     <% } %>

@@ -20,80 +20,96 @@
 
         <section class="sz-staff-hero">
           <div>
-            <span class="sz-staff-kicker">Staff SurvivalZ</span>
-            <h1>Hub Staff</h1>
+            <span class="sz-staff-kicker">Central Staff</span>
+            <h1>Moderacao SurvivalZ</h1>
 
             <p>
-              Central rápida para acompanhar denúncias, moderar tópicos, conceder medalhas
-              e acessar as principais áreas internas da equipe.
+              Hub interno para acompanhar denuncias, revisar topicos e acessar as acoes permitidas
+              para o seu cargo atual: <strong><%= roleLabel(playerRole) %></strong>.
             </p>
           </div>
 
           <div class="sz-staff-hero-actions">
-            <a href="/forum/moderacao/denuncias">Denúncias</a>
-            <a href="/forum/moderacao/medalhas">Medalhas</a>
-            <a href="/admin">Desenvolvedor</a>
+            <a href="/forum/moderacao/denuncias">Denuncias</a>
+            <a href="/forum">Forum publico</a>
+            <% if (rolePower(playerRole) >= 4) { %>
+              <a href="/admin">Painel Desenvolvedor</a>
+            <% } %>
           </div>
         </section>
 
-        <section class="sz-staff-overview">
+        <section class="sz-staff-overview sz-staff-overview-compact">
           <article>
-            <span>Tópicos filtrados</span>
+            <span>Topicos filtrados</span>
             <strong><%= overview.topicsCount %></strong>
             <small>Resultado do filtro atual</small>
           </article>
 
           <article>
-            <span>Denúncias abertas</span>
+            <span>Denuncias abertas</span>
             <strong><%= overview.openReports %></strong>
-            <small>Casos aguardando análise</small>
-          </article>
-
-          <article>
-            <span>Usuários</span>
-            <strong><%= overview.usersCount %></strong>
-            <small>Contas registradas</small>
-          </article>
-
-          <article>
-            <span>Medalhas</span>
-            <strong><%= overview.medalsCount %></strong>
-            <small>Insígnias cadastradas</small>
+            <small>Casos aguardando analise</small>
           </article>
         </section>
 
-        <section class="sz-staff-actions">
-          <a href="/forum/categoria/avisos-oficiais/novo">
-            <span>📢</span>
+        <section class="sz-staff-actions sz-staff-actions-unified">
+          <a href="/forum/moderacao/denuncias">
+            <span>!</span>
             <div>
-              <strong>Criar aviso oficial</strong>
-              <small>Publicar comunicado para a comunidade</small>
+              <strong>Denuncias</strong>
+              <small>Analise casos privados e evidencias enviadas.</small>
             </div>
           </a>
 
           <a href="/forum/categoria/denuncias">
-            <span>⚠️</span>
+            <span>D</span>
             <div>
-              <strong>Denúncias privadas</strong>
-              <small>Ver área de denúncias do fórum</small>
-            </div>
-          </a>
-
-          <a href="/forum/moderacao/medalhas">
-            <span>🏅</span>
-            <div>
-              <strong>Conceder medalha</strong>
-              <small>Gerenciar insígnias dos jogadores</small>
+              <strong>Area de denuncias</strong>
+              <small>Abrir a categoria protegida do forum.</small>
             </div>
           </a>
 
           <a href="/forum">
-            <span>💬</span>
+            <span>F</span>
             <div>
-              <strong>Fórum público</strong>
-              <small>Voltar para as categorias públicas</small>
+              <strong>Forum publico</strong>
+              <small>Voltar para categorias e topicos da comunidade.</small>
             </div>
           </a>
+
+          <% if (rolePower(playerRole) >= 4) { %>
+            <a href="/forum/moderacao/medalhas">
+              <span>M</span>
+              <div>
+                <strong>Medalhas</strong>
+                <small>Gerenciar insignias dos jogadores.</small>
+              </div>
+            </a>
+
+            <a href="/admin/pedidos">
+              <span>P</span>
+              <div>
+                <strong>Pedidos</strong>
+                <small>Acompanhar pedidos da Loja Beta.</small>
+              </div>
+            </a>
+
+            <a href="/admin/usuarios">
+              <span>U</span>
+              <div>
+                <strong>Usuarios</strong>
+                <small>Buscar contas, perfis e atividade.</small>
+              </div>
+            </a>
+
+            <a href="/admin/cargos">
+              <span>C</span>
+              <div>
+                <strong>Cargos</strong>
+                <small>Alterar roles com bloqueio do ultimo OWNER.</small>
+              </div>
+            </a>
+          <% } %>
         </section>
 
         <nav class="sz-staff-filters">
@@ -107,17 +123,17 @@
         <section class="sz-staff-panel">
           <div class="sz-staff-panel-header">
             <div>
-              <span>Moderação</span>
-              <h2>Tópicos encontrados</h2>
+              <span>Moderacao</span>
+              <h2>Topicos encontrados</h2>
             </div>
 
-            <strong><%= topics.length %> tópico(s)</strong>
+            <strong><%= topics.length %> topico(s)</strong>
           </div>
 
           <% if (topics.length === 0) { %>
             <div class="sz-staff-empty">
-              <h3>Nenhum tópico encontrado</h3>
-              <p>Não há tópicos para este filtro. Use outro status ou volte para todos.</p>
+              <h3>Nenhum topico encontrado</h3>
+              <p>Nao ha topicos para este filtro. Use outro status ou volte para todos.</p>
             </div>
           <% } %>
 
@@ -131,7 +147,7 @@
                     </span>
 
                     <span class="sz-staff-category">
-                      <%= topic.category.icon || "☣" %>
+                      <%= topic.category.icon || "Z" %>
                       <%= topic.category.name %>
                     </span>
                   </div>
@@ -143,8 +159,8 @@
                   </h3>
 
                   <p>
-                    Autor: <strong><%= topic.author.name %></strong>
-                    • <%= topic._count.posts %> resposta(s)
+                    Autor: <strong><%= displayUserName(topic.author) %></strong>
+                    - <%= topic._count.posts %> resposta(s)
                   </p>
                 </div>
 

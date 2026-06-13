@@ -28,7 +28,7 @@
             </p>
           </div>
 
-          <a href="/comunidade" class="members-hero-link">Voltar para comunidade</a>
+          <a href="/forum" class="members-hero-link">Voltar para o forum</a>
         </div>
 
         <form action="/membros" method="GET" class="members-filter-card">
@@ -40,7 +40,7 @@
               name="search"
               value="<%= filters.search %>"
               maxlength="80"
-              placeholder="Nome publico ou nick no servidor"
+              placeholder="Nick no servidor"
             >
           </div>
 
@@ -87,21 +87,21 @@
                     <% if (member.avatarUrl) { %>
                       <img
                         src="<%= member.avatarUrl %>"
-                        alt="Avatar de <%= member.name %>"
+                        alt="Avatar de <%= displayUserName(member) %>"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                       >
-                      <span style="display:none;"><%= (member.name || "S").charAt(0).toUpperCase() %></span>
+                      <span style="display:none;"><%= displayInitial(member) %></span>
                     <% } else { %>
-                      <span><%= (member.name || "S").charAt(0).toUpperCase() %></span>
+                      <span><%= displayInitial(member) %></span>
                     <% } %>
                   </a>
 
                   <div class="member-main-info">
-                    <span class="member-role member-role-<%= String(member.role || 'PLAYER').toLowerCase() %>">
+                    <span class="member-role member-role-<%= roleClass(member.role) %>">
                       <%= roleLabel(member.role) %>
                     </span>
-                    <h2><%= member.name %></h2>
-                    <p><%= member.sampNick || "Nick nao informado" %></p>
+                    <h2><%= displayUserName(member) %></h2>
+                    <p><%= roleLabel(member.role) %></p>
                   </div>
                 </div>
 

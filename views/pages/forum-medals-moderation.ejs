@@ -187,7 +187,7 @@
           <div class="forum-medal-users-grid">
             <% recentUsers.forEach((member) => { %>
               <a href="/forum/moderacao/medalhas?usuario=<%= encodeURIComponent(member.sampNick || member.email) %>" class="forum-medal-user-link">
-                <strong><%= member.name %></strong>
+                <strong><%= displayUserName(member) %></strong>
                 <span><%= member.sampNick || member.email %></span>
                 <small><%= member.medals.length %> medalha(s)</small>
               </a>

@@ -12,7 +12,7 @@
     <a href="/forum/topico/<%= topic.id %>" class="community-topic-row compact">
       <div>
         <strong><%= topic.title %></strong>
-        <span><%= topic.author.name %> • <%= formatDate(topic.createdAt) %></span>
+        <span><%= displayUserName(topic.author) %> • <%= formatDate(topic.createdAt) %></span>
       </div>
     </a>
   <% }) %>

@@ -233,6 +233,30 @@
   color: #ccc;
 }
 
+.member-role-sobrevivente {
+  background: rgba(148, 163, 184, 0.10);
+  border-color: rgba(148, 163, 184, 0.30);
+  color: #cbd5e1;
+}
+
+.member-role-premium {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: rgba(34, 211, 238, 0.40);
+  color: #67e8f9;
+}
+
+.member-role-beta_tester {
+  background: rgba(216, 180, 254, 0.12);
+  border-color: rgba(216, 180, 254, 0.40);
+  color: #d8b4fe;
+}
+
+.member-role-youtuber {
+  background: rgba(248, 113, 113, 0.12);
+  border-color: rgba(248, 113, 113, 0.42);
+  color: #fca5a5;
+}
+
 .member-medals {
   display: flex;
   flex-wrap: wrap;

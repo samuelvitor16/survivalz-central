@@ -11,14 +11,18 @@ const {
 } = require("../controllers/forumModerationController");
 
 const {
-  requireForumStaff
+  requireForumStaff,
+  requireAdminRole
 } = require("../middlewares/playerAuthMiddleware");
 
-router.get("/", requireForumStaff, renderForumModeration);
+router.get("/", requireForumStaff, (req, res) => {
+  const status = req.query.status ? `?status=${encodeURIComponent(req.query.status)}` : "";
+  res.redirect(`/staff${status}#staff-moderation`);
+});
 router.post("/topico/:id/status", requireForumStaff, updateTopicStatus);
 router.get("/denuncias", requireForumStaff, renderReportsModeration);
-router.get("/medalhas", requireForumStaff, renderMedalsModeration);
-router.post("/medalhas/conceder", requireForumStaff, awardMedal);
-router.post("/medalhas/remover", requireForumStaff, removeMedal);
+router.get("/medalhas", requireAdminRole, renderMedalsModeration);
+router.post("/medalhas/conceder", requireAdminRole, awardMedal);
+router.post("/medalhas/remover", requireAdminRole, removeMedal);
 
 module.exports = router;

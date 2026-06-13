@@ -1,5 +1,5 @@
 const prisma = require("../config/prisma");
-const { isSafeHttpUrl } = require("../utils/viewHelpers");
+const { displayUserName, isSafeHttpUrl } = require("../utils/viewHelpers");
 
 const PUBLIC_TOPIC_WHERE = {
   category: {
@@ -80,7 +80,12 @@ const renderPublicProfile = async (req, res) => {
         include: {
           topic: {
             include: {
-              category: true
+              category: true,
+              _count: {
+                select: {
+                  posts: true
+                }
+              }
             }
           }
         }
@@ -94,7 +99,7 @@ const renderPublicProfile = async (req, res) => {
     }
 
     res.render("pages/profile-public", {
-      title: `${user.name} - Perfil SurvivalZ`,
+      title: `${displayUserName(user)} - Perfil SurvivalZ`,
       user,
       activeTab,
       publicTopicsCount,
@@ -154,7 +159,6 @@ const updateProfile = async (req, res) => {
     }
 
     const {
-      name,
       discord,
       sampNick,
       avatarUrl,
@@ -167,7 +171,6 @@ const updateProfile = async (req, res) => {
 
     const formUser = {
       ...currentUser,
-      name,
       discord,
       sampNick,
       avatarUrl,
@@ -178,8 +181,8 @@ const updateProfile = async (req, res) => {
       signatureImageUrl
     };
 
-    if (!trimOrNull(name) || !trimOrNull(sampNick)) {
-      return renderProfileEdit(res, formUser, "Nome publico e nick no servidor sao obrigatorios.");
+    if (!trimOrNull(sampNick)) {
+      return renderProfileEdit(res, formUser, "Nick no servidor e obrigatorio.");
     }
 
     const urlsToValidate = [
@@ -223,7 +226,7 @@ const updateProfile = async (req, res) => {
         id: req.session.playerId
       },
       data: {
-        name: name.trim().slice(0, 80),
+        name: sampNick.trim().slice(0, 80),
         discord: trimOrNull(discord) ? discord.trim().slice(0, 80) : null,
         sampNick: sampNick.trim().slice(0, 40),
         avatarUrl: trimOrNull(avatarUrl),
@@ -235,7 +238,8 @@ const updateProfile = async (req, res) => {
       }
     });
 
-    req.session.playerName = updatedUser.name;
+    req.session.playerName = updatedUser.sampNick || updatedUser.name;
+    req.session.playerAvatarUrl = updatedUser.avatarUrl || null;
 
     return renderProfileEdit(res, updatedUser, null, "Perfil atualizado com sucesso.");
   } catch (error) {

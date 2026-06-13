@@ -3690,3 +3690,658 @@
 .checkout-account-link strong {
   color: #fff;
 }
+
+/* ================= FILTROS DA LOJA ================= */
+
+.shop-filter-section {
+  position: sticky;
+  top: 72px;
+  z-index: 20;
+  padding: 18px 0;
+  background:
+    linear-gradient(180deg, rgba(5, 5, 5, 0.98), rgba(5, 5, 5, 0.92));
+  border-bottom: 1px solid rgba(255, 43, 43, 0.16);
+  backdrop-filter: blur(14px);
+}
+
+.shop-filter-box {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(360px, 1fr);
+  gap: 20px;
+  align-items: center;
+  padding: 18px;
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.065), transparent 44%),
+    rgba(12, 12, 12, 0.96);
+  border: 1px solid rgba(255, 43, 43, 0.18);
+}
+
+.shop-filter-box h2 {
+  margin: 5px 0 6px;
+  font-size: 26px;
+}
+
+.shop-filter-box p {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.shop-filter-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shop-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: #070707;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.shop-search-wrap span {
+  color: #ff4b4b;
+}
+
+.shop-search-wrap input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-weight: 700;
+}
+
+.shop-search-wrap input::placeholder {
+  color: #777;
+}
+
+.shop-category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.shop-category-filters button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 43, 43, 0.24);
+  background: rgba(255, 255, 255, 0.035);
+  color: #ccc;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.shop-category-filters button:hover,
+.shop-category-filters button.active {
+  color: #fff;
+  background: rgba(255, 43, 43, 0.18);
+  border-color: rgba(255, 43, 43, 0.55);
+}
+
+.shop-no-results {
+  margin-top: 16px;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(10, 10, 10, 0.96);
+  border: 1px dashed rgba(255, 43, 43, 0.28);
+}
+
+.shop-no-results strong {
+  display: block;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.shop-no-results p {
+  color: #999;
+}
+
+[data-shop-card][hidden],
+[data-shop-section][hidden],
+.shop-no-results[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .shop-filter-section {
+    top: 64px;
+  }
+
+  .shop-filter-box {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .shop-filter-section {
+    position: sticky;
+    top: 58px;
+    padding: 10px 0;
+  }
+
+  .shop-filter-box {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .shop-filter-box h2,
+  .shop-filter-box p {
+    display: none;
+  }
+
+  .shop-category-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .shop-category-filters button {
+    flex: 0 0 auto;
+  }
+}
+
+/* ================= LOJA V2 - CATÁLOGO LATERAL ================= */
+
+.shop-catalog-section {
+  padding: 46px 0 80px;
+  background:
+    radial-gradient(circle at 85% 10%, rgba(255, 0, 0, 0.10), transparent 34%),
+    linear-gradient(180deg, #050505, #090909);
+}
+
+.shop-catalog-layout {
+  display: grid;
+  grid-template-columns: 285px minmax(0, 1fr);
+  gap: 26px;
+  align-items: start;
+}
+
+.shop-catalog-sidebar {
+  position: sticky;
+  top: 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.shop-catalog-card {
+  padding: 18px;
+  border-radius: 20px;
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.075), transparent 45%),
+    rgba(12, 12, 12, 0.96);
+  border: 1px solid rgba(255, 43, 43, 0.20);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+}
+
+.shop-catalog-card h2 {
+  margin: 8px 0 8px;
+  font-size: 28px;
+  line-height: 1.05;
+}
+
+.shop-catalog-card p {
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.shop-catalog-card.compact strong {
+  display: block;
+  color: #fff;
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.shop-catalog-card.compact a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 38px;
+  border-radius: 999px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 900;
+  background: rgba(255, 43, 43, 0.14);
+  border: 1px solid rgba(255, 43, 43, 0.36);
+}
+
+.shop-catalog-main {
+  min-width: 0;
+}
+
+.shop-catalog-main .shop-products-section {
+  padding: 0 0 52px !important;
+  background: transparent !important;
+}
+
+.shop-catalog-main .shop-products-section:last-of-type {
+  padding-bottom: 0 !important;
+}
+
+.shop-catalog-main .shop-products-section > .container {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+.shop-catalog-main .shop-section-header {
+  margin-bottom: 20px;
+}
+
+.shop-catalog-main .shop-section-header h2 {
+  font-size: clamp(28px, 4vw, 42px);
+}
+
+.shop-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 13px;
+  background: #070707;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  margin-bottom: 12px;
+}
+
+.shop-search-wrap span {
+  color: #ff4b4b;
+}
+
+.shop-search-wrap input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #fff;
+  font-weight: 800;
+}
+
+.shop-search-wrap input::placeholder {
+  color: #777;
+}
+
+.shop-category-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shop-category-filters button {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 43, 43, 0.22);
+  background: rgba(255, 255, 255, 0.035);
+  color: #ccc;
+  font-size: 12px;
+  font-weight: 900;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.shop-category-filters button:hover,
+.shop-category-filters button.active {
+  color: #fff;
+  background: rgba(255, 43, 43, 0.18);
+  border-color: rgba(255, 43, 43, 0.55);
+  transform: translateX(2px);
+}
+
+.shop-no-results {
+  margin-bottom: 18px;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(10, 10, 10, 0.96);
+  border: 1px dashed rgba(255, 43, 43, 0.28);
+}
+
+.shop-no-results strong {
+  display: block;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.shop-no-results p {
+  color: #999;
+}
+
+[data-shop-card][hidden],
+[data-shop-section][hidden],
+.shop-no-results[hidden] {
+  display: none !important;
+}
+
+/* Corrigir botões brancos da loja */
+.add-cart-btn,
+.product-btn.add-cart-btn,
+.vehicle-btn.add-cart-btn {
+  background:
+    linear-gradient(180deg, #ff2b2b, #a80000) !important;
+  border: 1px solid rgba(255, 70, 70, 0.65) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 26px rgba(196, 0, 0, 0.22) !important;
+}
+
+.add-cart-btn:hover,
+.product-btn.add-cart-btn:hover,
+.vehicle-btn.add-cart-btn:hover {
+  background:
+    linear-gradient(180deg, #ff4444, #c40000) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+.product-details-btn,
+.vehicle-details-btn {
+  color: #ff4b4b !important;
+  background: rgba(255, 43, 43, 0.06) !important;
+}
+
+.product-details-btn:hover,
+.vehicle-details-btn:hover {
+  color: #fff !important;
+  background: rgba(255, 43, 43, 0.16) !important;
+}
+
+/* Corrigir botões do topo da loja */
+.shop-hero-actions .btn-primary,
+.shop-hero-actions .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.shop-hero-actions .btn-secondary {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  border: 1px solid rgba(255, 43, 43, 0.28) !important;
+}
+
+.shop-hero-actions .btn-secondary:hover {
+  background: rgba(255, 43, 43, 0.15) !important;
+  color: #fff !important;
+}
+
+/* Mobile: sidebar vira filtro no topo */
+@media (max-width: 980px) {
+  .shop-catalog-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .shop-catalog-sidebar {
+    position: sticky;
+    top: 64px;
+    z-index: 25;
+  }
+
+  .shop-catalog-card {
+    padding: 14px;
+  }
+
+  .shop-catalog-card h2,
+  .shop-catalog-card p,
+  .shop-catalog-card.compact {
+    display: none;
+  }
+
+  .shop-category-filters {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .shop-category-filters button {
+    width: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    text-align: center;
+  }
+}
+
+@media (max-width: 650px) {
+  .shop-catalog-section {
+    padding: 28px 0 54px;
+  }
+
+  .shop-catalog-layout {
+    gap: 18px;
+  }
+
+  .shop-catalog-sidebar {
+    top: 58px;
+  }
+
+  .shop-search-wrap {
+    min-height: 40px;
+    margin-bottom: 9px;
+  }
+}
+
+/* ================= CORREÇÃO LOJA V2 - GRID BUGADO ================= */
+
+/* evita produto esmagado ao lado da sidebar */
+.shop-catalog-main .shop-products-grid,
+.shop-catalog-main .beta-packages-grid,
+.shop-catalog-main .zcoins-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)) !important;
+  gap: 18px !important;
+}
+
+/* veículos também precisam respeitar largura */
+.shop-catalog-main .vehicle-products-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)) !important;
+  gap: 18px !important;
+}
+
+/* se a tela não for bem grande, sidebar sobe pro topo */
+@media (max-width: 1180px) {
+  .shop-catalog-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .shop-catalog-sidebar {
+    position: sticky !important;
+    top: 70px !important;
+    z-index: 20 !important;
+  }
+
+  .shop-catalog-sidebar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .shop-catalog-card.compact {
+    display: none !important;
+  }
+
+  .shop-catalog-card h2,
+  .shop-catalog-card p {
+    display: none !important;
+  }
+
+  .shop-category-filters {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px !important;
+  }
+
+  .shop-category-filters button {
+    width: auto !important;
+    min-width: max-content !important;
+    text-align: center !important;
+  }
+}
+
+/* em telas médias, 2 cards por linha */
+@media (max-width: 1180px) and (min-width: 651px) {
+  .shop-catalog-main .shop-products-grid,
+  .shop-catalog-main .beta-packages-grid,
+  .shop-catalog-main .zcoins-grid,
+  .shop-catalog-main .vehicle-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* mobile continua 3 colunas compactas */
+@media (max-width: 650px) {
+  .shop-catalog-main .shop-products-grid,
+  .shop-catalog-main .beta-packages-grid,
+  .shop-catalog-main .zcoins-grid,
+  .shop-catalog-main .vehicle-products-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+}
+
+/* botão de detalhe não pode cortar */
+.product-card-actions,
+.vehicle-card-actions {
+  width: 100% !important;
+  display: flex !important;
+  gap: 8px !important;
+}
+
+.product-card-actions .add-cart-btn,
+.product-card-actions .product-details-btn,
+.vehicle-card-actions .add-cart-btn,
+.vehicle-card-actions .vehicle-details-btn {
+  min-width: 0 !important;
+  flex: 1 1 0 !important;
+  white-space: nowrap !important;
+}
+
+/* em card apertado, deixa os botões um embaixo do outro */
+@media (max-width: 1180px) {
+  .product-card-actions,
+  .vehicle-card-actions {
+    flex-direction: column !important;
+  }
+
+  .product-card-actions .add-cart-btn,
+  .product-card-actions .product-details-btn,
+  .vehicle-card-actions .add-cart-btn,
+  .vehicle-card-actions .vehicle-details-btn {
+    width: 100% !important;
+  }
+}
+
+/* ================= CORREÇÃO FINAL - BOTÕES DOS CARDS DA LOJA ================= */
+
+/* Cards normais: botões organizados */
+.shop-catalog-main .product-card-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.shop-catalog-main .product-card-actions .add-cart-btn,
+.shop-catalog-main .product-card-actions .product-details-btn {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 48px !important;
+  padding: 0 10px !important;
+  border-radius: 10px !important;
+  font-size: 13px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+/* Veículos: preço em cima, botões embaixo */
+.shop-catalog-main .vehicle-card-bottom {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+  padding: 14px !important;
+}
+
+.shop-catalog-main .vehicle-price {
+  width: 100% !important;
+}
+
+.shop-catalog-main .vehicle-card-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 64px !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.shop-catalog-main .vehicle-card-actions .add-cart-btn,
+.shop-catalog-main .vehicle-card-actions .vehicle-details-btn {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 44px !important;
+  padding: 0 8px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+/* botão Ver dos veículos */
+.shop-catalog-main .vehicle-details-btn {
+  color: #ff4b4b !important;
+  border: 1px solid rgba(255, 43, 43, 0.42) !important;
+  background: rgba(255, 43, 43, 0.06) !important;
+  text-decoration: none !important;
+}
+
+.shop-catalog-main .vehicle-details-btn:hover {
+  color: #fff !important;
+  background: rgba(255, 43, 43, 0.18) !important;
+}
+
+/* Mobile 3 colunas: deixa ainda menor */
+@media (max-width: 650px) {
+  .shop-catalog-main .product-card-actions {
+    grid-template-columns: 1fr !important;
+    gap: 5px !important;
+  }
+
+  .shop-catalog-main .vehicle-card-actions {
+    grid-template-columns: 1fr !important;
+    gap: 5px !important;
+  }
+
+  .shop-catalog-main .product-card-actions .add-cart-btn,
+  .shop-catalog-main .product-card-actions .product-details-btn,
+  .shop-catalog-main .vehicle-card-actions .add-cart-btn,
+  .shop-catalog-main .vehicle-card-actions .vehicle-details-btn {
+    height: 30px !important;
+    font-size: 10px !important;
+    padding: 0 5px !important;
+    border-radius: 7px !important;
+  }
+
+  .shop-catalog-main .vehicle-card-bottom {
+    padding: 7px !important;
+    gap: 6px !important;
+  }
+}

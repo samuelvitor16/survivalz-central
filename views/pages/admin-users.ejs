@@ -25,7 +25,7 @@
             <p>Busque contas cadastradas, veja cargos, atividade, medalhas e acesse detalhes administrativos.</p>
           </div>
 
-          <a href="/admin" class="btn-secondary">Voltar ao painel</a>
+          <a href="/staff" class="btn-secondary">Voltar ao painel</a>
         </div>
 
         <% if (error) { %>
@@ -72,20 +72,20 @@
                     <% if (user.avatarUrl) { %>
                       <img
                         src="<%= user.avatarUrl %>"
-                        alt="Avatar de <%= user.name %>"
+                        alt="Avatar de <%= displayUserName(user) %>"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                       >
-                      <span style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                      <span style="display:none;"><%= displayInitial(user) %></span>
                     <% } else { %>
-                      <span><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                      <span><%= displayInitial(user) %></span>
                     <% } %>
                   </a>
 
                   <div>
-                    <span class="admin-user-role role-<%= String(user.role || 'PLAYER').toLowerCase() %>">
+                    <span class="admin-user-role role-<%= roleClass(user.role) %>">
                       <%= roleLabel(user.role) %>
                     </span>
-                    <h2><%= user.name %></h2>
+                    <h2><%= displayUserName(user) %></h2>
                     <p><%= user.email %></p>
                   </div>
                 </div>

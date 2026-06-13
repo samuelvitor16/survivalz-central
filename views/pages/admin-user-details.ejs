@@ -21,7 +21,7 @@
         <div class="admin-home-header">
           <div>
             <span class="section-tag">Detalhe do usuario</span>
-            <h1><%= user.name %></h1>
+            <h1><%= displayUserName(user) %></h1>
             <p>Dados publicos, atividade, pedidos vinculados, medalhas e cargo da conta.</p>
           </div>
 
@@ -46,20 +46,20 @@
                 <% if (user.avatarUrl) { %>
                   <img
                     src="<%= user.avatarUrl %>"
-                    alt="Avatar de <%= user.name %>"
+                    alt="Avatar de <%= displayUserName(user) %>"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                   >
-                  <span style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                  <span style="display:none;"><%= displayInitial(user) %></span>
                 <% } else { %>
-                  <span><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                  <span><%= displayInitial(user) %></span>
                 <% } %>
               </a>
 
               <div>
-                <span class="admin-user-role role-<%= String(user.role || 'PLAYER').toLowerCase() %>">
+                <span class="admin-user-role role-<%= roleClass(user.role) %>">
                   <%= roleLabel(user.role) %>
                 </span>
-                <h2><%= user.name %></h2>
+                <h2><%= displayUserName(user) %></h2>
                 <p><%= user.email %></p>
               </div>
             </div>
@@ -97,7 +97,34 @@
               </select>
 
               <button type="submit" class="admin-action-btn">Salvar cargo</button>
-              <small>Nao e permitido remover o ultimo OWNER. Senhas nao sao alteradas nesta sprint.</small>
+              <small>Nao e permitido remover o ultimo Desenvolvedor.</small>
+            </form>
+          </article>
+
+          <article class="admin-user-detail-card">
+            <div class="admin-box-header">
+              <h2>Senha temporaria</h2>
+              <span>Suporte Beta</span>
+            </div>
+
+            <form
+              action="/admin/usuarios/<%= user.id %>/password"
+              method="POST"
+              class="admin-user-role-form"
+              onsubmit="return confirm('Definir nova senha temporaria para este usuario?');"
+            >
+              <label for="temporaryPassword">Nova senha temporaria</label>
+              <input
+                type="password"
+                id="temporaryPassword"
+                name="temporaryPassword"
+                minlength="6"
+                autocomplete="new-password"
+                required
+              >
+
+              <button type="submit" class="admin-action-btn">Definir nova senha temporaria</button>
+              <small>Informe a senha temporaria ao jogador por canal seguro. A senha/hash nao sera exibida depois de salvar.</small>
             </form>
           </article>
         </section>

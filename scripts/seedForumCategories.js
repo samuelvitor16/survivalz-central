@@ -10,12 +10,28 @@ const categories = [
     position: 1
   },
   {
+    name: "Notícias",
+    slug: "noticias",
+    description: "Novidades importantes, anúncios grandes, lançamentos e comunicados especiais do SurvivalZ.",
+    icon: "📰",
+    color: "#ff3b3b",
+    position: 2
+  },
+  {
+    name: "Changelog",
+    slug: "changelog",
+    description: "Atualizações, patch notes, correções, melhorias e mudanças aplicadas no SurvivalZ.",
+    icon: "🛠️",
+    color: "#f5b942",
+    position: 3
+  },
+  {
     name: "Dúvidas",
     slug: "duvidas",
     description: "Área para tirar dúvidas sobre servidor, loja, regras e sistemas.",
     icon: "❓",
     color: "#f5b942",
-    position: 2
+    position: 4
   },
   {
     name: "Sugestões",
@@ -23,7 +39,7 @@ const categories = [
     description: "Envie ideias para melhorar o SurvivalZ.",
     icon: "💡",
     color: "#35d06f",
-    position: 3
+    position: 5
   },
   {
     name: "Denúncias",
@@ -31,7 +47,7 @@ const categories = [
     description: "Área para denúncias contra jogadores, abusos ou problemas.",
     icon: "⚠️",
     color: "#ff5555",
-    position: 4
+    position: 6
   },
   {
     name: "Revisão de Punição",
@@ -39,7 +55,7 @@ const categories = [
     description: "Solicite revisão de banimentos, punições ou decisões da staff.",
     icon: "⚖️",
     color: "#b86bff",
-    position: 5
+    position: 7
   },
   {
     name: "Guias e Tutoriais",
@@ -47,7 +63,7 @@ const categories = [
     description: "Conteúdos úteis para novos sobreviventes.",
     icon: "📖",
     color: "#4da3ff",
-    position: 6
+    position: 8
   },
   {
     name: "Comunidade",
@@ -55,7 +71,7 @@ const categories = [
     description: "Conversas gerais, prints, histórias e interação entre players.",
     icon: "💬",
     color: "#ffffff",
-    position: 7
+    position: 9
   }
 ];
 

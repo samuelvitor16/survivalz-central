@@ -1,0 +1,7 @@
+
+> survivalz-central@1.0.0 start
+> node app.js
+
+◇ injected env (13) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+☣️ Central SurvivalZ rodando em http://localhost:3001

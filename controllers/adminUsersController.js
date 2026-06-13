@@ -1,26 +1,109 @@
 const { UserRole } = require("@prisma/client");
+const bcrypt = require("bcrypt");
 
 const prisma = require("../config/prisma");
 const { getOrdersByUserId } = require("../models/orderModel");
 const { formatPrice } = require("../data/products");
+const { displayUserName, normalizeRole: normalizeUserRole, rolePower } = require("../utils/viewHelpers");
 
-const REQUESTED_ROLE_OPTIONS = ["OWNER", "ADMIN", "STAFF", "PLAYER"];
+const REQUESTED_ROLE_OPTIONS = [
+  "DESENVOLVEDOR",
+  "DIRETOR",
+  "SUB_DIRETOR",
+  "GERENTE",
+
+  "COORDENADOR",
+  "SUPERVISOR",
+  "ADMINISTRADOR",
+  "MODERADOR",
+  "ESTAGIARIO",
+  "SUPORTE",
+
+  "YOUTUBER",
+  "BETA_TESTER",
+  "PREMIUM",
+  "SOBREVIVENTE"
+];
+
 const SUPPORTED_ROLE_OPTIONS = Object.values(UserRole || {});
 const ROLE_UPDATE_OPTIONS = REQUESTED_ROLE_OPTIONS.filter((role) => SUPPORTED_ROLE_OPTIONS.includes(role));
-const ROLE_MANAGER_OPTIONS = ["ADMIN", "OWNER"];
+const ROLE_MANAGER_MIN_POWER = 2000;
+const SYSTEM_ADMIN_POWER = 9999;
+const GERENTE_ASSIGNABLE_ROLES = [
+  "SOBREVIVENTE",
+  "PREMIUM",
+  "BETA_TESTER",
+  "YOUTUBER",
+  "SUPORTE",
+  "ESTAGIARIO",
+  "MODERADOR",
+  "ADMINISTRADOR"
+];
 
 const normalizeRole = (value) => {
-  const role = String(value || "").trim().toUpperCase();
+  const rawRole = String(value || "").trim();
+
+  if (
+    !rawRole ||
+    rawRole === "ALL" ||
+    rawRole === "TODOS" ||
+    rawRole === "TODOS_OS_CARGOS"
+  ) {
+    return "";
+  }
+
+  const role = normalizeUserRole(rawRole);
   return REQUESTED_ROLE_OPTIONS.includes(role) ? role : "";
 };
 
-const canManageRoles = (req) => {
-  if (!req.session) return false;
-  if (req.session.playerId) {
-    return ROLE_MANAGER_OPTIONS.includes(req.session.playerRole);
+const getActorRole = (req) => {
+  if (!req.session) return "PLAYER";
+
+  if (!req.session.playerId && req.session.isAdminLogged) {
+    return "DESENVOLVEDOR";
   }
 
-  return Boolean(req.session.isAdminLogged);
+  return req.session.playerRole || "PLAYER";
+};
+
+const getActorPower = (req) => {
+  if (!req.session) return 0;
+
+  if (!req.session.playerId && req.session.isAdminLogged) {
+    return SYSTEM_ADMIN_POWER;
+  }
+
+  return rolePower(getActorRole(req));
+};
+
+const canManageRoles = (req) => {
+  return getActorPower(req) >= ROLE_MANAGER_MIN_POWER;
+};
+
+const canManageTargetRole = (req, targetRole) => {
+  if (normalizeUserRole(getActorRole(req)) === "GERENTE") {
+    return GERENTE_ASSIGNABLE_ROLES.includes(normalizeUserRole(targetRole));
+  }
+
+  return getActorPower(req) > rolePower(targetRole);
+};
+
+const canAssignRole = (req, nextRole) => {
+  if (normalizeUserRole(getActorRole(req)) === "GERENTE") {
+    return GERENTE_ASSIGNABLE_ROLES.includes(normalizeUserRole(nextRole));
+  }
+
+  return getActorPower(req) > rolePower(nextRole);
+};
+
+const getAssignableRoleOptions = (req) => {
+  const actorPower = getActorPower(req);
+
+  if (normalizeUserRole(getActorRole(req)) === "GERENTE") {
+    return ROLE_UPDATE_OPTIONS.filter((role) => GERENTE_ASSIGNABLE_ROLES.includes(role));
+  }
+
+  return ROLE_UPDATE_OPTIONS.filter((role) => actorPower > rolePower(role));
 };
 
 const buildUserWhere = ({ search, role }) => {
@@ -108,6 +191,7 @@ const renderAdminUsers = async (req, res) => {
       role,
       roleOptions: REQUESTED_ROLE_OPTIONS,
       supportedRoleOptions: SUPPORTED_ROLE_OPTIONS,
+      assignableRoleOptions: getAssignableRoleOptions(req),
       error: req.query.erro || null,
       success: req.query.sucesso || null
     });
@@ -186,11 +270,12 @@ const renderAdminUserDetails = async (req, res) => {
       .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
     res.render("pages/admin-user-details", {
-      title: `${user.name} - Usuario Admin`,
+      title: `${displayUserName(user)} - Usuario Admin`,
       user,
       linkedOrders,
-      roleOptions: REQUESTED_ROLE_OPTIONS,
+      roleOptions: getAssignableRoleOptions(req),
       supportedRoleOptions: SUPPORTED_ROLE_OPTIONS,
+      canManageThisUserRole: canManageTargetRole(req, user.role),
       formatPrice,
       error: req.query.erro || null,
       success: req.query.sucesso || null
@@ -201,7 +286,14 @@ const renderAdminUserDetails = async (req, res) => {
   }
 };
 
-const changeUserRole = async (id, nextRole) => {
+const changeUserRole = async (req, id, nextRole) => {
+  if (!canManageRoles(req)) {
+    return {
+      ok: false,
+      message: "Voce nao tem permissao para alterar cargos."
+    };
+  }
+
   if (!nextRole || !SUPPORTED_ROLE_OPTIONS.includes(nextRole)) {
     return {
       ok: false,
@@ -226,17 +318,38 @@ const changeUserRole = async (id, nextRole) => {
     };
   }
 
-  if (user.role === "OWNER" && nextRole !== "OWNER") {
-    const ownersCount = await prisma.user.count({
+  if (req.session && req.session.playerId && req.session.playerId === user.id) {
+    return {
+      ok: false,
+      message: "Voce nao pode alterar o proprio cargo."
+    };
+  }
+
+  if (!canManageTargetRole(req, user.role)) {
+    return {
+      ok: false,
+      message: "Voce nao pode alterar cargo de alguem com cargo igual ou superior ao seu."
+    };
+  }
+
+  if (!canAssignRole(req, nextRole)) {
+    return {
+      ok: false,
+      message: "Voce nao pode atribuir um cargo igual ou superior ao seu."
+    };
+  }
+
+  if (user.role === "DESENVOLVEDOR" && nextRole !== "DESENVOLVEDOR") {
+    const developersCount = await prisma.user.count({
       where: {
-        role: "OWNER"
+        role: "DESENVOLVEDOR"
       }
     });
 
-    if (ownersCount <= 1) {
+    if (developersCount <= 1) {
       return {
         ok: false,
-        message: "Nao e permitido remover o ultimo OWNER"
+        message: "Nao e permitido remover o ultimo Desenvolvedor"
       };
     }
   }
@@ -264,7 +377,7 @@ const updateAdminUserRole = async (req, res) => {
 
     const { id } = req.params;
     const nextRole = normalizeRole(req.body.role);
-    const result = await changeUserRole(id, nextRole);
+    const result = await changeUserRole(req, id, nextRole);
 
     if (!result.ok) {
       return res.redirect(`/admin/usuarios/${id}?erro=${encodeURIComponent(result.message)}`);
@@ -274,6 +387,57 @@ const updateAdminUserRole = async (req, res) => {
   } catch (error) {
     console.log("Erro ao atualizar cargo do usuario:", error);
     return res.redirect(`/admin/usuarios/${req.params.id}?erro=Erro ao atualizar cargo`);
+  }
+};
+
+const updateAdminUserTemporaryPassword = async (req, res) => {
+  const { id } = req.params;
+  const redirectBase = `/admin/usuarios/${id}`;
+
+  try {
+    if (!canManageRoles(req)) {
+      return res.status(403).send("Voce nao tem permissao para alterar senha.");
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id
+      },
+      select: {
+        id: true,
+        role: true
+      }
+    });
+
+    if (!user) {
+      return res.redirect(`${redirectBase}?erro=${encodeURIComponent("Usuario nao encontrado")}`);
+    }
+
+    if (!canManageTargetRole(req, user.role)) {
+      return res.redirect(`${redirectBase}?erro=${encodeURIComponent("Voce nao pode alterar senha de alguem com cargo igual ou superior ao seu.")}`);
+    }
+
+    const temporaryPassword = String(req.body.temporaryPassword || "");
+
+    if (temporaryPassword.length < 6) {
+      return res.redirect(`${redirectBase}?erro=${encodeURIComponent("A senha temporaria precisa ter pelo menos 6 caracteres")}`);
+    }
+
+    const passwordHash = await bcrypt.hash(temporaryPassword, 10);
+
+    await prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        passwordHash
+      }
+    });
+
+    return res.redirect(`${redirectBase}?sucesso=${encodeURIComponent("Senha temporaria definida. Informe ao jogador por canal seguro.")}`);
+  } catch (error) {
+    console.log("Erro ao redefinir senha temporaria:", error);
+    return res.redirect(`${redirectBase}?erro=${encodeURIComponent("Erro ao redefinir senha temporaria")}`);
   }
 };
 
@@ -295,7 +459,7 @@ const renderAdminRoles = async (req, res) => {
       title: "Equipe e cargos - Painel Admin",
       users,
       search,
-      roleOptions: ROLE_UPDATE_OPTIONS,
+      roleOptions: getAssignableRoleOptions(req),
       error: req.query.erro || null,
       success: req.query.sucesso || null
     });
@@ -315,7 +479,7 @@ const updateAdminRoleQuick = async (req, res) => {
     }
 
     const nextRole = normalizeRole(req.body.role);
-    const result = await changeUserRole(req.body.userId, nextRole);
+    const result = await changeUserRole(req, req.body.userId, nextRole);
     const key = result.ok ? "sucesso" : "erro";
 
     return res.redirect(`${redirectBase}${key}=${encodeURIComponent(result.message)}`);
@@ -329,6 +493,7 @@ module.exports = {
   renderAdminUsers,
   renderAdminUserDetails,
   updateAdminUserRole,
+  updateAdminUserTemporaryPassword,
   renderAdminRoles,
   updateAdminRoleQuick,
   REQUESTED_ROLE_OPTIONS,

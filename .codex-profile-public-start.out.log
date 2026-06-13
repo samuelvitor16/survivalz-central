@@ -1,0 +1,7 @@
+
+> survivalz-central@1.0.0 start
+> node app.js
+
+◇ injected env (13) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+☣️ Central SurvivalZ rodando em http://localhost:3000

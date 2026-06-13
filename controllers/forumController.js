@@ -1,7 +1,50 @@
 const prisma = require("../config/prisma");
-const STAFF_ROLES = ["STAFF", "ADMIN", "OWNER"];
+const { isStaffRole, rolePower } = require("../utils/viewHelpers");
+
+const STAFF_ROLES = [
+  "SUPORTE",
+  "ESTAGIARIO",
+  "MODERADOR",
+  "ADMINISTRADOR",
+  "SUPERVISOR",
+  "COORDENADOR",
+  "GERENTE",
+  "SUB_DIRETOR",
+  "DIRETOR",
+  "DESENVOLVEDOR",
+
+  // Legado temporário
+  "STAFF",
+  "ADMIN",
+  "OWNER"
+];
+
+const OFFICIAL_POST_MIN_POWER = 4;
+const MODERATION_MIN_POWER = 3;
+
+const getSessionRole = (req) => {
+  return req.session && req.session.playerRole ? req.session.playerRole : "PLAYER";
+};
+
+const getSessionPower = (req) => {
+  return rolePower(getSessionRole(req));
+};
+
+const canPostOfficial = (role) => rolePower(role) >= OFFICIAL_POST_MIN_POWER;
+
 const isForumStaff = (req) => {
-  return STAFF_ROLES.includes(req.session.playerRole);
+  return isStaffRole(getSessionRole(req));
+};
+
+const canModerateUser = (req, targetUser = {}) => {
+  const actorPower = getSessionPower(req);
+  const targetPower = rolePower(targetUser.role || "PLAYER");
+
+  return actorPower >= MODERATION_MIN_POWER && actorPower > targetPower;
+};
+
+const canModerateTopic = (req, topic = {}) => {
+  return canModerateUser(req, topic.author || {});
 };
 
 const getCurrentPlayerRole = async (req, res) => {
@@ -31,50 +74,64 @@ const getCurrentPlayerRole = async (req, res) => {
   return user.role;
 };
 
-const isStaffRole = (role) => STAFF_ROLES.includes(role);
-
-const canViewTopic = (req, topic, canManageTopic = isForumStaff(req)) => {
+const canViewTopic = (req, topic, canViewPrivateReports = isForumStaff(req)) => {
   if (topic.category.slug !== "denuncias") {
     return true;
   }
 
-  if (canManageTopic) {
+  if (canViewPrivateReports) {
     return true;
   }
 
   return req.session.playerId && topic.authorId === req.session.playerId;
 };
+
 const canCreateTopicInCategory = (req, category) => {
   if (!req.session.playerId) return false;
   if (category.isLocked) return false;
 
-  if (category.slug === "avisos-oficiais") {
-    return STAFF_ROLES.includes(req.session.playerRole);
+  if (["avisos-oficiais", "changelog"].includes(category.slug)) {
+    return canPostOfficial(getSessionRole(req));
   }
 
   return true;
 };
 
 const isTopicLockedForPlayer = (topic) => {
+  if (!topic) return false;
+
   return topic.status === "CLOSED" || topic.status === "ARCHIVED";
 };
 
 const canEditTopic = (req, topic) => {
-  if (isForumStaff(req)) return true;
-  return req.session.playerId === topic.authorId && !isTopicLockedForPlayer(topic);
+  if (req.session.playerId === topic.authorId && !isTopicLockedForPlayer(topic)) {
+    return true;
+  }
+
+  return canModerateTopic(req, topic);
 };
 
 const canDeleteTopic = (req, topic) => {
-  if (isForumStaff(req)) return true;
-  return req.session.playerId === topic.authorId && !isTopicLockedForPlayer(topic) && topic._count && topic._count.posts === 0;
+  if (req.session.playerId === topic.authorId && !isTopicLockedForPlayer(topic)) {
+    return topic._count && topic._count.posts === 0;
+  }
+
+  return canModerateTopic(req, topic);
 };
 
-const canEditPost = (req, post) => {
-  if (isForumStaff(req)) return true;
-  return req.session.playerId === post.authorId && !isTopicLockedForPlayer(post.topic);
+const canEditPost = (req, post, parentTopic = null) => {
+  const topic = post.topic || parentTopic;
+
+  if (req.session.playerId === post.authorId && !isTopicLockedForPlayer(topic)) {
+    return true;
+  }
+
+  return canModerateUser(req, post.author || {});
 };
 
-const canDeletePost = canEditPost;
+const canDeletePost = (req, post, parentTopic = null) => {
+  return canEditPost(req, post, parentTopic);
+};
 
 const createSlug = (text) => {
   return String(text)
@@ -86,34 +143,263 @@ const createSlug = (text) => {
     .replace(/^-+|-+$/g, "");
 };
 
+const extractTopicCoverUrl = (content = "") => {
+  const text = String(content || "");
+  const patterns = [
+    /<img[^>]+src=["']([^"']+)["']/i,
+    /!\[[^\]]*]\(([^)\s]+)\)/i,
+    /\[img](.*?)\[\/img]/i,
+    /(https?:\/\/[^\s"'<>]+\.(?:png|jpe?g|webp|gif))/i,
+    /(\/uploads\/[^\s"'<>]+\.(?:png|jpe?g|webp|gif))/i
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    const url = match && match[1] ? match[1].trim() : "";
+
+    if (
+      url &&
+      !/[\s"'<>]/.test(url) &&
+      (url.startsWith("/uploads/") || /^https?:\/\//i.test(url))
+    ) {
+      return url;
+    }
+  }
+
+  return null;
+};
+
 const renderForumHome = async (req, res) => {
   try {
-    const categories = await prisma.forumCategory.findMany({
-      orderBy: {
-        position: "asc"
-      },
-      include: {
-        _count: {
-          select: {
-            topics: true
+    await getCurrentPlayerRole(req, res);
+
+    const [categories, featuredCandidates, latestTopics, teamMembers, activeUsers] = await Promise.all([
+      prisma.forumCategory.findMany({
+        orderBy: {
+          position: "asc"
+        },
+        include: {
+          topics: {
+            orderBy: {
+              updatedAt: "desc"
+            },
+            take: 1,
+            include: {
+              author: true
+            }
+          },
+          _count: {
+            select: {
+              topics: true
+            }
           }
         }
-      }
-    });
+      }),
+
+      prisma.forumTopic.findMany({
+        where: {
+          OR: [
+            {
+              status: "PINNED"
+            },
+            {
+              category: {
+                slug: {
+                  in: [
+                    "avisos-oficiais",
+                    "changelog",
+                    "sugestoes",
+                    "duvidas",
+                    "duvidas-resolvidas",
+                    "guias-tutoriais",
+                    "revisao-de-punicao",
+                    "denuncias"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        orderBy: {
+          updatedAt: "desc"
+        },
+        take: 20,
+        include: {
+          author: true,
+          category: true,
+          _count: {
+            select: {
+              posts: true
+            }
+          }
+        }
+      }),
+
+      prisma.forumTopic.findMany({
+        where: {
+          category: {
+            slug: {
+              not: "denuncias"
+            }
+          }
+        },
+        orderBy: {
+          updatedAt: "desc"
+        },
+        take: 5,
+        include: {
+          author: true,
+          category: true,
+          _count: {
+            select: {
+              posts: true
+            }
+          }
+        }
+      }),
+
+      prisma.user.findMany({
+        where: {
+          role: {
+            in: STAFF_ROLES
+          }
+        },
+        select: {
+          id: true,
+          name: true,
+          sampNick: true,
+          avatarUrl: true,
+          role: true
+        }
+      }),
+
+      prisma.user.findMany({
+        take: 16,
+        orderBy: {
+          updatedAt: "desc"
+        },
+        select: {
+          id: true,
+          name: true,
+          sampNick: true,
+          avatarUrl: true,
+          reputation: true,
+          _count: {
+            select: {
+              topics: true,
+              posts: true
+            }
+          }
+        }
+      })
+    ]);
+
+    const getTopicReplies = (topic) => {
+      return Number(topic._count && topic._count.posts ? topic._count.posts : 0);
+    };
+
+    const getTopicViews = (topic) => {
+      return Number(topic.views || 0);
+    };
+
+    const getTopicScore = (topic) => {
+      return getTopicViews(topic) + (getTopicReplies(topic) * 12) + (topic.status === "PINNED" ? 80 : 0);
+    };
+
+    const isHotTopic = (topic) => {
+      return getTopicReplies(topic) >= 3 || getTopicViews(topic) >= 80 || getTopicScore(topic) >= 120;
+    };
+
+    const featuredCategoryWeight = {
+      "avisos-oficiais": 0,
+      changelog: 1,
+      sugestoes: 2,
+      duvidas: 3,
+      "duvidas-resolvidas": 4,
+      "guias-tutoriais": 5,
+      "revisao-de-punicao": 6,
+      denuncias: 7
+    };
+
+    const decoratedFeaturedTopics = [...featuredCandidates]
+      .map((topic) => ({
+        ...topic,
+        coverUrl: extractTopicCoverUrl(topic.content),
+        hotScore: getTopicScore(topic),
+        isHot: isHotTopic(topic)
+      }))
+      .sort((a, b) => {
+        const hotA = a.isHot ? 0 : 1;
+        const hotB = b.isHot ? 0 : 1;
+
+        if (hotA !== hotB) return hotA - hotB;
+
+        const pinnedA = a.status === "PINNED" ? 0 : 1;
+        const pinnedB = b.status === "PINNED" ? 0 : 1;
+
+        if (pinnedA !== pinnedB) return pinnedA - pinnedB;
+
+        const categoryA = featuredCategoryWeight[a.category.slug] ?? 99;
+        const categoryB = featuredCategoryWeight[b.category.slug] ?? 99;
+
+        if (categoryA !== categoryB) return categoryA - categoryB;
+
+        if (b.hotScore !== a.hotScore) return b.hotScore - a.hotScore;
+
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      })
+      .slice(0, 4);
+
+    const rankedUsers = activeUsers
+      .map((user) => ({
+        ...user,
+        activityScore: user._count.topics + user._count.posts + (user.reputation || 0)
+      }))
+      .sort((a, b) => b.activityScore - a.activityScore)
+      .slice(0, 5);
+
+    const sortedTeamMembers = [...teamMembers]
+      .sort((a, b) => {
+        const roleDiff = rolePower(b.role) - rolePower(a.role);
+
+        if (roleDiff !== 0) return roleDiff;
+
+        return String(a.sampNick || a.name || "").localeCompare(String(b.sampNick || b.name || ""));
+      })
+      .slice(0, 5);
+
+    const newTopicCategory =
+      categories.find((category) => category.slug === "comunidade") ||
+      categories.find((category) => category.slug === "duvidas") ||
+      categories.find((category) => !category.isLocked && !category.isPrivate) ||
+      null;
+
+    const reportCategory =
+      categories.find((category) => category.slug === "denuncias") ||
+      categories.find((category) => category.slug === "denuncia") ||
+      null;
 
     res.render("pages/forum-home", {
-      title: "Fórum - SurvivalZ",
-      categories
+      title: "Forum - SurvivalZ",
+      categories,
+      featuredTopics: decoratedFeaturedTopics,
+      latestTopics,
+      teamMembers: sortedTeamMembers,
+      activeUsers: rankedUsers,
+      newTopicCategory,
+      reportCategory
     });
   } catch (error) {
-    console.log("Erro ao carregar fórum:", error);
-    res.status(500).send("Erro ao carregar fórum.");
+    console.log("Erro ao carregar forum:", error);
+    res.status(500).send("Erro ao carregar forum.");
   }
 };
 
 const renderForumCategory = async (req, res) => {
   try {
     const { slug } = req.params;
+    const currentPlayerRole = await getCurrentPlayerRole(req, res);
+    const canViewPrivateReports = isStaffRole(currentPlayerRole);
 
     const category = await prisma.forumCategory.findUnique({
       where: {
@@ -129,7 +415,7 @@ const renderForumCategory = async (req, res) => {
 
     const isReportsCategory = category.slug === "denuncias";
 
-    const topicsWhere = isReportsCategory && !isForumStaff(req)
+    const topicsWhere = isReportsCategory && !canViewPrivateReports
       ? {
           authorId: req.session.playerId || "__not_logged__"
         }
@@ -176,7 +462,7 @@ const renderForumCategory = async (req, res) => {
       permissionError: req.query.erro === "sem-permissao"
         ? "Você não tem permissão para criar tópico nesta categoria."
         : null,
-      privateCategoryMessage: isReportsCategory && !isForumStaff(req)
+      privateCategoryMessage: isReportsCategory && !canViewPrivateReports
         ? "Por privacidade, você visualiza apenas as denúncias criadas pela sua própria conta."
         : null
     });
@@ -188,6 +474,7 @@ const renderForumCategory = async (req, res) => {
 
 const renderNewTopic = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { slug } = req.params;
 
     const category = await prisma.forumCategory.findUnique({
@@ -203,9 +490,9 @@ const renderNewTopic = async (req, res) => {
     }
 
     if (!canCreateTopicInCategory(req, category)) {
-  return res.redirect(`/forum/categoria/${category.slug}?erro=sem-permissao`);
-}
-    
+      return res.redirect(`/forum/categoria/${category.slug}?erro=sem-permissao`);
+    }
+
     res.render("pages/forum-new-topic", {
       title: `Novo tópico - ${category.name}`,
       category,
@@ -220,14 +507,15 @@ const renderNewTopic = async (req, res) => {
 
 const createTopic = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { slug } = req.params;
     const {
-  title,
-  content,
-  reportAccusedNick,
-  reportReason,
-  reportEvidence
-} = req.body;
+      title,
+      content,
+      reportAccusedNick,
+      reportReason,
+      reportEvidence
+    } = req.body;
 
     const category = await prisma.forumCategory.findUnique({
       where: {
@@ -239,6 +527,10 @@ const createTopic = async (req, res) => {
       return res.status(404).render("pages/404", {
         title: "Categoria não encontrada"
       });
+    }
+
+    if (!canCreateTopicInCategory(req, category)) {
+      return res.redirect(`/forum/categoria/${category.slug}?erro=sem-permissao`);
     }
 
     if (!title || !content) {
@@ -270,43 +562,43 @@ const createTopic = async (req, res) => {
 
     const isReportCategory = category.slug === "denuncias";
 
-if (isReportCategory) {
-  if (!reportAccusedNick || !reportReason || !reportEvidence) {
-    return res.render("pages/forum-new-topic", {
-      title: `Novo tópico - ${category.name}`,
-      category,
-      error: "Para criar uma denúncia, informe acusado, motivo e provas.",
-      old: req.body
-    });
-  }
+    if (isReportCategory) {
+      if (!reportAccusedNick || !reportReason || !reportEvidence) {
+        return res.render("pages/forum-new-topic", {
+          title: `Novo tópico - ${category.name}`,
+          category,
+          error: "Para criar uma denúncia, informe acusado, motivo e provas.",
+          old: req.body
+        });
+      }
 
-  if (reportAccusedNick.trim().length < 3) {
-    return res.render("pages/forum-new-topic", {
-      title: `Novo tópico - ${category.name}`,
-      category,
-      error: "Informe um nick válido para o acusado.",
-      old: req.body
-    });
-  }
-}
+      if (reportAccusedNick.trim().length < 3) {
+        return res.render("pages/forum-new-topic", {
+          title: `Novo tópico - ${category.name}`,
+          category,
+          error: "Informe um nick válido para o acusado.",
+          old: req.body
+        });
+      }
+    }
 
     const baseSlug = createSlug(title);
     const finalSlug = `${baseSlug}-${Date.now()}`;
 
     const topic = await prisma.forumTopic.create({
-  data: {
-    title: title.trim(),
-    slug: finalSlug,
-    content: content.trim(),
+      data: {
+        title: title.trim(),
+        slug: finalSlug,
+        content: content.trim(),
 
-    reportAccusedNick: isReportCategory ? reportAccusedNick.trim() : null,
-    reportReason: isReportCategory ? reportReason.trim() : null,
-    reportEvidence: isReportCategory ? reportEvidence.trim() : null,
+        reportAccusedNick: isReportCategory ? reportAccusedNick.trim() : null,
+        reportReason: isReportCategory ? reportReason.trim() : null,
+        reportEvidence: isReportCategory ? reportEvidence.trim() : null,
 
-    authorId: req.session.playerId,
-    categoryId: category.id
-  }
-});
+        authorId: req.session.playerId,
+        categoryId: category.id
+      }
+    });
 
     res.redirect(`/forum/topico/${topic.id}`);
   } catch (error) {
@@ -343,14 +635,12 @@ const renderTopic = async (req, res) => {
             }
           }
         },
-
         category: true,
         _count: {
           select: {
             posts: true
           }
         },
-
         posts: {
           orderBy: {
             createdAt: "asc"
@@ -387,9 +677,10 @@ const renderTopic = async (req, res) => {
     }
 
     const currentPlayerRole = await getCurrentPlayerRole(req, res);
-    const canManageTopic = isStaffRole(currentPlayerRole);
+    const canViewPrivateReports = isStaffRole(currentPlayerRole);
+    const canManageTopic = canModerateTopic(req, topic);
 
-    if (!canViewTopic(req, topic, canManageTopic)) {
+    if (!canViewTopic(req, topic, canViewPrivateReports)) {
       return res.status(403).send("Você não tem permissão para visualizar esta denúncia.");
     }
 
@@ -412,9 +703,18 @@ const renderTopic = async (req, res) => {
         })
       : [];
 
+    const decoratedTopic = {
+      ...topic,
+      posts: topic.posts.map((post) => ({
+        ...post,
+        canEditPost: canEditPost(req, post, topic),
+        canDeletePost: canDeletePost(req, post, topic)
+      }))
+    };
+
     res.render("pages/forum-topic", {
       title: `${topic.title} - Fórum SurvivalZ`,
-      topic,
+      topic: decoratedTopic,
       categories,
       currentPlayerId: req.session.playerId || null,
       canManageTopic,
@@ -448,8 +748,8 @@ const createReply = async (req, res) => {
     }
 
     if (topic.status === "CLOSED" || topic.status === "ARCHIVED") {
-  return res.redirect(`/forum/topico/${id}?erro=topico-fechado`);
-}
+      return res.redirect(`/forum/topico/${id}?erro=topico-fechado`);
+    }
 
     if (!content || content.trim().length < 3) {
       return res.redirect(`/forum/topico/${id}`);
@@ -481,6 +781,7 @@ const createReply = async (req, res) => {
 
 const updateTopicStatusFromTopic = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { id } = req.params;
     const { status } = req.body;
 
@@ -488,6 +789,25 @@ const updateTopicStatusFromTopic = async (req, res) => {
 
     if (!validStatuses.includes(status)) {
       return res.redirect(`/forum/topico/${id}`);
+    }
+
+    const topic = await prisma.forumTopic.findUnique({
+      where: {
+        id
+      },
+      include: {
+        author: true
+      }
+    });
+
+    if (!topic) {
+      return res.status(404).render("pages/404", {
+        title: "Tópico não encontrado"
+      });
+    }
+
+    if (!canModerateTopic(req, topic)) {
+      return res.status(403).send("Você não tem permissão para alterar este tópico.");
     }
 
     await prisma.forumTopic.update({
@@ -508,8 +828,28 @@ const updateTopicStatusFromTopic = async (req, res) => {
 
 const moveTopicCategory = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { id } = req.params;
     const { categoryId } = req.body;
+
+    const topic = await prisma.forumTopic.findUnique({
+      where: {
+        id
+      },
+      include: {
+        author: true
+      }
+    });
+
+    if (!topic) {
+      return res.status(404).render("pages/404", {
+        title: "Tópico não encontrado"
+      });
+    }
+
+    if (!canModerateTopic(req, topic)) {
+      return res.status(403).send("Você não tem permissão para mover este tópico.");
+    }
 
     const category = await prisma.forumCategory.findUnique({
       where: {
@@ -540,6 +880,7 @@ const moveTopicCategory = async (req, res) => {
 
 const renderEditTopic = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { id } = req.params;
 
     const topic = await prisma.forumTopic.findUnique({
@@ -547,6 +888,7 @@ const renderEditTopic = async (req, res) => {
         id
       },
       include: {
+        author: true,
         category: true,
         _count: {
           select: {
@@ -579,6 +921,7 @@ const renderEditTopic = async (req, res) => {
 
 const updateTopic = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { id } = req.params;
     const { title, content } = req.body;
 
@@ -587,6 +930,7 @@ const updateTopic = async (req, res) => {
         id
       },
       include: {
+        author: true,
         category: true,
         _count: {
           select: {
@@ -638,6 +982,7 @@ const updateTopic = async (req, res) => {
 
 const deleteTopic = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { id } = req.params;
 
     const topic = await prisma.forumTopic.findUnique({
@@ -645,6 +990,7 @@ const deleteTopic = async (req, res) => {
         id
       },
       include: {
+        author: true,
         category: true,
         _count: {
           select: {
@@ -685,6 +1031,7 @@ const deleteTopic = async (req, res) => {
 
 const renderEditPost = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { postId } = req.params;
 
     const post = await prisma.forumPost.findUnique({
@@ -692,6 +1039,7 @@ const renderEditPost = async (req, res) => {
         id: postId
       },
       include: {
+        author: true,
         topic: {
           include: {
             category: true
@@ -723,6 +1071,7 @@ const renderEditPost = async (req, res) => {
 
 const updatePost = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { postId } = req.params;
     const { content } = req.body;
 
@@ -731,6 +1080,7 @@ const updatePost = async (req, res) => {
         id: postId
       },
       include: {
+        author: true,
         topic: true
       }
     });
@@ -783,6 +1133,7 @@ const updatePost = async (req, res) => {
 
 const deletePost = async (req, res) => {
   try {
+    await getCurrentPlayerRole(req, res);
     const { postId } = req.params;
 
     const post = await prisma.forumPost.findUnique({
@@ -790,6 +1141,7 @@ const deletePost = async (req, res) => {
         id: postId
       },
       include: {
+        author: true,
         topic: true
       }
     });

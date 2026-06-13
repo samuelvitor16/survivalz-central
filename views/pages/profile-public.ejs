@@ -15,280 +15,308 @@
   <%- include("../partials/header") %>
 
   <main>
-    <section class="player-dashboard-section">
+    <section class="player-dashboard-section sz-public-profile-section">
       <div class="container">
 
-        <% const profileBannerUrl = user.bannerUrl || "/images/home/hero-bg.png"; %>
+        <%
+          const profileBannerUrl = user.bannerUrl || "/images/home/hero-bg.png";
+          const userMedals = user.medals || [];
+          const featuredMedals = userMedals.slice(0, 6);
+          const publicPostsCount = user._count ? user._count.posts : 0;
+          const profileName = displayUserName(user);
+          const profileRole = roleClass(user.role);
+          const gameStats = getGameStats(user);
+          const hasCharacterIntegration = Boolean(
+            user.lastGameLogin ||
+            user.isOnlineInGame ||
+            user.zCoins ||
+            user.gameXp ||
+            user.vipTier ||
+            user.clanName ||
+            user.kills ||
+            user.deaths ||
+            user.playtimeMinutes ||
+            user.gameLevel > 1
+          );
+          const recentPublicActivity = [
+            ...user.topics.map((topic) => ({
+              type: "Topico",
+              title: topic.title,
+              href: `/forum/topico/${topic.id}`,
+              category: topic.category.name,
+              replies: topic._count.posts,
+              views: topic.views || 0,
+              date: topic.createdAt,
+              status: topicStatusLabel(topic.status)
+            })),
+            ...recentPosts.map((post) => ({
+              type: "Resposta",
+              title: post.topic.title,
+              href: `/forum/topico/${post.topic.id}`,
+              category: post.topic.category.name,
+              replies: post.topic._count ? post.topic._count.posts : 0,
+              views: post.topic.views || 0,
+              date: post.createdAt,
+              status: "Publicado"
+            }))
+          ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
+        %>
 
-        <section class="sz-profile">
-
-          <div
-            class="sz-profile-cover"
-            style='background-image: linear-gradient(90deg, rgba(0,0,0,.78), rgba(120,0,0,.30)), url("<%= profileBannerUrl %>");'
-          ></div>
-
-          <div class="sz-profile-main">
-
-            <div class="sz-profile-avatar-wrap">
-              <% if (user.avatarUrl) { %>
-                <img
-                  src="<%= user.avatarUrl %>"
-                  alt="Avatar de <%= user.name %>"
-                  class="sz-profile-avatar"
-                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                >
-
-                <div class="sz-profile-avatar-fallback" style="display:none;">
-                  <%= user.name.charAt(0).toUpperCase() %>
-                </div>
-              <% } else { %>
-                <div class="sz-profile-avatar-fallback">
-                  <%= user.name.charAt(0).toUpperCase() %>
-                </div>
-              <% } %>
-            </div>
-
-            <div class="sz-profile-info">
-
-              <span class="sz-profile-kicker">Perfil SurvivalZ</span>
-
-              <div class="sz-profile-title-row">
-                <div>
-                  <h1><%= user.name %></h1>
-
-                  <div class="sz-profile-subline">
-                    <span><%= user.sampNick || "Nick não informado" %></span>
-
-                    <% if (user.location) { %>
-                      <span><%= user.location %></span>
-                    <% } %>
-                  </div>
-                </div>
-
-                <div class="sz-profile-actions">
-                  <% if (isOwnProfile) { %>
-                    <a href="/perfil/editar">Editar perfil</a>
-                  <% } %>
-
-                  <a href="/forum">Ver fórum</a>
-                  <a href="/comunidade">Comunidade</a>
-                </div>
+        <article class="sz-profile">
+          <section
+            class="sz-profile-hero"
+            style='background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.88), rgba(70, 0, 0, 0.58) 48%, rgba(0, 0, 0, 0.82)), url("<%= profileBannerUrl %>");'
+          >
+            <div class="sz-profile-hero-content">
+              <div class="sz-profile-hero-avatar">
+                <% if (user.avatarUrl) { %>
+                  <img
+                    src="<%= user.avatarUrl %>"
+                    alt="Avatar de <%= profileName %>"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                  >
+                  <span style="display:none;"><%= displayInitial(user) %></span>
+                <% } else { %>
+                  <span><%= displayInitial(user) %></span>
+                <% } %>
               </div>
 
-              <div class="sz-profile-rank sz-profile-rank-<%= user.role.toLowerCase() %>">
-                <div class="sz-profile-rank-icon">
-                  <% if (user.role === "OWNER") { %>
-                    👑
-                  <% } else if (user.role === "ADMIN") { %>
-                    🛡️
-                  <% } else if (user.role === "STAFF" || user.role === "MODERADOR") { %>
-                    ⚔️
-                  <% } else { %>
-                    ☣
+              <div class="sz-profile-hero-main">
+                <span class="section-tag">Perfil SurvivalZ</span>
+                <h1><%= profileName %></h1>
+
+                <div class="sz-profile-hero-meta">
+                  <strong class="role-badge role-<%= profileRole %>"><%= roleDisplayLabel(user.role) %></strong>
+                  <span><%= user.sampNick || "Nick nao informado" %></span>
+                  <% if (user.location) { %>
+                    <span><%= user.location %></span>
                   <% } %>
                 </div>
 
-                <div class="sz-profile-rank-text">
-                  <span>Cargo</span>
-                  <strong><%= roleDisplayLabel(user.role) %></strong>
-                </div>
-              </div>
-
-              <% if (user.medals && user.medals.length > 0) { %>
-                <div class="sz-profile-insignias">
-                  <span class="sz-profile-box-title">Insígnias recentes</span>
-
-                  <div class="sz-profile-insignia-list">
-                    <% user.medals.slice(0, 8).forEach((userMedal) => { %>
+                <div class="sz-profile-featured-medals" aria-label="Insignias principais">
+                  <% if (featuredMedals.length > 0) { %>
+                    <% featuredMedals.forEach((userMedal) => { %>
                       <span
-                        class="sz-profile-insignia medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
+                        class="sz-profile-mini-medal medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>"
                         title="<%= medalTooltip(userMedal) %>"
                         data-tooltip="<%= medalTooltip(userMedal) %>"
                       >
-                        <%= userMedal.medal.icon || "🏅" %>
+                        <%= userMedal.medal.icon || "*" %>
                       </span>
                     <% }) %>
-                  </div>
+                  <% } else { %>
+                    <small>Nenhuma insignia em destaque</small>
+                  <% } %>
                 </div>
-              <% } %>
+              </div>
+
+              <div class="sz-profile-hero-actions">
+                <% if (isOwnProfile) { %>
+                  <a href="/perfil/editar" class="sz-profile-action-primary">Editar perfil</a>
+                <% } %>
+                <a href="/forum">Forum</a>
+              </div>
+            </div>
+          </section>
+
+          <section class="sz-profile-statbar" aria-label="Estatisticas do perfil">
+            <div><span>Topicos</span><strong><%= publicTopicsCount %></strong></div>
+            <div><span>Respostas</span><strong><%= publicPostsCount %></strong></div>
+            <div><span>Reputacao</span><strong><%= user.reputation || 0 %></strong></div>
+            <div><span>Medalhas</span><strong><%= userMedals.length %></strong></div>
+            <div><span>Entrou em</span><strong><%= formatDate(user.createdAt) %></strong></div>
+          </section>
+        </article>
+
+        <section class="sz-profile-layout">
+          <aside class="sz-profile-sidebar">
+            <section class="sz-profile-panel sz-profile-identity-card">
+              <span class="section-tag">Identidade</span>
+
+              <div class="sz-profile-side-user">
+                <div class="sz-profile-side-avatar">
+                  <% if (user.avatarUrl) { %>
+                    <img
+                      src="<%= user.avatarUrl %>"
+                      alt="Avatar de <%= profileName %>"
+                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                    >
+                    <span style="display:none;"><%= displayInitial(user) %></span>
+                  <% } else { %>
+                    <span><%= displayInitial(user) %></span>
+                  <% } %>
+                </div>
+
+                <div>
+                  <h2><%= profileName %></h2>
+                  <strong class="role-badge role-<%= profileRole %>"><%= roleDisplayLabel(user.role) %></strong>
+                </div>
+              </div>
+
+              <div class="sz-profile-side-stats">
+                <div><span>Topicos</span><strong><%= publicTopicsCount %></strong></div>
+                <div><span>Posts</span><strong><%= publicPostsCount %></strong></div>
+                <div><span>Pontos</span><strong><%= user.reputation || 0 %></strong></div>
+                <div><span>Medalhas</span><strong><%= userMedals.length %></strong></div>
+              </div>
+
+              <div class="sz-profile-info-list">
+                <div><span>Registro</span><strong><%= formatDate(user.createdAt) %></strong></div>
+                <div><span>Nick servidor</span><strong><%= user.sampNick || "Nao informado" %></strong></div>
+                <div><span>Discord</span><strong><%= user.discord || "Nao informado" %></strong></div>
+                <div><span>Grupo/local</span><strong><%= user.location || "Nao informado" %></strong></div>
+              </div>
+            </section>
+
+            <section class="sz-profile-panel">
+              <div class="sz-profile-panel-heading">
+                <span class="section-tag">Sobre</span>
+                <h2>Bio</h2>
+              </div>
 
               <div class="sz-profile-bio">
                 <% if (user.bio) { %>
                   <%- renderUserText(user.bio) %>
                 <% } else { %>
-                  Este sobrevivente ainda não adicionou uma bio.
+                  Este sobrevivente ainda nao escreveu uma bio.
                 <% } %>
               </div>
+            </section>
 
-            </div>
-          </div>
-
-          <div class="sz-profile-stats">
-            <div>
-              <span>Tópicos</span>
-              <strong><%= publicTopicsCount %></strong>
-            </div>
-
-            <div>
-              <span>Respostas</span>
-              <strong><%= user._count.posts %></strong>
-            </div>
-
-            <div>
-              <span>Medalhas</span>
-              <strong><%= user.medals.length %></strong>
-            </div>
-
-            <div>
-              <span>Reputação</span>
-              <strong><%= user.reputation || 0 %></strong>
-            </div>
-
-            <div>
-              <span>Registro</span>
-              <strong><%= formatDate(user.createdAt) %></strong>
-            </div>
-          </div>
-
-          <nav class="sz-profile-tabs">
-            <a class="<%= activeTab === 'posts' ? 'active' : '' %>" href="/perfil/<%= user.id %>?tab=posts">Postagens</a>
-            <a class="<%= activeTab === 'atividade' ? 'active' : '' %>" href="/perfil/<%= user.id %>?tab=atividade">Última atividade</a>
-            <a class="<%= activeTab === 'sobre' ? 'active' : '' %>" href="/perfil/<%= user.id %>?tab=sobre">Sobre</a>
-            <a class="<%= activeTab === 'medalhas' ? 'active' : '' %>" href="/perfil/<%= user.id %>?tab=medalhas">Medalhas</a>
-          </nav>
-
-        </section>
-
-        <section class="sz-profile-panel">
-
-          <% if (activeTab === "posts") { %>
-            <div class="sz-profile-panel-header">
-              <div>
-                <span>Atividade pública</span>
-                <h2>Postagens</h2>
+            <section class="sz-profile-panel">
+              <div class="sz-profile-panel-heading">
+                <span class="section-tag">Conquistas</span>
+                <h2>Medalhas e insignias</h2>
               </div>
 
-              <a href="/forum">Ver fórum</a>
-            </div>
-
-            <% if (user.topics.length === 0) { %>
-              <p class="player-empty-text">Este jogador ainda não criou tópicos públicos.</p>
-            <% } %>
-
-            <div class="sz-profile-list">
-              <% user.topics.forEach((topic) => { %>
-                <a href="/forum/topico/<%= topic.id %>" class="sz-profile-list-item">
-                  <div>
-                    <strong><%= topic.title %></strong>
-                    <span>
-                      <%= topic.category.name %> • <%= topic._count.posts %> resposta(s)
-                    </span>
-                  </div>
-
-                  <small><%= topicStatusLabel(topic.status) %></small>
-                </a>
-              <% }) %>
-            </div>
-          <% } %>
-
-          <% if (activeTab === "sobre") { %>
-            <div class="sz-profile-panel-header">
-              <div>
-                <span>Informações públicas</span>
-                <h2>Sobre</h2>
-              </div>
-            </div>
-
-            <div class="sz-profile-about-grid">
-              <div><span>Nome público</span><strong><%= user.name %></strong></div>
-              <div><span>Nick no servidor</span><strong><%= user.sampNick || "Não informado" %></strong></div>
-              <div><span>Discord</span><strong><%= user.discord || "Não informado" %></strong></div>
-              <div><span>Localização / grupo</span><strong><%= user.location || "Não informado" %></strong></div>
-              <div><span>Cargo</span><strong><%= roleDisplayLabel(user.role) %></strong></div>
-              <div><span>Conta criada em</span><strong><%= formatDate(user.createdAt) %></strong></div>
-              <div><span>Reputação</span><strong><%= user.reputation || 0 %></strong></div>
-              <div><span>Medalhas</span><strong><%= user.medals.length %></strong></div>
-            </div>
-
-            <div class="sz-profile-about-bio">
-              <h3>Bio</h3>
-
-              <% if (user.bio) { %>
-                <p><%- renderUserText(user.bio) %></p>
+              <% if (userMedals.length === 0) { %>
+                <div class="sz-profile-empty">
+                  <strong>Sem medalhas ainda</strong>
+                  <p>As insignias da comunidade aparecem aqui quando forem conquistadas.</p>
+                </div>
               <% } else { %>
-                <p>Nenhuma bio publicada.</p>
+                <div class="sz-profile-medal-list">
+                  <% userMedals.forEach((userMedal) => { %>
+                    <article class="sz-profile-medal-card medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>">
+                      <div class="sz-profile-medal-icon"><span><%= userMedal.medal.icon || "*" %></span></div>
+                      <div>
+                        <strong><%= userMedal.medal.name %></strong>
+                        <span><%= medalRarityLabel(userMedal.medal.rarity) %></span>
+                      </div>
+                    </article>
+                  <% }) %>
+                </div>
               <% } %>
-            </div>
-          <% } %>
+            </section>
+          </aside>
 
-          <% if (activeTab === "medalhas") { %>
-            <div class="sz-profile-panel-header">
-              <div>
-                <span>Conquistas da comunidade</span>
-                <h2>Medalhas</h2>
-              </div>
-            </div>
-
-            <% if (user.medals.length === 0) { %>
-              <p class="player-empty-text">Este jogador ainda não possui medalhas.</p>
-            <% } %>
-
-            <div class="sz-profile-medals-grid">
-              <% user.medals.forEach((userMedal) => { %>
-                <article class="sz-profile-medal-card medal-rarity-<%= userMedal.medal.rarity.toLowerCase() %>">
-                  <div class="sz-profile-medal-icon">
-                    <span><%= userMedal.medal.icon || "🏅" %></span>
-                  </div>
-
-                  <div>
-                    <strong><%= userMedal.medal.name %></strong>
-                    <span><%= medalRarityLabel(userMedal.medal.rarity) %></span>
-                    <p><%= userMedal.medal.description || "Medalha SurvivalZ." %></p>
-
-                    <% if (userMedal.reason) { %>
-                      <small>Motivo: <%= userMedal.reason %></small>
-                    <% } %>
-                  </div>
-                </article>
-              <% }) %>
-            </div>
-          <% } %>
-
-          <% if (activeTab === "atividade") { %>
-            <div class="sz-profile-panel-header">
-              <div>
-                <span>Movimentação pública</span>
-                <h2>Última atividade</h2>
+          <div class="sz-profile-main">
+            <section class="sz-profile-panel sz-profile-character-card">
+              <div class="sz-profile-panel-row">
+                <div>
+                  <span class="section-tag">Personagem SurvivalZ</span>
+                  <h2>Personagem SurvivalZ</h2>
+                </div>
+                <small class="<%= hasCharacterIntegration ? 'is-online' : '' %>">
+                  <%= hasCharacterIntegration ? gameStats.onlineStatus : "Aguardando sync" %>
+                </small>
               </div>
 
-              <a href="/forum">Ver fórum</a>
-            </div>
+              <div class="sz-profile-character">
+                <div class="sz-profile-character-portrait <%= user.avatarUrl ? '' : 'is-empty' %>">
+                  <% if (user.avatarUrl) { %>
+                    <img
+                      src="<%= user.avatarUrl %>"
+                      alt="Avatar de <%= profileName %> como personagem SurvivalZ"
+                      onerror="this.style.display='none'; this.parentElement.classList.add('is-empty');"
+                    >
+                  <% } %>
+                </div>
 
-            <% if (recentPosts.length === 0 && user.topics.length === 0) { %>
-              <p class="player-empty-text">A atividade pública deste jogador aparecerá aqui.</p>
+                <div class="sz-profile-character-body">
+                  <% if (hasCharacterIntegration) { %>
+                    <div class="sz-profile-character-grid">
+                      <div><span>Personagem</span><strong><%= user.sampNick || profileName %></strong></div>
+                      <div><span>Status</span><strong><%= gameStats.onlineStatus %></strong></div>
+                      <div><span>ZCoins</span><strong><%= gameStats.zCoins %></strong></div>
+                      <div><span>Cargo/rank</span><strong><%= roleDisplayLabel(user.role) %></strong></div>
+                      <div><span>Nivel</span><strong><%= gameStats.level %></strong></div>
+                      <div><span>XP</span><strong><%= gameStats.xp %></strong></div>
+                      <div><span>VIP</span><strong><%= gameStats.vip %></strong></div>
+                      <div><span>Cla/Faccao</span><strong><%= gameStats.clan %></strong></div>
+                      <div><span>Kills</span><strong><%= gameStats.kills %></strong></div>
+                      <div><span>Mortes</span><strong><%= gameStats.deaths %></strong></div>
+                      <div><span>Tempo jogado</span><strong><%= gameStats.playtime %></strong></div>
+                      <div><span>Ultimo login</span><strong><%= gameStats.lastGameLogin %></strong></div>
+                    </div>
+                  <% } else { %>
+                    <div class="sz-profile-character-empty">
+                      <strong>Informacoes do personagem serao exibidas quando a integracao estiver disponivel.</strong>
+                      <p>Enquanto isso, o perfil mostra os dados publicos da comunidade e a atividade do forum.</p>
+                    </div>
+
+                    <div class="sz-profile-character-grid sz-profile-character-grid-compact">
+                      <div><span>Personagem</span><strong><%= user.sampNick || profileName %></strong></div>
+                      <div><span>Cargo/rank</span><strong><%= roleDisplayLabel(user.role) %></strong></div>
+                      <div><span>Status</span><strong>Aguardando sync</strong></div>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            </section>
+
+            <section class="sz-profile-panel">
+              <div class="sz-profile-panel-row">
+                <div>
+                  <span class="section-tag">Forum</span>
+                  <h2>Postagens recentes</h2>
+                </div>
+                <a href="/forum">Ver forum</a>
+              </div>
+
+              <% if (recentPublicActivity.length === 0) { %>
+                <div class="sz-profile-empty">
+                  <strong>Nenhuma postagem publica</strong>
+                  <p>Quando este jogador criar topicos ou responder no forum, a atividade aparece aqui.</p>
+                </div>
+              <% } else { %>
+                <div class="sz-profile-post-list">
+                  <% recentPublicActivity.forEach((item) => { %>
+                    <a href="<%= item.href %>" class="sz-profile-post-card">
+                      <div class="sz-profile-post-type"><%= item.type %></div>
+                      <div>
+                        <h3><%= item.title %></h3>
+                        <p>
+                          <span><%= item.category %></span>
+                          <span><%= formatDate(item.date) %></span>
+                          <span><%= item.replies %> resposta(s)</span>
+                          <span><%= item.views %> view(s)</span>
+                        </p>
+                      </div>
+                      <em><%= item.status %></em>
+                    </a>
+                  <% }) %>
+                </div>
+              <% } %>
+            </section>
+
+            <% if (user.signatureText || user.signatureImageUrl) { %>
+              <section class="sz-profile-panel sz-profile-signature">
+                <div class="sz-profile-panel-heading">
+                  <span class="section-tag">Assinatura</span>
+                  <h2>Marca do jogador</h2>
+                </div>
+
+                <% if (user.signatureText) { %>
+                  <div class="sz-profile-bio"><%- renderUserText(user.signatureText) %></div>
+                <% } %>
+
+                <% if (user.signatureImageUrl) { %>
+                  <img src="<%= user.signatureImageUrl %>" alt="Assinatura de <%= profileName %>">
+                <% } %>
+              </section>
             <% } %>
-
-            <div class="sz-profile-list">
-              <% user.topics.slice(0, 5).forEach((topic) => { %>
-                <a href="/forum/topico/<%= topic.id %>" class="sz-profile-list-item">
-                  <div>
-                    <strong>Criou: <%= topic.title %></strong>
-                    <span><%= topic.category.name %> • <%= formatDate(topic.createdAt) %></span>
-                  </div>
-                </a>
-              <% }) %>
-
-              <% recentPosts.forEach((post) => { %>
-                <a href="/forum/topico/<%= post.topic.id %>" class="sz-profile-list-item">
-                  <div>
-                    <strong>Respondeu em: <%= post.topic.title %></strong>
-                    <span><%= post.topic.category.name %> • <%= formatDate(post.createdAt) %></span>
-                  </div>
-                </a>
-              <% }) %>
-            </div>
-          <% } %>
-
+          </div>
         </section>
 
       </div>

@@ -54,11 +54,13 @@ app.use((req, res, next) => {
   res.locals.isAdminLogged = req.session.isAdminLogged || false;
 
   res.locals.isPlayerLogged = !!req.session.playerId;
+  res.locals.currentPlayerId = req.session.playerId || null;
   res.locals.playerName = req.session.playerName || null;
   res.locals.playerRole = req.session.playerRole || null;
+  res.locals.playerAvatarUrl = req.session.playerAvatarUrl || null;
 
   res.locals.discordInvite = process.env.DISCORD_INVITE || "#";
-  res.locals.guideLink = process.env.GUIDE_LINK || "/sobre";
+  res.locals.guideLink = process.env.GUIDE_URL || process.env.GUIDE_LINK || "/servidor";
 
   res.locals.permissionError = null;
   res.locals.privateCategoryMessage = null;

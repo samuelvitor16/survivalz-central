@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/loja-breve.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main class="store-soon-page">
+    <section class="store-soon-hero">
+      <div class="container store-soon-container">
+
+        <div class="store-soon-card">
+          <span class="store-soon-kicker">Acesso antecipado restrito</span>
+
+          <h1>Loja SurvivalZ</h1>
+
+          <p>
+            A loja oficial ainda não foi liberada para todos os jogadores.
+            Primeiro queremos que a comunidade conheça a Central, crie sua conta,
+            explore o fórum e acompanhe as novidades do servidor.
+          </p>
+
+          <div class="store-soon-release">
+            <span>Lançamento previsto</span>
+            <strong>Terça às 21:00</strong>
+          </div>
+
+          <div class="store-countdown" data-launch-at="<%= launchAt %>">
+            <div>
+              <strong id="count-days">00</strong>
+              <span>Dias</span>
+            </div>
+
+            <div>
+              <strong id="count-hours">00</strong>
+              <span>Horas</span>
+            </div>
+
+            <div>
+              <strong id="count-minutes">00</strong>
+              <span>Minutos</span>
+            </div>
+
+            <div>
+              <strong id="count-seconds">00</strong>
+              <span>Segundos</span>
+            </div>
+          </div>
+
+          <div class="store-soon-actions">
+            <a href="/forum" class="btn-primary">Conhecer o fórum</a>
+            <a href="/equipe" class="btn-secondary">Ver equipe</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+  <script>
+    const countdown = document.querySelector(".store-countdown");
+    const launchAt = countdown ? new Date(countdown.dataset.launchAt).getTime() : null;
+
+    const daysEl = document.getElementById("count-days");
+    const hoursEl = document.getElementById("count-hours");
+    const minutesEl = document.getElementById("count-minutes");
+    const secondsEl = document.getElementById("count-seconds");
+
+    const pad = (value) => String(value).padStart(2, "0");
+
+    function updateCountdown() {
+      if (!launchAt) return;
+
+      const now = Date.now();
+      const distance = launchAt - now;
+
+      if (distance <= 0) {
+        daysEl.textContent = "00";
+        hoursEl.textContent = "00";
+        minutesEl.textContent = "00";
+        secondsEl.textContent = "00";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      daysEl.textContent = pad(days);
+      hoursEl.textContent = pad(hours);
+      minutesEl.textContent = pad(minutes);
+      secondsEl.textContent = pad(seconds);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+</body>
+</html>

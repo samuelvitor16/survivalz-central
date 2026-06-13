@@ -120,7 +120,7 @@
                     <div>
                       <span class="order-code"><%= order.code %></span>
 
-                      <h2><%= order.customer.name %></h2>
+                      <h2><%= order.customer.sampNick || order.customer.name || "Nao informado" %></h2>
 
                       <p>
                         Discord: <strong><%= order.customer.discord %></strong> •

@@ -1,0 +1,167 @@
+ReferenceError: C:\Users\Geraldo\Desktop\survivalz-central\views\pages\forum-home.ejs:86
+    84| 
+    85|           <div class="forum-portal-actions">
+ >> 86|             <% if (isPlayerLogged && newTopicCategory) { %>
+    87|               <a href="/forum/categoria/<%= newTopicCategory.slug %>/novo" class="btn-primary">Novo topico</a>
+    88|             <% } %>
+    89| 
+
+newTopicCategory is not defined
+    at eval ("C:\\Users\\Geraldo\\Desktop\\survivalz-central\\views\\pages\\forum-home.ejs":79:30)
+    at forum-home (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\response.js:923:7)
+    at renderForumHome (C:\Users\Geraldo\Desktop\survivalz-central\controllers\forumController.js:210:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ReferenceError: C:\Users\Geraldo\Desktop\survivalz-central\views\pages\forum-home.ejs:86
+    84| 
+    85|           <div class="forum-portal-actions">
+ >> 86|             <% if (isPlayerLogged && newTopicCategory) { %>
+    87|               <a href="/forum/categoria/<%= newTopicCategory.slug %>/novo" class="btn-primary">Novo topico</a>
+    88|             <% } %>
+    89| 
+
+newTopicCategory is not defined
+    at eval ("C:\\Users\\Geraldo\\Desktop\\survivalz-central\\views\\pages\\forum-home.ejs":79:30)
+    at forum-home (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\response.js:923:7)
+    at renderForumHome (C:\Users\Geraldo\Desktop\survivalz-central\controllers\forumController.js:210:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ReferenceError: C:\Users\Geraldo\Desktop\survivalz-central\views\pages\forum-home.ejs:86
+    84| 
+    85|           <div class="forum-portal-actions">
+ >> 86|             <% if (isPlayerLogged && newTopicCategory) { %>
+    87|               <a href="/forum/categoria/<%= newTopicCategory.slug %>/novo" class="btn-primary">Novo topico</a>
+    88|             <% } %>
+    89| 
+
+newTopicCategory is not defined
+    at eval ("C:\\Users\\Geraldo\\Desktop\\survivalz-central\\views\\pages\\forum-home.ejs":79:30)
+    at forum-home (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\response.js:923:7)
+    at renderForumHome (C:\Users\Geraldo\Desktop\survivalz-central\controllers\forumController.js:210:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ReferenceError: C:\Users\Geraldo\Desktop\survivalz-central\views\pages\forum-home.ejs:86
+    84| 
+    85|           <div class="forum-portal-actions">
+ >> 86|             <% if (isPlayerLogged && newTopicCategory) { %>
+    87|               <a href="/forum/categoria/<%= newTopicCategory.slug %>/novo" class="btn-primary">Novo topico</a>
+    88|             <% } %>
+    89| 
+
+newTopicCategory is not defined
+    at eval ("C:\\Users\\Geraldo\\Desktop\\survivalz-central\\views\\pages\\forum-home.ejs":79:30)
+    at forum-home (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\response.js:923:7)
+    at renderForumHome (C:\Users\Geraldo\Desktop\survivalz-central\controllers\forumController.js:210:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ReferenceError: C:\Users\Geraldo\Desktop\survivalz-central\views\pages\forum-home.ejs:86
+    84| 
+    85|           <div class="forum-portal-actions">
+ >> 86|             <% if (isPlayerLogged && newTopicCategory) { %>
+    87|               <a href="/forum/categoria/<%= newTopicCategory.slug %>/novo" class="btn-primary">Novo topico</a>
+    88|             <% } %>
+    89| 
+
+newTopicCategory is not defined
+    at eval ("C:\\Users\\Geraldo\\Desktop\\survivalz-central\\views\\pages\\forum-home.ejs":79:30)
+    at forum-home (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\response.js:923:7)
+    at renderForumHome (C:\Users\Geraldo\Desktop\survivalz-central\controllers\forumController.js:210:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ReferenceError: C:\Users\Geraldo\Desktop\survivalz-central\views\pages\forum-home.ejs:86
+    84| 
+    85|           <div class="forum-portal-actions">
+ >> 86|             <% if (isPlayerLogged && newTopicCategory) { %>
+    87|               <a href="/forum/categoria/<%= newTopicCategory.slug %>/novo" class="btn-primary">Novo topico</a>
+    88|             <% } %>
+    89| 
+
+newTopicCategory is not defined
+    at eval ("C:\\Users\\Geraldo\\Desktop\\survivalz-central\\views\\pages\\forum-home.ejs":79:30)
+    at forum-home (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\response.js:923:7)
+    at renderForumHome (C:\Users\Geraldo\Desktop\survivalz-central\controllers\forumController.js:210:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ReferenceError: C:\Users\Geraldo\Desktop\survivalz-central\views\pages\forum-home.ejs:90
+    88|             <% } %>
+    89| 
+ >> 90|             <% if (reportCategory) { %>
+    91|               <a
+    92|                 href="/forum/categoria/<%= reportCategory.slug %><%= isPlayerLogged && !reportCategory.isLocked ? "/novo" : "" %>"
+    93|                 class="btn-secondary"
+
+reportCategory is not defined
+    at eval ("C:\\Users\\Geraldo\\Desktop\\survivalz-central\\views\\pages\\forum-home.ejs":88:8)
+    at forum-home (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\response.js:923:7)
+    at renderForumHome (C:\Users\Geraldo\Desktop\survivalz-central\controllers\forumController.js:210:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ReferenceError: C:\Users\Geraldo\Desktop\survivalz-central\views\pages\forum-home.ejs:90
+    88|             <% } %>
+    89| 
+ >> 90|             <% if (reportCategory) { %>
+    91|               <a
+    92|                 href="/forum/categoria/<%= reportCategory.slug %><%= isPlayerLogged && !reportCategory.isLocked ? "/novo" : "" %>"
+    93|                 class="btn-secondary"
+
+reportCategory is not defined
+    at eval ("C:\\Users\\Geraldo\\Desktop\\survivalz-central\\views\\pages\\forum-home.ejs":88:8)
+    at forum-home (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\response.js:923:7)
+    at renderForumHome (C:\Users\Geraldo\Desktop\survivalz-central\controllers\forumController.js:210:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+SyntaxError: Identifier 'featuredFallback' has already been declared in C:\Users\Geraldo\Desktop\survivalz-central\views\pages\forum-home.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+    at new Function (<anonymous>)
+    at Template.compile (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:607:18)
+    at Object.compile (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:359:18)
+    at handleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:216:16)
+    at tryHandleCache (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:253:22)
+    at ejs.renderFile [as engine] (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\Geraldo\Desktop\survivalz-central\node_modules\express\lib\response.js:923:7)

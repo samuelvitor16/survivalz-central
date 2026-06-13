@@ -1,0 +1,7 @@
+
+> survivalz-central@1.0.0 start
+> node app.js
+
+◇ injected env (13) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+☣️ Central SurvivalZ rodando em http://localhost:3000

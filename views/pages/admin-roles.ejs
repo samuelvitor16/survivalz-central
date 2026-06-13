@@ -15,21 +15,44 @@
   <%- include("../partials/header") %>
 
   <main>
-    <section class="admin-home-section">
+    <section class="admin-home-section admin-roles-page">
       <div class="container">
 
-        <div class="admin-home-header">
+        <div class="admin-home-header admin-roles-header">
           <div>
             <span class="section-tag">Painel Desenvolvedor</span>
             <h1>Equipe e cargos</h1>
-            <p>Busque uma conta e atualize rapidamente o cargo usado no perfil, forum, membros e painel.</p>
+            <p>
+              Busque uma conta e atualize rapidamente o cargo usado no perfil,
+              fórum, membros e painel.
+            </p>
           </div>
 
           <div class="admin-user-detail-actions">
-            <a href="/admin/usuarios" class="btn-secondary">Usuarios</a>
-            <a href="/admin" class="btn-secondary">Voltar ao painel</a>
+            <a href="/admin/usuarios" class="btn-secondary">Usuários</a>
+            <a href="/staff" class="btn-secondary">Voltar ao painel</a>
           </div>
         </div>
+
+        <section class="admin-role-info-grid">
+          <article>
+            <span>Comunidade</span>
+            <strong>Sobrevivente → YouTuber</strong>
+            <p>Cargos visuais. Não liberam painel, moderação ou área staff.</p>
+          </article>
+
+          <article>
+            <span>Staff operacional</span>
+            <strong>Suporte → Administrador</strong>
+            <p>Equipe de atendimento, denúncias, fiscalização e organização.</p>
+          </article>
+
+          <article>
+            <span>Gestão</span>
+            <strong>Supervisor → Desenvolvedor</strong>
+            <p>Cargos protegidos por hierarquia e regras administrativas.</p>
+          </article>
+        </section>
 
         <% if (error) { %>
           <div class="admin-user-message error"><%= error %></div>
@@ -53,64 +76,150 @@
           <a href="/admin/cargos">Limpar</a>
         </form>
 
+        <%
+          const roleGroups = [
+            {
+              label: "Comunidade",
+              description: "Cargos visuais, sem acesso administrativo.",
+              roles: ["SOBREVIVENTE", "PREMIUM", "BETA_TESTER", "YOUTUBER"]
+            },
+            {
+              label: "Staff Operacional",
+              description: "Cargos de suporte, moderação e administração operacional.",
+              roles: ["SUPORTE", "ESTAGIARIO", "MODERADOR", "ADMINISTRADOR"]
+            },
+            {
+              label: "Gestão e Direção",
+              description: "Cargos internos protegidos por hierarquia.",
+              roles: ["SUPERVISOR", "COORDENADOR", "GERENTE", "SUB_DIRETOR", "DIRETOR", "DESENVOLVEDOR"]
+            }
+          ];
+
+          const legacyRoleMap = {
+            PLAYER: "SOBREVIVENTE",
+            STAFF: "SUPORTE",
+            ADMIN: "ADMINISTRADOR",
+            OWNER: "DESENVOLVEDOR"
+          };
+
+          const normalizeAdminRole = (role) => legacyRoleMap[role] || role;
+
+          const availableRoles = Array.isArray(roleOptions) ? roleOptions : [];
+
+          const roleTagDescription = (role) => {
+            const normalized = normalizeAdminRole(role);
+
+            if (["SOBREVIVENTE", "PREMIUM", "BETA_TESTER", "YOUTUBER"].includes(normalized)) {
+              return "Cargo comunitário";
+            }
+
+            if (["SUPORTE", "ESTAGIARIO", "MODERADOR", "ADMINISTRADOR"].includes(normalized)) {
+              return "Staff operacional";
+            }
+
+            return "Gestão protegida";
+          };
+        %>
+
         <% if (!search) { %>
-          <section class="admin-users-empty">
-            <strong>Busque um usuario para alterar cargo.</strong>
-            <p>Use nome, e-mail, nick ou Discord. Nenhum hash de senha e exibido nesta tela.</p>
+          <section class="admin-users-empty admin-roles-empty">
+            <strong>Busque um usuário para alterar cargo.</strong>
+            <p>Use nome, e-mail, nick ou Discord. Nenhum hash de senha é exibido nesta tela.</p>
           </section>
         <% } else if (users.length === 0) { %>
-          <section class="admin-users-empty">
-            <strong>Nenhum usuario encontrado.</strong>
+          <section class="admin-users-empty admin-roles-empty">
+            <strong>Nenhum usuário encontrado.</strong>
             <p>Confira o termo digitado e tente novamente.</p>
           </section>
         <% } else { %>
-          <section class="admin-roles-list">
+          <section class="admin-roles-list admin-roles-list-v2">
             <% users.forEach((user) => { %>
-              <article class="admin-roles-card">
-                <div class="admin-user-main">
-                  <a href="/perfil/<%= user.id %>" class="admin-user-avatar">
+              <%
+                const normalizedUserRole = normalizeAdminRole(user.role);
+                const canQuickEdit = availableRoles.includes(normalizedUserRole);
+              %>
+
+              <article class="admin-roles-card admin-roles-card-v2 <%= canQuickEdit ? '' : 'is-protected' %>">
+
+                <div class="admin-role-user-block">
+                  <a href="/perfil/<%= user.id %>" class="admin-user-avatar admin-role-avatar">
                     <% if (user.avatarUrl) { %>
                       <img
                         src="<%= user.avatarUrl %>"
-                        alt="Avatar de <%= user.name %>"
+                        alt="Avatar de <%= displayUserName(user) %>"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                       >
-                      <span style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                      <span style="display:none;"><%= displayInitial(user) %></span>
                     <% } else { %>
-                      <span><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                      <span><%= displayInitial(user) %></span>
                     <% } %>
                   </a>
 
-                  <div>
-                    <span class="admin-user-role role-<%= String(user.role || 'PLAYER').toLowerCase() %>">
-                      <%= roleLabel(user.role) %>
+                  <div class="admin-role-user-info">
+                    <span class="admin-user-role role-<%= roleClass(normalizedUserRole) %>">
+                      <%= roleLabel(normalizedUserRole) %>
                     </span>
-                    <h2><%= user.name %></h2>
-                    <p><%= user.email %></p>
-                    <small>Nick: <%= user.sampNick || "Nao informado" %> | Discord: <%= user.discord || "Nao informado" %></small>
+
+                    <h2><%= displayUserName(user) %></h2>
+
+                    <div class="admin-role-user-meta">
+                      <span><strong>E-mail:</strong> <%= user.email || "Não informado" %></span>
+                      <span><strong>Nick:</strong> <%= user.sampNick || "Não informado" %></span>
+                      <span><strong>Discord:</strong> <%= user.discord || "Não informado" %></span>
+                    </div>
+
+                    <small class="admin-role-category">
+                      <%= roleTagDescription(normalizedUserRole) %>
+                    </small>
                   </div>
                 </div>
 
-                <form action="/admin/cargos" method="POST" class="admin-user-role-form admin-roles-form">
-                  <input type="hidden" name="userId" value="<%= user.id %>">
-                  <input type="hidden" name="q" value="<%= search %>">
+                <div class="admin-role-change-block">
+                  <% if (availableRoles.length > 0 && canQuickEdit) { %>
+                    <form action="/admin/cargos" method="POST" class="admin-user-role-form admin-roles-form admin-roles-form-v2">
+                      <input type="hidden" name="userId" value="<%= user.id %>">
+                      <input type="hidden" name="q" value="<%= search %>">
 
-                  <label for="role-<%= user.id %>">Novo cargo</label>
-                  <select id="role-<%= user.id %>" name="role">
-                    <% roleOptions.forEach((roleOption) => { %>
-                      <option value="<%= roleOption %>" <%= user.role === roleOption ? "selected" : "" %>>
-                        <%= roleLabel(roleOption) %>
-                      </option>
-                    <% }) %>
-                  </select>
+                      <label for="role-<%= user.id %>">Novo cargo</label>
 
-                  <button type="submit" class="admin-action-btn">Atualizar cargo</button>
-                </form>
+                      <select id="role-<%= user.id %>" name="role">
+                        <% roleGroups.forEach((group) => { %>
+                          <% const groupOptions = group.roles.filter((roleOption) => availableRoles.includes(roleOption)); %>
 
-                <div class="admin-user-actions">
+                          <% if (groupOptions.length > 0) { %>
+                            <optgroup label="<%= group.label %>">
+                              <% groupOptions.forEach((roleOption) => { %>
+                                <option value="<%= roleOption %>" <%= normalizedUserRole === roleOption ? "selected" : "" %>>
+                                  <%= roleLabel(roleOption) %>
+                                </option>
+                              <% }) %>
+                            </optgroup>
+                          <% } %>
+                        <% }) %>
+                      </select>
+
+                      <button type="submit" class="admin-action-btn admin-role-update-btn">
+                        Atualizar cargo
+                      </button>
+                    </form>
+                  <% } else if (availableRoles.length > 0 && !canQuickEdit) { %>
+                    <div class="admin-role-protected-box">
+                      <strong>Cargo protegido</strong>
+                      <p>Você não pode alterar cargo de alguém com cargo igual ou superior ao seu.</p>
+                    </div>
+                  <% } else { %>
+                    <div class="admin-role-protected-box">
+                      <strong>Sem cargos disponíveis</strong>
+                      <p>Seu cargo atual não permite atribuir cargos nesta tela.</p>
+                    </div>
+                  <% } %>
+                </div>
+
+                <div class="admin-user-actions admin-role-actions">
                   <a href="/perfil/<%= user.id %>">Ver perfil</a>
                   <a href="/admin/usuarios/<%= user.id %>">Detalhes</a>
                 </div>
+
               </article>
             <% }) %>
           </section>

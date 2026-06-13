@@ -1,5 +1,6 @@
 const prisma = require("../config/prisma");
 const { UserRole } = require("@prisma/client");
+const { rolePower } = require("../utils/viewHelpers");
 
 const publicTopicWhere = {
   category: {
@@ -19,13 +20,58 @@ const includeTopicCardData = {
   }
 };
 
-const MEMBER_ROLE_OPTIONS = ["OWNER", "ADMIN", "STAFF", "PLAYER"];
+const MEMBER_ROLE_OPTIONS = [
+  "DESENVOLVEDOR",
+  "DIRETOR",
+  "SUB_DIRETOR",
+  "GERENTE",
+
+  "COORDENADOR",
+  "SUPERVISOR",
+  "ADMINISTRADOR",
+  "MODERADOR",
+  "ESTAGIARIO",
+  "SUPORTE",
+
+  "YOUTUBER",
+  "BETA_TESTER",
+  "PREMIUM",
+  "SOBREVIVENTE"
+];
 const MEMBER_SORT_OPTIONS = ["recent", "reputation", "topics", "posts", "medals"];
 
-const renderHome = (req, res) => {
-  res.render("pages/home", {
-    title: "Central SurvivalZ"
-  });
+const renderHome = async (req, res) => {
+  try {
+    const homeNewsTopics = await prisma.forumTopic.findMany({
+      where: {
+        category: {
+          slug: {
+            in: ["noticias", "changelog"]
+          }
+        },
+        status: {
+          in: ["OPEN", "PINNED"]
+        }
+      },
+      orderBy: {
+        updatedAt: "desc"
+      },
+      take: 6,
+      include: includeTopicCardData
+    });
+
+    res.render("pages/home", {
+      title: "Central SurvivalZ",
+      homeNewsTopics
+    });
+  } catch (error) {
+    console.log("Erro ao carregar home:", error);
+
+    res.render("pages/home", {
+      title: "Central SurvivalZ",
+      homeNewsTopics: []
+    });
+  }
 };
 
 const getTopicsByCategory = (slug, take = 4) => {
@@ -135,6 +181,14 @@ const renderComunidade = async (req, res) => {
     console.log("Erro ao carregar comunidade:", error);
     res.status(500).send("Erro ao carregar comunidade.");
   }
+};
+
+const redirectToForum = (req, res) => {
+  res.redirect("/forum");
+};
+
+const redirectToServidor = (req, res) => {
+  res.redirect("/servidor");
 };
 
 const renderMembers = async (req, res) => {
@@ -258,9 +312,79 @@ const renderMembers = async (req, res) => {
   }
 };
 
+const renderTeam = async (req, res) => {
+  try {
+    const team = await prisma.user.findMany({
+      where: {
+        role: {
+          in: [
+  "DESENVOLVEDOR",
+  "DIRETOR",
+  "SUB_DIRETOR",
+  "GERENTE",
+  "COORDENADOR",
+  "SUPERVISOR",
+  "ADMINISTRADOR",
+  "MODERADOR",
+  "ESTAGIARIO",
+  "SUPORTE",
+  "STAFF",
+  "ADMIN",
+  "OWNER"
+]
+        }
+      },
+      orderBy: [
+        {
+          role: "desc"
+        },
+        {
+          createdAt: "asc"
+        }
+      ],
+      select: {
+        id: true,
+        name: true,
+        sampNick: true,
+        avatarUrl: true,
+        role: true,
+        bio: true,
+        medals: {
+          orderBy: {
+            createdAt: "desc"
+          },
+          take: 4,
+          select: {
+            medal: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                icon: true,
+                rarity: true
+              }
+            },
+            createdAt: true
+          }
+        }
+      }
+    });
+
+    res.render("pages/equipe", {
+      title: "Equipe - SurvivalZ",
+      team: [...team].sort((a, b) => {
+        return rolePower(b.role) - rolePower(a.role);
+      })
+    });
+  } catch (error) {
+    console.log("Erro ao carregar equipe:", error);
+    res.status(500).send("Erro ao carregar equipe.");
+  }
+};
+
 const renderSobre = (req, res) => {
-  res.render("pages/sobre", {
-    title: "Sobre o SurvivalZ"
+  res.render("pages/servidor", {
+    title: "Servidor - SurvivalZ"
   });
 };
 
@@ -291,7 +415,10 @@ const renderPainel = (req, res) => {
 module.exports = {
   renderHome,
   renderComunidade,
+  redirectToForum,
+  redirectToServidor,
   renderMembers,
+  renderTeam,
   renderSobre,
   renderGestao,
   renderLogin,

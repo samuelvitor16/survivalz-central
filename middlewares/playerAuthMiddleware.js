@@ -1,8 +1,44 @@
 const prisma = require("../config/prisma");
+const { normalizeRole, rolePower } = require("../utils/viewHelpers");
 
-const STAFF_ROLES = ["STAFF", "ADMIN", "OWNER"];
-const ADMIN_ROLES = ["ADMIN", "OWNER"];
-const OWNER_ROLES = ["OWNER"];
+const STAFF_ROLES = [
+  "SUPORTE",
+  "ESTAGIARIO",
+  "MODERADOR",
+  "ADMINISTRADOR",
+  "SUPERVISOR",
+  "COORDENADOR",
+  "GERENTE",
+  "SUB_DIRETOR",
+  "DIRETOR",
+  "DESENVOLVEDOR",
+
+  // Legado temporário
+  "STAFF",
+  "ADMIN",
+  "OWNER"
+];
+
+const ADMIN_ROLES = [
+  "ADMINISTRADOR",
+  "SUPERVISOR",
+  "COORDENADOR",
+  "GERENTE",
+  "SUB_DIRETOR",
+  "DIRETOR",
+  "DESENVOLVEDOR",
+
+  // Legado temporário
+  "ADMIN",
+  "OWNER"
+];
+
+const OWNER_ROLES = [
+  "DESENVOLVEDOR",
+
+  // Legado temporário
+  "OWNER"
+];
 
 const refreshSessionRole = async (req, res) => {
   if (!req.session.playerId) {
@@ -14,16 +50,23 @@ const refreshSessionRole = async (req, res) => {
       id: req.session.playerId
     },
     select: {
-      role: true
+      role: true,
+      avatarUrl: true,
+      name: true,
+      sampNick: true
     }
   });
 
   if (!user) return null;
 
   req.session.playerRole = user.role;
+  req.session.playerName = user.sampNick || user.name;
+  req.session.playerAvatarUrl = user.avatarUrl || null;
 
   if (res.locals) {
     res.locals.playerRole = user.role;
+    res.locals.playerName = req.session.playerName;
+    res.locals.playerAvatarUrl = req.session.playerAvatarUrl;
   }
 
   return user.role;
@@ -33,7 +76,7 @@ const canUseDevPasswordAccess = (req) => {
   if (!req.session || !req.session.isAdminLogged) return false;
   if (!req.session.playerId) return true;
 
-  return ADMIN_ROLES.includes(req.session.playerRole);
+  return rolePower(req.session.playerRole) >= 4;
 };
 
 const requireRole = (roles, options = {}) => {
@@ -50,7 +93,7 @@ const requireRole = (roles, options = {}) => {
 
     const role = await refreshSessionRole(req, res);
 
-    if (roles.includes(role)) {
+    if (roles.includes(normalizeRole(role))) {
       return next();
     }
 
@@ -68,7 +111,7 @@ const requirePlayer = (req, res, next) => {
 
 const redirectIfPlayerLogged = (req, res, next) => {
   if (req.session.playerId) {
-    return res.redirect("/painel");
+    return res.redirect(`/perfil/${req.session.playerId}`);
   }
 
   next();

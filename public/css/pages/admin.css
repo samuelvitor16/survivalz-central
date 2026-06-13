@@ -1694,3 +1694,530 @@
     grid-template-columns: 1fr;
   }
 }
+.admin-user-role-form input {
+  width: 100%;
+  background: rgba(8, 8, 8, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+/* ==================================================
+   SURVIVALZ - BADGES DE CARGO V3 / ADMIN
+   ================================================== */
+
+.admin-user-role {
+  --rank-main: #94a3b8;
+  --rank-glow: rgba(148, 163, 184, 0.22);
+
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 8px;
+
+  min-height: 32px;
+  padding: 7px 11px 7px 13px;
+
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rank-main) 48%, transparent);
+
+  background:
+    radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--rank-main) 34%, transparent), transparent 36%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.92));
+
+  color: #fff;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.13),
+    0 0 20px var(--rank-glow),
+    0 10px 22px rgba(0,0,0,0.28);
+
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-user-role::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--rank-main);
+  box-shadow: 0 0 14px var(--rank-main);
+}
+
+.admin-user-role::after {
+  content: "NV 000";
+
+  padding: 3px 6px;
+  border-radius: 999px;
+
+  background: var(--rank-main);
+  color: #020617;
+
+  font-size: 0.55rem;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+}
+
+.admin-user-role.role-suporte {
+  --rank-main: #22c55e;
+  --rank-glow: rgba(34, 197, 94, 0.34);
+}
+
+.admin-user-role.role-estagiario {
+  --rank-main: #14b8a6;
+  --rank-glow: rgba(20, 184, 166, 0.35);
+}
+
+.admin-user-role.role-moderador {
+  --rank-main: #3b82f6;
+  --rank-glow: rgba(59, 130, 246, 0.38);
+}
+
+.admin-user-role.role-administrador {
+  --rank-main: #ef4444;
+  --rank-glow: rgba(239, 68, 68, 0.43);
+}
+
+.admin-user-role.role-supervisor {
+  --rank-main: #f97316;
+  --rank-glow: rgba(249, 115, 22, 0.42);
+}
+
+.admin-user-role.role-coordenador {
+  --rank-main: #eab308;
+  --rank-glow: rgba(234, 179, 8, 0.45);
+}
+
+.admin-user-role.role-gerente {
+  --rank-main: #a855f7;
+  --rank-glow: rgba(168, 85, 247, 0.48);
+}
+
+.admin-user-role.role-sub_diretor {
+  --rank-main: #ec4899;
+  --rank-glow: rgba(236, 72, 153, 0.50);
+}
+
+.admin-user-role.role-diretor {
+  --rank-main: #facc15;
+  --rank-glow: rgba(250, 204, 21, 0.55);
+}
+
+.admin-user-role.role-desenvolvedor {
+  --rank-main: #f43f5e;
+  --rank-glow: rgba(244, 63, 94, 0.62);
+}
+
+.admin-user-role.role-player::after {
+  content: "NV 000";
+}
+
+.admin-user-role.role-suporte::after,
+.admin-user-role.role-staff::after {
+  content: "NV 001";
+}
+
+.admin-user-role.role-estagiario::after {
+  content: "NV 002";
+}
+
+.admin-user-role.role-moderador::after {
+  content: "NV 003";
+}
+
+.admin-user-role.role-administrador::after,
+.admin-user-role.role-admin::after {
+  content: "NV 004";
+}
+
+.admin-user-role.role-supervisor::after {
+  content: "NV 005";
+}
+
+.admin-user-role.role-coordenador::after {
+  content: "NV 006";
+}
+
+.admin-user-role.role-gerente::after {
+  content: "NV 2000";
+}
+
+.admin-user-role.role-sub_diretor::after {
+  content: "NV 2001";
+}
+
+.admin-user-role.role-diretor::after {
+  content: "NV 2002";
+}
+
+.admin-user-role.role-desenvolvedor::after,
+.admin-user-role.role-owner::after {
+  content: "NV 5000";
+}
+
+.admin-user-role.role-sobrevivente,
+.admin-user-role.role-player {
+  --rank-main: #94a3b8;
+  --rank-glow: rgba(148, 163, 184, 0.22);
+}
+
+.admin-user-role.role-premium {
+  --rank-main: #22d3ee;
+  --rank-glow: rgba(34, 211, 238, 0.36);
+}
+
+.admin-user-role.role-beta_tester {
+  --rank-main: #d8b4fe;
+  --rank-glow: rgba(216, 180, 254, 0.36);
+}
+
+.admin-user-role.role-youtuber {
+  --rank-main: #f87171;
+  --rank-glow: rgba(248, 113, 113, 0.38);
+}
+
+.admin-user-role.role-sobrevivente::after,
+.admin-user-role.role-player::after {
+  content: "NV 000";
+}
+
+.admin-user-role.role-premium::after {
+  content: "NV 010";
+}
+
+.admin-user-role.role-beta_tester::after {
+  content: "NV 020";
+}
+
+.admin-user-role.role-youtuber::after {
+  content: "NV 030";
+}
+
+/* ==================================================
+   ADMIN CARGOS - TELA V2
+   ================================================== */
+
+.admin-roles-page {
+  padding-top: 72px;
+}
+
+.admin-roles-header {
+  margin-bottom: 22px;
+}
+
+.admin-role-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.admin-role-info-grid article {
+  position: relative;
+  overflow: hidden;
+  padding: 18px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 43, 43, 0.12), transparent 42%),
+    rgba(8, 8, 8, 0.96);
+  border: 1px solid rgba(255, 43, 43, 0.18);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+}
+
+.admin-role-info-grid article::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: rgba(255, 43, 43, 0.72);
+  box-shadow: 0 0 18px rgba(255, 43, 43, 0.6);
+}
+
+.admin-role-info-grid span {
+  display: block;
+  margin-bottom: 7px;
+  color: #ff5555;
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-role-info-grid strong {
+  display: block;
+  margin-bottom: 7px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 950;
+}
+
+.admin-role-info-grid p {
+  color: #aaa;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.admin-roles-list-v2 {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-roles-card-v2 {
+  position: relative;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 360px) auto;
+  align-items: center;
+  gap: 18px;
+
+  padding: 18px;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(circle at top left, rgba(255, 43, 43, 0.11), transparent 38%),
+    linear-gradient(145deg, rgba(255, 43, 43, 0.035), transparent 45%),
+    rgba(7, 7, 7, 0.94);
+
+  border: 1px solid rgba(255, 43, 43, 0.20);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 18px 38px rgba(0,0,0,0.28);
+
+  transition: 0.18s ease;
+}
+
+.admin-roles-card-v2:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 43, 43, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    0 0 26px rgba(255, 43, 43, 0.08),
+    0 20px 44px rgba(0,0,0,0.34);
+}
+
+.admin-roles-card-v2.is-protected {
+  border-color: rgba(255, 255, 255, 0.09);
+  opacity: 0.82;
+}
+
+.admin-roles-card-v2.is-protected::after {
+  content: "PROTEGIDO";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 185, 66, 0.35);
+  background: rgba(255, 185, 66, 0.10);
+  color: #f5b942;
+  font-size: 0.58rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+}
+
+.admin-role-user-block {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+}
+
+.admin-role-avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  border-color: rgba(255, 43, 43, 0.34);
+  box-shadow:
+    0 0 18px rgba(255, 43, 43, 0.08),
+    0 10px 24px rgba(0,0,0,0.32);
+}
+
+.admin-role-user-info {
+  min-width: 0;
+}
+
+.admin-role-user-info h2 {
+  margin: 8px 0 6px;
+  color: #fff;
+  font-size: 1.35rem;
+  line-height: 1.08;
+}
+
+.admin-role-user-meta {
+  display: grid;
+  gap: 3px;
+  color: #aaa;
+  font-size: 0.76rem;
+}
+
+.admin-role-user-meta span {
+  overflow-wrap: anywhere;
+}
+
+.admin-role-user-meta strong {
+  color: #ddd;
+}
+
+.admin-role-category {
+  display: inline-flex !important;
+  width: fit-content;
+  margin-top: 8px !important;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #aaa !important;
+  font-size: 0.68rem !important;
+  font-weight: 850;
+}
+
+.admin-role-change-block {
+  min-width: 0;
+}
+
+.admin-roles-form-v2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  margin: 0;
+}
+
+.admin-roles-form-v2 label {
+  color: #aaa;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-roles-form-v2 select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255, 43, 43, 0.22);
+
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.08), rgba(0,0,0,0.52)),
+    #080808;
+
+  color: #fff;
+  font-weight: 850;
+  outline: none;
+}
+
+.admin-roles-form-v2 select:focus {
+  border-color: rgba(255, 43, 43, 0.55);
+  box-shadow: 0 0 0 3px rgba(255, 43, 43, 0.08);
+}
+
+.admin-roles-form-v2 optgroup {
+  background: #111;
+  color: #ff7777;
+  font-weight: 950;
+}
+
+.admin-roles-form-v2 option {
+  background: #151515;
+  color: #fff;
+}
+
+.admin-role-update-btn {
+  width: 100%;
+  min-height: 42px;
+  border-radius: 12px;
+  background:
+    linear-gradient(135deg, rgba(196, 0, 0, 0.78), rgba(94, 12, 20, 0.75));
+  border-color: rgba(255, 43, 43, 0.35);
+  color: #fff;
+}
+
+.admin-role-update-btn:hover {
+  color: #fff;
+  border-color: rgba(255, 43, 43, 0.65);
+  filter: brightness(1.08);
+}
+
+.admin-role-protected-box {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 185, 66, 0.22);
+  background:
+    radial-gradient(circle at top left, rgba(255, 185, 66, 0.10), transparent 50%),
+    rgba(0, 0, 0, 0.34);
+}
+
+.admin-role-protected-box strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #f5b942;
+  font-size: 0.9rem;
+}
+
+.admin-role-protected-box p {
+  color: #aaa;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.admin-role-actions {
+  justify-content: flex-end;
+  margin-top: 0;
+}
+
+.admin-role-actions a {
+  min-height: 38px;
+  border-radius: 11px;
+  white-space: nowrap;
+}
+
+.admin-roles-empty {
+  padding: 24px;
+}
+
+@media (max-width: 1050px) {
+  .admin-roles-card-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-role-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 850px) {
+  .admin-role-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-role-user-block {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 580px) {
+  .admin-role-user-block {
+    flex-direction: column;
+  }
+
+  .admin-role-avatar {
+    width: 68px;
+    height: 68px;
+  }
+
+  .admin-roles-card-v2 {
+    padding: 16px;
+  }
+}

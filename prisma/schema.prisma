@@ -8,6 +8,25 @@ datasource db {
 
 enum UserRole {
   PLAYER
+  SOBREVIVENTE
+  PREMIUM
+  BETA_TESTER
+  YOUTUBER
+
+  SUPORTE
+  ESTAGIARIO
+  MODERADOR
+  ADMINISTRADOR
+  SUPERVISOR
+  COORDENADOR
+
+  GERENTE
+  SUB_DIRETOR
+  DIRETOR
+
+  DESENVOLVEDOR
+
+  // Legado temporário, para não quebrar usuários antigos
   STAFF
   ADMIN
   OWNER
@@ -57,7 +76,7 @@ model User {
   lastGameLogin   DateTime?
   isOnlineInGame  Boolean   @default(false)
 
-  role     UserRole @default(PLAYER)
+  role     UserRole @default(SOBREVIVENTE)
   isBanned Boolean  @default(false)
 
   topics ForumTopic[]

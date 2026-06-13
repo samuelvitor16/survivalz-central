@@ -61,7 +61,7 @@
                 <div class="forum-report-moderation-grid">
                   <div><span>Acusado</span><strong><%= report.reportAccusedNick || "Nao informado" %></strong></div>
                   <div><span>Motivo</span><strong><%= report.reportReason || "Nao informado" %></strong></div>
-                  <div><span>Autor</span><strong><%= report.author.name %></strong></div>
+                  <div><span>Autor</span><strong><%= displayUserName(report.author) %></strong></div>
                   <div><span>Data</span><strong><%= formatDateTime(report.createdAt) %></strong></div>
                   <div><span>Status</span><strong><%= topicStatusLabel(report.status) %></strong></div>
                   <div><span>Respostas</span><strong><%= report._count.posts %></strong></div>

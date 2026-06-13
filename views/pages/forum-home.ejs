@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title><%= title %></title>
-
   <link rel="icon" type="image/png" href="/images/logo/favicon.png">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pages/forum.css">
@@ -15,40 +14,466 @@
   <%- include("../partials/header") %>
 
   <main>
-    <section class="forum-section">
+    <section class="forum-portal forum-community-portal">
       <div class="container">
+        <%
+          const categoryBuckets = [
+            {
+              title: "Importante",
+              eyebrow: "Base da zona",
+              description: "Avisos oficiais, regras, changelog e suporte essencial.",
+              icon: "!",
+              match: ["aviso", "oficial", "regra", "suporte", "changelog"]
+            },
+            {
+              title: "Comunidade",
+              eyebrow: "Movimento publico",
+              description: "Duvidas, eventos, sugestoes, guias e conversa da comunidade.",
+              icon: "SZ",
+              match: ["duvida", "sugest", "evento", "guia", "tutorial", "comunidade", "geral"]
+            },
+            {
+              title: "Moderacao e suporte",
+              eyebrow: "Analise staff",
+              description: "Denuncias, revisoes e areas que precisam de acompanhamento.",
+              icon: "MOD",
+              match: ["denuncia", "punicao", "revisao", "moderacao", "staff"]
+            }
+          ];
 
-        <div class="forum-header">
-          <span class="section-tag">Comunidade SurvivalZ</span>
+          const usedCategoryIds = new Set();
+          const normalizeCategoryText = (category) => `${category.slug || ""} ${category.name || ""}`.toLowerCase();
+          const cleanText = (value = "") =>
+  String(value)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
 
-          <h1>Fórum SurvivalZ</h1>
+const getCategoryVisualIcon = (category = {}) => {
+  const text = cleanText(`${category.slug || ""} ${category.name || ""} ${category.title || ""}`);
 
-          <p>
-            O centro oficial da comunidade. Tire dúvidas, acompanhe avisos,
-            envie sugestões, abra denúncias e participe da evolução do servidor.
-          </p>
-        </div>
+  if (text.includes("aviso") || text.includes("oficial")) return "📢";
+  if (text.includes("changelog") || text.includes("atualizacao")) return "📝";
+  if (text.includes("regra")) return "📜";
+  if (text.includes("suporte")) return "🎫";
+  if (text.includes("duvida")) return "❓";
+  if (text.includes("sugest")) return "💡";
+  if (text.includes("guia") || text.includes("tutorial")) return "📘";
+  if (text.includes("comunidade") || text.includes("geral")) return "💬";
+  if (text.includes("evento")) return "🎉";
+  if (text.includes("denuncia")) return "⚠️";
+  if (text.includes("revisao") || text.includes("punicao") || text.includes("moderacao") || text.includes("staff")) return "⚖️";
 
-        <div class="forum-category-grid">
-          <% categories.forEach((category) => { %>
-            <a href="/forum/categoria/<%= category.slug %>" class="forum-category-card">
-  <div class="forum-category-icon">
-    <span><%= category.icon || "☣" %></span>
+  return "☣️";
+};
+
+const getGroupVisualIcon = (group = {}) => {
+  const text = cleanText(`${group.title || ""} ${group.eyebrow || ""}`);
+
+  if (text.includes("importante") || text.includes("base")) return "📢";
+  if (text.includes("comunidade")) return "☣️";
+  if (text.includes("moderacao") || text.includes("suporte")) return "⚠️";
+
+  return "☣️";
+};
+          const groupedCategories = categoryBuckets.map((bucket) => {
+            const items = categories.filter((category) => {
+              if (usedCategoryIds.has(category.id)) return false;
+              const text = normalizeCategoryText(category);
+              return bucket.match.some((needle) => text.includes(needle));
+            });
+
+            items.forEach((category) => usedCategoryIds.add(category.id));
+
+            return {
+              ...bucket,
+              items
+            };
+          }).filter((group) => group.items.length > 0);
+
+          const otherCategories = categories.filter((category) => !usedCategoryIds.has(category.id));
+
+          if (otherCategories.length > 0) {
+            groupedCategories.push({
+              title: "Outras areas",
+              eyebrow: "Arquivo aberto",
+              description: "Demais secoes existentes do forum.",
+              icon: "Z",
+              items: otherCategories
+            });
+          }
+
+        %>
+
+      <%
+  
+      const featuredFallback = "/images/home/hero-bg.png";
+
+function getTopicReplies(topic = {}) {
+  return Number(topic._count && topic._count.posts ? topic._count.posts : 0);
+}
+
+function getTopicViews(topic = {}) {
+  return Number(topic.views || 0);
+}
+
+function getTopicScore(topic = {}) {
+  return getTopicViews(topic) + (getTopicReplies(topic) * 12) + (topic.status === "PINNED" ? 80 : 0);
+}
+
+function isHotTopic(topic = {}) {
+  return getTopicReplies(topic) >= 3 || getTopicViews(topic) >= 80 || getTopicScore(topic) >= 120;
+}
+
+function getCategoryAccent(category = {}) {
+  const text = cleanText(`${category.slug || ""} ${category.name || ""} ${category.title || ""}`);
+
+  if (text.includes("aviso") || text.includes("oficial")) return "accent-red";
+  if (text.includes("changelog") || text.includes("atualizacao")) return "accent-yellow";
+
+  if (
+    text.includes("duvida") &&
+    (
+      text.includes("resolvida") ||
+      text.includes("resolvido") ||
+      text.includes("solucionada") ||
+      text.includes("solucionado")
+    )
+  ) {
+    return "accent-green";
+  }
+
+  if (text.includes("duvida")) return "accent-blue";
+  if (text.includes("denuncia") || text.includes("revisao") || text.includes("punicao")) return "accent-orange";
+  if (text.includes("sugest")) return "accent-purple";
+
+  return "accent-red";
+}
+
+const visibleFeaturedTopics = [...(featuredTopics || [])]
+  .sort((a, b) => {
+    const hotA = isHotTopic(a) ? 0 : 1;
+    const hotB = isHotTopic(b) ? 0 : 1;
+
+    if (hotA !== hotB) return hotA - hotB;
+
+    const pinnedA = a.status === "PINNED" ? 0 : 1;
+    const pinnedB = b.status === "PINNED" ? 0 : 1;
+
+    if (pinnedA !== pinnedB) return pinnedA - pinnedB;
+
+    return getTopicScore(b) - getTopicScore(a);
+  })
+  .slice(0, 4);
+
+const visibleLatestTopics = [...(latestTopics || [])].slice(0, 5);
+
+const doubtCategory = (categories || []).find((category) => {
+  const text = cleanText(`${category.slug || ""} ${category.name || ""}`);
+  return text.includes("duvida");
+});
+
+const resolvedDoubtCategory = (categories || []).find((category) => {
+  const text = cleanText(`${category.slug || ""} ${category.name || ""}`);
+  return (
+    text.includes("duvida") &&
+    (
+      text.includes("resolvida") ||
+      text.includes("resolvido") ||
+      text.includes("solucionada") ||
+      text.includes("solucionado")
+    )
+  );
+});
+
+  function getTopicFeaturedImage(topic) {
+    const topicText =
+      topic.content ||
+      topic.body ||
+      topic.description ||
+      "";
+
+    const bbcodeImage = topicText.match(/\[img\]([\s\S]*?)\[\/img\]/i);
+    const htmlImage = topicText.match(/<img[^>]+src=["']([^"']+)["']/i);
+
+    return (
+      topic.coverImageUrl ||
+      topic.coverUrl ||
+      topic.bannerUrl ||
+      topic.imageUrl ||
+      topic.thumbnailUrl ||
+      (bbcodeImage && bbcodeImage[1] ? bbcodeImage[1].trim() : null) ||
+      (htmlImage && htmlImage[1] ? htmlImage[1].trim() : null) ||
+      featuredFallback
+    );
+  }
+%>
+
+        <header class="forum-portal-hero">
+          <div>
+            <span class="forum-portal-kicker">Comunidade SurvivalZ</span>
+            <h1>Forum SurvivalZ</h1>
+            <p>Avisos, duvidas, denuncias, sugestoes e guias da comunidade.</p>
+          </div>
+
+          <div class="forum-portal-actions">
+            <% if (isPlayerLogged && typeof newTopicCategory !== "undefined" && newTopicCategory) { %>
+              <a href="/forum/categoria/<%= newTopicCategory.slug %>/novo" class="btn-primary">Novo topico</a>
+            <% } %>
+
+            <% if (typeof reportCategory !== "undefined" && reportCategory) { %>
+              <a
+                href="/forum/categoria/<%= reportCategory.slug %><%= isPlayerLogged && !reportCategory.isLocked ? "/novo" : "" %>"
+                class="btn-secondary"
+              >
+                Criar denuncia
+              </a>
+            <% } %>
+          </div>
+        </header>
+
+        <div class="forum-portal-layout">
+          <div class="forum-main-column">
+            <section class="forum-featured forum-featured-modern">
+  <div class="forum-section-head">
+    <div>
+      <span>Avisos e novidades</span>
+      <h2>Destaques da comunidade</h2>
+    </div>
+    <p>Tópicos oficiais, fixados e novidades recentes aparecem com mais peso visual.</p>
   </div>
 
-  <div class="forum-category-content">
-    <h2><%= category.name %></h2>
-    <p><%= category.description || "Categoria do fórum SurvivalZ." %></p>
+  <% if (visibleFeaturedTopics.length > 0) { %>
+    <div class="forum-featured-grid">
+      <% visibleFeaturedTopics.forEach((topic, index) => { %>
+        <% const featuredImage = getTopicFeaturedImage(topic); %>
+        <% const hotTopic = isHotTopic(topic); %>
 
-    <div class="forum-category-meta">
-      <span><%= category._count ? category._count.topics : 0 %> tópico(s)</span>
-      <strong>Acessar →</strong>
+        <a
+          href="/forum/topico/<%= topic.id %>"
+          class="forum-featured-card <%= index === 0 ? 'is-main' : '' %> <%= getCategoryAccent(topic.category) %> <%= hotTopic ? 'is-hot' : '' %>"
+          style="--forum-cover: url('<%= featuredImage %>');"
+        >
+          <div class="forum-featured-badges">
+            <% if (hotTopic) { %>
+              <span class="forum-hot-badge">🔥 Em alta</span>
+            <% } %>
+
+            <span class="forum-featured-badge"><%= topic.category.name %></span>
+          </div>
+
+          <div class="forum-featured-content">
+            <strong><%= topic.title %></strong>
+
+            <small>
+              <%= displayUserName(topic.author) %> - <%= formatDate(topic.updatedAt) %>
+            </small>
+
+            <div class="forum-featured-meta">
+              <em><%= topic.views || 0 %> views</em>
+              <em><%= getTopicReplies(topic) %> respostas</em>
+
+              <% if (topic.status && topic.status !== "OPEN") { %>
+                <em><%= topicStatusLabel(topic.status) %></em>
+              <% } %>
+            </div>
+
+            <span class="forum-featured-link">Ver novidade</span>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="forum-featured-empty">
+      <strong>Nenhum aviso destacado ainda.</strong>
+      <p>Quando surgirem tópicos oficiais ou fixados, eles vão aparecer aqui.</p>
+    </div>
+  <% } %>
+</section>
+
+            <section class="forum-panel forum-latest-panel">
+              <div class="forum-section-head compact">
+                <div>
+                  <span>Ultimas postagens</span>
+                  <h2>Movimento recente</h2>
+                </div>
+              </div>
+
+              <div class="forum-latest-list">
+                <% if (visibleLatestTopics.length === 0) { %>
+                  <p class="forum-empty">Nenhum topico publico ainda.</p>
+                <% } %>
+
+               <% visibleLatestTopics.forEach((topic) => { %>
+  <% const hotTopic = isHotTopic(topic); %>
+
+  <a
+    href="/forum/topico/<%= topic.id %>"
+    class="forum-latest-item <%= getCategoryAccent(topic.category) %> <%= hotTopic ? 'is-hot' : '' %>"
+  >
+                    <span class="forum-latest-avatar">
+                      <% if (topic.author && topic.author.avatarUrl) { %>
+                        <img src="<%= topic.author.avatarUrl %>" alt="Avatar de <%= displayUserName(topic.author) %>">
+                      <% } else { %>
+                        <%= displayInitial(topic.author) %>
+                      <% } %>
+                    </span>
+
+                    <span class="forum-latest-icon"><%= getCategoryVisualIcon(topic.category) %></span>
+
+                    <div class="forum-latest-content">
+                      <strong><%= topic.title %></strong>
+                      <small>
+                        <%= displayUserName(topic.author) %> em <%= topic.category.name %>
+                      </small>
+                      <div class="forum-latest-meta">
+                        <em><%= topic._count.posts %> respostas</em>
+                        <em><%= topic.views || 0 %> views</em>
+                        <% if (hotTopic) { %>
+  <em class="forum-latest-hot">🔥 Em alta</em>
+<% } %>
+                        <% if (topic.status && topic.status !== "OPEN") { %>
+                          <em><%= topicStatusLabel(topic.status) %></em>
+                        <% } %>
+                      </div>
+                    </div>
+
+                    <time datetime="<%= topic.updatedAt.toISOString() %>"><%= formatDate(topic.updatedAt) %></time>
+                  </a>
+                <% }) %>
+              </div>
+            </section>
+
+            <section class="forum-panel forum-categories-panel">
+              <div class="forum-section-head compact">
+                <div>
+                  <span>Categorias agrupadas</span>
+                  <h2>Explore o forum</h2>
+                </div>
+              </div>
+
+              <div class="forum-category-groups">
+                <% if (groupedCategories.length === 0) { %>
+                  <p class="forum-empty">Nenhuma categoria cadastrada ainda.</p>
+                <% } %>
+
+                <% groupedCategories.forEach((group) => { %>
+                  <section class="forum-category-group">
+                    <div class="forum-category-group-head">
+                     
+                      <div>
+                        <small><%= group.eyebrow %></small>
+                        <strong><%= group.title %></strong>
+                        <p><%= group.description %></p>
+                      </div>
+                      <em><%= group.items.length %></em>
+                    </div>
+
+                    <% group.items.forEach((category) => { %>
+                    <% const categoryIcon = getCategoryVisualIcon(category); %>
+
+  <a href="/forum/categoria/<%= category.slug %>" class="forum-category-row">
+    <span class="forum-category-icon">
+      <span><%= categoryIcon %></span>
+    </span>
+
+                        <div class="forum-category-info">
+                          <strong><%= category.name %></strong>
+                          <small><%= category.description || "Categoria do forum SurvivalZ." %></small>
+                        </div>
+
+                        <div class="forum-category-count">
+                          <strong><%= category._count ? category._count.topics : 0 %></strong>
+                          <span>topicos</span>
+                        </div>
+
+                        <div class="forum-category-last">
+                          <% if (category.topics && category.topics.length > 0) { %>
+                            <strong><%= category.topics[0].title %></strong>
+                            <span><%= displayUserName(category.topics[0].author) %> - <%= formatDate(category.topics[0].updatedAt) %></span>
+                          <% } else { %>
+                            <strong>Nenhum topico</strong>
+                            <span>Seja o primeiro a publicar</span>
+                          <% } %>
+                        </div>
+                      </a>
+                    <% }) %>
+                  </section>
+                <% }) %>
+              </div>
+            </section>
+          </div>
+
+          <aside class="forum-sidebar forum-portal-sidebar">
+            <section class="forum-sidebar-card forum-discord-widget">
+              <span class="forum-sidebar-eyebrow">Tempo real</span>
+              <h2>Discord</h2>
+              <p>Suporte, avisos e comunidade em tempo real.</p>
+              <div class="forum-discord-status">
+                <span></span>
+                <strong>Comunidade aberta</strong>
+                <small>Membros online: acompanhe no Discord</small>
+              </div>
+              <a href="<%= discordInvite %>" target="_blank" rel="noopener noreferrer" class="forum-sidebar-button">Entrar no Discord</a>
+            </section>
+
+            <section class="forum-sidebar-card">
+              <div class="forum-sidebar-head">
+                <div>
+                  <span class="forum-sidebar-eyebrow">Hierarquia</span>
+                  <h2>Equipe</h2>
+                </div>
+                <a href="/equipe">Ver equipe</a>
+              </div>
+
+              <% if (teamMembers.length === 0) { %>
+                <p class="forum-empty small">Nenhuma equipe cadastrada.</p>
+              <% } %>
+
+              <% teamMembers.forEach((member) => { %>
+                <a href="/perfil/<%= member.id %>" class="forum-team-mini-card role-<%= roleClass(member.role) %>">
+                  <span class="forum-mini-avatar">
+                    <% if (member.avatarUrl) { %>
+                      <img src="<%= member.avatarUrl %>" alt="Avatar de <%= displayUserName(member) %>">
+                    <% } else { %>
+                      <%= displayInitial(member) %>
+                    <% } %>
+                  </span>
+                  <div>
+                    <strong><%= displayUserName(member) %></strong>
+                    <small><%= roleLabel(member.role) %></small>
+                  </div>
+                  <em><%= member.role %></em>
+                </a>
+              <% }) %>
+            </section>
+
+           <section class="forum-sidebar-card">
+  <div class="forum-sidebar-head">
+    <div>
+      <span class="forum-sidebar-eyebrow">Atalhos</span>
+      <h2>Links rápidos</h2>
     </div>
   </div>
-</a>
-          <% }) %>
-        </div>
 
+  <div class="forum-quick-links">
+  <a href="/loja" class="forum-quick-link">Loja Beta</a>
+  <a href="/servidor" class="forum-quick-link">Servidor</a>
+  <a href="/equipe" class="forum-quick-link">Equipe</a>
+
+  <% if (doubtCategory) { %>
+    <a href="/forum/categoria/<%= doubtCategory.slug %>" class="forum-quick-link">Dúvidas</a>
+  <% } %>
+
+  <% if (resolvedDoubtCategory) { %>
+    <a href="/forum/categoria/<%= resolvedDoubtCategory.slug %>" class="forum-quick-link resolved">Dúvidas resolvidas</a>
+  <% } %>
+
+  <a href="<%= discordInvite %>" target="_blank" rel="noopener noreferrer" class="forum-quick-link">Discord</a>
+</div>
+</section>
+          </aside>
+        </div>
       </div>
     </section>
   </main>

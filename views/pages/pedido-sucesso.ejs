@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title><%= title %></title>
-
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pages/shop.css">
 </head>
@@ -16,22 +15,15 @@
   <main>
     <section class="order-success-section">
       <div class="container order-success-container">
-
         <div class="order-success-card">
-          <div class="success-icon">✓</div>
-
+          <div class="success-icon">OK</div>
           <span class="section-tag">Pedido enviado</span>
-
-          <h1>Seu pedido foi criado com sucesso</h1>
-
-          <p>
-            A gestão do SurvivalZ recebeu seu pedido. Agora realize o pagamento via Pix,
-            copie a mensagem pronta e envie o comprovante no Discord junto com o código do pedido.
-          </p>
+          <h1>Pedido criado com sucesso</h1>
+          <p>Agora pague via Pix, copie a mensagem do pedido e envie no Discord com o comprovante.</p>
 
           <% if (orderCode) { %>
             <div class="success-order-code">
-              <span>Código do pedido</span>
+              <span>Codigo do pedido</span>
               <strong><%= orderCode %></strong>
             </div>
           <% } %>
@@ -39,9 +31,8 @@
           <% if (order) { %>
             <div class="success-payment-box">
               <h2>Pagamento via Pix</h2>
-
               <div class="success-payment-total">
-                <span>Valor total do pedido</span>
+                <span>Valor total</span>
                 <strong><%= formatPrice(order.total) %></strong>
               </div>
 
@@ -50,127 +41,69 @@
                   <div class="pix-qrcode-box">
                     <img src="<%= pix.pixQrCode %>" alt="QR Code Pix do pedido <%= order.code %>">
                   </div>
-                <% } else { %>
-                  <div class="success-warning">
-                    <strong>QR Code indisponivel:</strong>
-                    <span>Use o Pix Copia e Cola abaixo para pagar este pedido.</span>
-                  </div>
                 <% } %>
 
                 <div class="pix-copy-box">
                   <label for="pixPayload">Pix Copia e Cola</label>
-
                   <textarea id="pixPayload" readonly><%= pix.pixCopyPaste %></textarea>
-
-                  <button type="button" class="btn-primary pix-copy-btn" id="copyPixButton">
-                    Copiar Pix
-                  </button>
+                  <button type="button" class="btn-primary pix-copy-btn" id="copyPixButton">Copiar Pix</button>
                 </div>
 
                 <% if (pix.pixError) { %>
-                  <div class="success-warning">
-                    <strong>Aviso Pix:</strong>
-                    <span><%= pix.pixError %></span>
-                  </div>
+                  <div class="success-warning"><strong>Aviso Pix:</strong><span><%= pix.pixError %></span></div>
                 <% } %>
               <% } else { %>
                 <div class="success-warning">
-                  <strong>⚠ Pix não configurado:</strong>
-                  <span>
-                    A chave Pix ainda não foi configurada no servidor. Entre em contato com a gestão
-                    informando o código do pedido.
-                  </span>
+                  <strong>Pix nao configurado:</strong>
+                  <span>Entre em contato com a gestao informando o codigo do pedido.</span>
                 </div>
               <% } %>
             </div>
+
+            <div class="success-warning">
+              <strong>Conferencia obrigatoria:</strong>
+              <span>Envie a mensagem copiada e o comprovante. A equipe confere Pix, dados do pedido e liberacao dos beneficios.</span>
+            </div>
           <% } %>
-
-         <div class="success-warning">
-  <strong>⚠ Próximo passo:</strong>
-  <span>
-    Após pagar o Pix, clique em <b>Copiar mensagem</b>, depois em <b>Abrir Discord</b>
-    e envie a mensagem junto com o comprovante. Sem o comprovante, o pedido continuará
-    como aguardando pagamento. Ao finalizar o pedido, você confirma que está de acordo
-    com os <a href="/loja/termos" target="_blank">termos da Loja Beta</a>.
-  </span>
-</div>
-          <div class="success-next-steps">
-  <h2>O que fazer agora?</h2>
-
-  <div class="success-step-list">
-    <div>
-      <strong>1</strong>
-      <span>Pague o Pix usando o QR Code ou Pix Copia e Cola acima.</span>
-    </div>
-
-    <div>
-      <strong>2</strong>
-      <span>Clique em <b>Copiar mensagem</b> para copiar os dados do pedido.</span>
-    </div>
-
-    <div>
-      <strong>3</strong>
-      <span>Clique em <b>Abrir Discord</b> e envie a mensagem no ticket ou canal indicado.</span>
-    </div>
-
-    <div>
-      <strong>4</strong>
-      <span>Anexe o comprovante do Pix junto com a mensagem.</span>
-    </div>
-
-    <div>
-      <strong>5</strong>
-      <span>Aguarde a gestão conferir e liberar os produtos manualmente.</span>
-    </div>
-  </div>
-</div>
 
           <div class="success-actions">
             <% if (orderCode) { %>
-              <button type="button" class="btn-primary success-copy-btn" id="copyOrderCodeButton">
-                Copiar código
-              </button>
-
-              <button type="button" class="btn-secondary success-copy-btn" id="copyDiscordMessageButton">
-                Copiar mensagem
-              </button>
+              <button type="button" class="btn-primary success-copy-btn" id="copyOrderCodeButton">Copiar codigo</button>
+              <button type="button" class="btn-secondary success-copy-btn" id="copyDiscordMessageButton">Copiar mensagem para Discord</button>
             <% } %>
-
-            <a href="<%= discordInvite %>" target="_blank" class="btn-primary">
-              Abrir Discord
-            </a>
-
-            <a href="/loja/consultar" class="btn-secondary">
-              Consultar pedido
-            </a>
-
-            <a href="/loja" class="btn-secondary">
-              Voltar para loja
-            </a>
+            <a href="<%= discordInvite %>" target="_blank" rel="noopener noreferrer" class="btn-primary">Abrir Discord</a>
+            <a href="/loja/consultar" class="btn-secondary">Consultar pedido</a>
+            <a href="/loja" class="btn-secondary">Voltar para loja</a>
           </div>
         </div>
-
       </div>
     </section>
   </main>
 
   <% if (order) { %>
     <textarea id="discordMessageText" class="success-hidden-copy-text" readonly>
-Olá! Fiz um pedido na Loja Beta SurvivalZ.
+PEDIDO SURVIVALZ - <%= order.code %>
 
-Código do pedido: <%= order.code %>
-Valor total: <%= formatPrice(order.total) %>
+Nick: <%= order.customer.sampNick || order.customer.name || "Nao informado" %>
+Discord: <%= order.customer.discord || "Nao informado" %>
 
-Já realizei o pagamento via Pix.
-Segue o comprovante para conferência da gestão.
+Produtos:
+<% order.items.forEach((item) => { %>
+- <%= item.quantity %>x <%= item.name %> - <%= formatPrice(item.totalCents) %>
+<% }) %>
+
+Total: <%= formatPrice(order.total) %>
+Cupom: <%= order.coupon || "Nenhum" %>
+Status: <%= String(order.status || "pendente").replace(/_/g, " ") %>
+Pagamento: <%= order.paymentMethod === "pix" || !order.paymentMethod ? "Pix manual" : order.paymentMethod %>
+
+Aviso: ja realizei ou vou realizar o pagamento via Pix. Favor conferir Pix, comprovante e dados do pedido antes de liberar os beneficios.
     </textarea>
 
     <textarea id="orderCodeText" class="success-hidden-copy-text" readonly><%= order.code %></textarea>
   <% } %>
 
   <%- include("../partials/footer") %>
-
   <script src="/js/pixCopy.js"></script>
-
 </body>
 </html>

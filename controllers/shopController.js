@@ -14,6 +14,8 @@ const {
 } = require("../models/orderModel");
 const prisma = require("../config/prisma");
 
+const DONATION_TERMS_VERSION = "donation-beta-2026-06";
+
 const getCheckoutUser = async (req) => {
   if (!req.session.playerId) return null;
 
@@ -97,7 +99,7 @@ const renderCartCheckout = async (req, res) => {
 
 const createCheckoutOrder = async (req, res) => {
   try {
-    const { customer, items, coupon } = req.body;
+    const { customer, items, coupon, donationTermsAccepted, donationTermsText, donationTermsVersion } = req.body;
 
     if (!customer || !items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
@@ -106,10 +108,17 @@ const createCheckoutOrder = async (req, res) => {
       });
     }
 
-    if (!customer.name || !customer.discord || !customer.email || !customer.sampNick) {
+    if (!customer.discord || !customer.email || !customer.sampNick) {
       return res.status(400).json({
         success: false,
         message: "Preencha todos os dados obrigatórios."
+      });
+    }
+
+    if (donationTermsAccepted !== true) {
+      return res.status(400).json({
+        success: false,
+        message: "Aceite o termo de doacao/apoio para finalizar o pedido."
       });
     }
 
@@ -302,7 +311,7 @@ for (const productId of Object.keys(requestedItems)) {
 
       return {
       customer: {
-        name: customer.name.trim(),
+        name: customer.sampNick.trim(),
         discord: customer.discord.trim(),
         email: normalizedEmail,
         sampNick: customer.sampNick.trim(),
@@ -313,6 +322,10 @@ for (const productId of Object.keys(requestedItems)) {
       discount,
       total,
       coupon: shouldApplyCoupon ? "BETA25" : null,
+      donationTermsAccepted: true,
+      donationTermsAcceptedAt: new Date().toISOString(),
+      donationTermsVersion: donationTermsVersion || DONATION_TERMS_VERSION,
+      donationTermsText: donationTermsText || null,
       paymentMethod: "pix",
       paymentStatus: "aguardando_pagamento",
       pixCopyPaste: pixPayment.pixCopyPaste,

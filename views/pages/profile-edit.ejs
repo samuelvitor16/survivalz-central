@@ -51,11 +51,6 @@
             <form action="/perfil/editar" method="POST" class="player-auth-form sz-profile-editor-form">
               <div class="sz-profile-editor-grid">
                 <div class="form-group">
-                  <label for="name">Nome publico</label>
-                  <input type="text" id="name" name="name" value="<%= user.name || '' %>" maxlength="80" required>
-                </div>
-
-                <div class="form-group">
                   <label for="sampNick">Nick no servidor</label>
                   <input type="text" id="sampNick" name="sampNick" value="<%= user.sampNick || '' %>" maxlength="40" required>
                 </div>
@@ -91,10 +86,10 @@
                   <div class="sz-profile-editor-avatar-preview">
                     <% if (user.avatarUrl) { %>
                       <img id="avatarCardPreview" src="<%= user.avatarUrl %>" alt="Preview do avatar">
-                      <span id="avatarCardFallback" style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                      <span id="avatarCardFallback" style="display:none;"><%= displayInitial(user) %></span>
                     <% } else { %>
                       <img id="avatarCardPreview" src="" alt="Preview do avatar" style="display:none;">
-                      <span id="avatarCardFallback"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                      <span id="avatarCardFallback"><%= displayInitial(user) %></span>
                     <% } %>
                   </div>
 
@@ -263,10 +258,10 @@
             <div class="sz-profile-editor-avatar-preview sz-profile-editor-preview-avatar">
               <% if (user.avatarUrl) { %>
                 <img id="avatarPreview" src="<%= user.avatarUrl %>" alt="Preview do avatar">
-                <span id="avatarFallback" style="display:none;"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                <span id="avatarFallback" style="display:none;"><%= displayInitial(user) %></span>
               <% } else { %>
                 <img id="avatarPreview" src="" alt="Preview do avatar" style="display:none;">
-                <span id="avatarFallback"><%= (user.name || "S").charAt(0).toUpperCase() %></span>
+                <span id="avatarFallback"><%= displayInitial(user) %></span>
               <% } %>
             </div>
 

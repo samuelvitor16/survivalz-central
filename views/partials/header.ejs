@@ -1,13 +1,20 @@
-<header class="main-header">
+<header class="main-header sz-header">
   <%
-    const staffNavRoles = ["STAFF", "ADMIN", "OWNER"];
-    const adminNavRoles = ["ADMIN", "OWNER"];
-    const canSeeStaffLinks = staffNavRoles.includes(playerRole);
-    const canSeeDeveloperLinks = adminNavRoles.includes(playerRole)
-      || (isAdminLogged && !["STAFF", "PLAYER"].includes(playerRole));
+    const canSeeStaffLinks = isStaffRole(playerRole);
+    const sessionUser = {
+      id: currentPlayerId,
+      name: playerName,
+      sampNick: playerName,
+      avatarUrl: playerAvatarUrl,
+      role: playerRole || "PLAYER"
+    };
+    const profileLabel = isPlayerLogged ? displayUserName(sessionUser) : "Conta";
+    const profileInitial = isPlayerLogged ? displayInitial(sessionUser) : "Z";
+    const profileAvatarUrl = isPlayerLogged ? playerAvatarUrl : null;
   %>
-  <div class="container nav-container">
-    <a href="/" class="logo logo-image-link">
+
+  <div class="container sz-header-shell">
+    <a href="/" class="sz-header-logo" aria-label="SurvivalZ">
       <img src="/images/logo/survivalz-logo.png" alt="SurvivalZ">
     </a>
 
@@ -17,63 +24,67 @@
       <span></span>
     </button>
 
-    <nav class="navbar" id="mainNavbar">
-      <a href="/">Inicio</a>
-      <a href="/comunidade">Comunidade</a>
-      <a href="/membros">Membros</a>
-      <a href="/forum">Forum</a>
-      <a href="/loja">Loja Beta</a>
-
-      <div class="nav-dropdown">
-        <button type="button">Servidor</button>
-        <div class="nav-dropdown-menu">
-          <a href="/sobre">Sobre</a>
-          <a href="/gestao">Gestao</a>
-          <a href="<%= guideLink %>" target="_blank" rel="noopener noreferrer">Guia</a>
-          <a href="/loja/consultar">Consultar Pedido</a>
-        </div>
+    <nav class="sz-header-nav" id="mainNavbar" aria-label="Navegacao principal">
+      <div class="sz-header-links">
+        <a href="/">Inicio</a>
+        <a href="/forum">Forum</a>
+        <a href="/loja">Loja Beta</a>
+        <a href="/equipe">Equipe</a>
+        <a href="/servidor">Servidor</a>
+        <% if (canSeeStaffLinks) { %>
+          <a href="/staff">Staff</a>
+        <% } %>
       </div>
 
-      <% if (canSeeStaffLinks) { %>
-        <div class="nav-dropdown">
-          <button type="button">Staff</button>
-          <div class="nav-dropdown-menu">
-            <a href="/forum/moderacao">Hub Staff</a>
-            <a href="/forum/moderacao/denuncias">Denuncias</a>
-            <a href="/forum/moderacao/medalhas">Medalhas</a>
-          </div>
-        </div>
-      <% } %>
+      <div class="sz-header-actions">
+        <a href="<%= discordInvite %>" target="_blank" rel="noopener noreferrer" class="btn-nav sz-discord-btn">
+          <span class="sz-discord-mark" aria-hidden="true">D</span>
+          <span>Discord</span>
+        </a>
 
-      <div class="nav-dropdown">
-        <button type="button">Conta</button>
-        <div class="nav-dropdown-menu">
-          <% if (isPlayerLogged) { %>
-            <a href="/painel">Meu Painel</a>
-            <a href="/perfil/editar">Editar Perfil</a>
-            <a href="/sair">Sair</a>
-          <% } else { %>
-            <a href="/entrar">Entrar</a>
-            <a href="/cadastrar">Criar Conta</a>
-          <% } %>
+        <div class="nav-dropdown profile-dropdown sz-profile-dropdown">
+          <button type="button" class="profile-menu-button" aria-label="Abrir menu de perfil" aria-expanded="false">
+            <% if (profileAvatarUrl) { %>
+              <img src="<%= profileAvatarUrl %>" alt="Perfil de <%= profileLabel %>" class="profile-menu-avatar-img">
+            <% } else { %>
+              <span class="profile-menu-avatar"><%= profileInitial %></span>
+            <% } %>
+          </button>
+
+          <div class="nav-dropdown-menu profile-dropdown-menu sz-profile-card">
+            <% if (isPlayerLogged) { %>
+              <div class="sz-profile-card-head">
+                <% if (profileAvatarUrl) { %>
+                  <img src="<%= profileAvatarUrl %>" alt="Perfil de <%= profileLabel %>" class="profile-menu-avatar-img large">
+                <% } else { %>
+                  <span class="profile-menu-avatar large"><%= profileInitial %></span>
+                <% } %>
+                <div>
+                  <strong><%= profileLabel %></strong>
+                  <small><%= roleLabel(playerRole) %></small>
+                </div>
+              </div>
+
+              <a href="/perfil/<%= currentPlayerId %>">Meu perfil</a>
+              <a href="/perfil/editar">Editar perfil</a>
+              <a href="/painel/pedidos">Meus pedidos</a>
+
+              <a href="/sair" class="logout-link">Sair</a>
+            <% } else { %>
+              <div class="sz-profile-card-head">
+                <span class="profile-menu-avatar large">Z</span>
+                <div>
+                  <strong>Visitante</strong>
+                  <small>Entre para acessar o perfil</small>
+                </div>
+              </div>
+
+              <a href="/entrar">Entrar</a>
+              <a href="/cadastrar">Criar conta</a>
+            <% } %>
+          </div>
         </div>
       </div>
-
-      <% if (canSeeDeveloperLinks) { %>
-        <div class="nav-dropdown">
-          <button type="button">Desenvolvedor</button>
-          <div class="nav-dropdown-menu">
-            <a href="/admin">Painel Desenvolvedor</a>
-            <a href="/admin/pedidos">Pedidos</a>
-            <a href="/admin/cargos">Equipe e cargos</a>
-            <a href="/admin/logout">Sair Admin</a>
-          </div>
-        </div>
-      <% } %>
-
-      <a href="<%= discordInvite %>" target="_blank" rel="noopener noreferrer" class="btn-nav">
-        Discord
-      </a>
     </nav>
   </div>
 </header>
@@ -88,25 +99,27 @@
         const isOpen = navbar.classList.toggle("is-open");
         menuBtn.classList.toggle("is-open", isOpen);
         menuBtn.setAttribute("aria-expanded", String(isOpen));
-
-        document.querySelectorAll(".nav-dropdown.open").forEach((dropdown) => {
-          dropdown.classList.remove("open");
-        });
       });
     }
 
-    document.querySelectorAll(".nav-dropdown > button").forEach((button) => {
+    document.querySelectorAll(".sz-profile-dropdown > button").forEach((button) => {
       button.addEventListener("click", (event) => {
-        if (window.innerWidth > 768) return;
+        const dropdown = button.closest(".sz-profile-dropdown");
+        if (!dropdown) return;
 
         event.preventDefault();
-        const dropdown = button.closest(".nav-dropdown");
+        const isOpen = dropdown.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+    });
 
-        document.querySelectorAll(".nav-dropdown.open").forEach((item) => {
-          if (item !== dropdown) item.classList.remove("open");
-        });
-
-        dropdown.classList.toggle("open");
+    document.addEventListener("click", (event) => {
+      document.querySelectorAll(".sz-profile-dropdown.open").forEach((dropdown) => {
+        if (!dropdown.contains(event.target)) {
+          dropdown.classList.remove("open");
+          const button = dropdown.querySelector(".profile-menu-button");
+          if (button) button.setAttribute("aria-expanded", "false");
+        }
       });
     });
   });

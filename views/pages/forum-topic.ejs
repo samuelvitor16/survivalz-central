@@ -34,13 +34,13 @@
             <h1><%= topic.title %></h1>
 
             <p>
-              Criado por <a href="/perfil/<%= topic.author.id %>"><strong><%= topic.author.name %></strong></a>
+              Criado por <a href="/perfil/<%= topic.author.id %>"><strong><%= displayUserName(topic.author) %></strong></a>
               | <%= formatDateTime(topic.createdAt) %>
               | <%= topic.views + 1 %> visualizacoes
             </p>
           </div>
 
-          <% if (canManageTopic || canEditOwnTopic) { %>
+          <% if (canManageTopic || canEditOwnTopic || canDeleteOwnTopic) { %>
             <div class="forum-topic-action-menu" data-action-menu>
               <button type="button" class="forum-topic-action-trigger" data-action-trigger aria-label="Abrir acoes do topico">
                 ...
@@ -109,7 +109,7 @@
 
               <div>
                 <span>Autor</span>
-                <strong><%= topic.author.name %></strong>
+                <strong><%= displayUserName(topic.author) %></strong>
               </div>
 
               <div>
@@ -152,18 +152,18 @@
         }) %>
 
         <% topic.posts.forEach((post, index) => { %>
-          <%- include("../partials/forum-post-card", {
-            author: post.author,
-            content: post.content,
-            postedAt: post.createdAt,
-            postNumber: index + 2,
-            dateLabel: "Respondido em",
-            isReply: true,
-            editHref: (canManageTopic || (isPlayerLogged && post.authorId === currentPlayerId && topic.status !== "CLOSED" && topic.status !== "ARCHIVED")) ? `/forum/resposta/${post.id}/editar` : null,
-            deleteAction: (canManageTopic || (isPlayerLogged && post.authorId === currentPlayerId && topic.status !== "CLOSED" && topic.status !== "ARCHIVED")) ? `/forum/resposta/${post.id}/apagar` : null,
-            deleteLabel: "Apagar resposta"
-          }) %>
-        <% }) %>
+  <%- include("../partials/forum-post-card", {
+    author: post.author,
+    content: post.content,
+    postedAt: post.createdAt,
+    postNumber: index + 2,
+    dateLabel: "Respondido em",
+    isReply: true,
+    editHref: post.canEditPost ? `/forum/resposta/${post.id}/editar` : null,
+    deleteAction: post.canDeletePost ? `/forum/resposta/${post.id}/apagar` : null,
+    deleteLabel: "Apagar resposta"
+  }) %>
+<% }) %>
 
         <div class="forum-reply-form-card">
           <% if (replyError) { %>
@@ -179,27 +179,27 @@
           <% } else if (isPlayerLogged) { %>
             <h2>Responder topico</h2>
 
-<form action="/forum/topico/<%= topic.id %>/responder" method="POST" class="forum-form">
-  <div class="form-group">
-    <label>Sua resposta</label>
+            <form action="/forum/topico/<%= topic.id %>/responder" method="POST" class="forum-form">
+              <div class="form-group">
+                <label>Sua resposta</label>
 
-    <%- include("../partials/forum-editor-toolbar", {
-      textareaId: "content",
-      previewId: "replyPreview",
-      value: ""
-    }) %>
-  </div>
+                <%- include("../partials/forum-editor-toolbar", {
+                  textareaId: "content",
+                  previewId: "replyPreview",
+                  value: ""
+                }) %>
+              </div>
 
-  <div class="forum-reply-actions">
-    <button
-      type="submit"
-      class="btn-primary forum-submit-btn"
-      data-confirm-action="Enviar esta resposta?"
-    >
-      Enviar resposta
-    </button>
-  </div>
-</form>
+              <div class="forum-reply-actions">
+                <button
+                  type="submit"
+                  class="btn-primary forum-submit-btn"
+                  data-confirm-action="Enviar esta resposta?"
+                >
+                  Enviar resposta
+                </button>
+              </div>
+            </form>
           <% } else { %>
             <h2>Entre para responder</h2>
             <p>Voce precisa estar logado para participar deste topico.</p>

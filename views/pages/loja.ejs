@@ -85,68 +85,51 @@
       </div>
     </section>
 
-        <section class="shop-before-buy-section">
-      <div class="container">
+        <section class="shop-catalog-section" id="loja-produtos">
+  <div class="container shop-catalog-layout">
 
-        <div class="shop-before-buy-header">
-          <span class="section-tag">Antes de comprar</span>
+    <aside class="shop-catalog-sidebar">
+      <div class="shop-catalog-card">
+        <span class="section-tag">Catálogo</span>
+        <h2>Encontre seu item</h2>
+        <p>Pesquise ou filtre os produtos da Loja Beta.</p>
 
-          <h2>Como funciona a Loja Beta?</h2>
-
-          <p>
-            A Loja Beta do SurvivalZ funciona com pedido manual. Você monta o carrinho,
-            finaliza a compra, paga via Pix e envia o comprovante no Discord para a gestão confirmar.
-          </p>
+        <div class="shop-search-wrap">
+          <span>🔎</span>
+          <input
+            type="search"
+            id="shopSearchInput"
+            placeholder="Buscar VIP, ZCoins, veículo..."
+            autocomplete="off"
+          >
         </div>
 
-        <div class="shop-before-buy-grid">
-          <div class="shop-before-buy-card">
-            <strong>1</strong>
-            <h3>Monte seu pedido</h3>
-            <p>
-              Escolha pacotes Beta, VIPs, ZCoins ou veículos e adicione tudo ao carrinho.
-            </p>
-          </div>
-
-          <div class="shop-before-buy-card">
-            <strong>2</strong>
-            <h3>Pague via Pix</h3>
-            <p>
-              O site gera QR Code e Pix Copia e Cola com o valor exato do pedido.
-            </p>
-          </div>
-
-          <div class="shop-before-buy-card">
-            <strong>3</strong>
-            <h3>Envie o comprovante</h3>
-            <p>
-              Após pagar, copie a mensagem pronta e envie no Discord junto com o comprovante.
-            </p>
-          </div>
-
-          <div class="shop-before-buy-card">
-            <strong>4</strong>
-            <h3>Aguarde a entrega</h3>
-            <p>
-              A gestão confere o pagamento e libera os produtos manualmente.
-            </p>
-          </div>
+        <div class="shop-category-filters" id="shopCategoryFilters">
+          <button type="button" class="active" data-shop-filter="all">Todos</button>
+          <button type="button" data-shop-filter="beta">Pacotes Beta</button>
+          <button type="button" data-shop-filter="vip">VIPs</button>
+          <button type="button" data-shop-filter="zcoins">ZCoins</button>
+          <button type="button" data-shop-filter="vehicles">Veículos</button>
         </div>
-
-        <div class="shop-beta-alert">
-  <strong>⚠ Atenção:</strong>
-  <span>
-    O servidor estará em fase Beta. Itens, veículos, moedas e benefícios adquiridos
-    durante o Beta poderão ser resetados ao fim da fase de testes.
-    Antes de comprar, leia os
-    <a href="/loja/termos" target="_blank">termos da Loja Beta</a>.
-  </span>
-</div>
-
       </div>
-    </section>
 
-    <section class="shop-products-section" id="pacotes-beta">
+      <div class="shop-catalog-card compact">
+        <strong>Loja Beta</strong>
+        <p>
+          Pedidos são confirmados manualmente pela gestão após o pagamento.
+        </p>
+
+        <a href="/loja/consultar">Consultar pedido</a>
+      </div>
+    </aside>
+
+    <div class="shop-catalog-main">
+      <div class="shop-no-results" id="shopNoResults" hidden>
+        <strong>Nenhum produto encontrado.</strong>
+        <p>Tente buscar por outro nome ou selecione outra categoria.</p>
+      </div>
+
+    <section class="shop-products-section" id="pacotes-beta" data-shop-section data-shop-category="beta">
       <div class="container">
 
         <div class="shop-section-header">
@@ -163,7 +146,12 @@
 
         <div class="shop-products-grid beta-packages-grid">
           <% betaPackages.forEach((product) => { %>
-            <article class="product-card <%= product.highlight ? 'featured' : '' %>">
+            <article
+  class="product-card <%= product.highlight ? 'featured' : '' %>"
+  data-shop-card
+  data-shop-category="<%= product.category %>"
+  data-shop-search="<%= [product.name, product.type, product.description, ...(product.benefits || [])].join(' ') %>"
+>
               <% if (product.highlight) { %>
                 <div class="product-badge">Destaque</div>
               <% } %>
@@ -218,7 +206,7 @@
       </div>
     </section>
 
-    <section class="shop-products-section shop-alt-section" id="vips">
+    <section class="shop-products-section shop-alt-section" id="vips" data-shop-section data-shop-category="vip">
       <div class="container">
 
         <div class="shop-section-header">
@@ -240,7 +228,12 @@
 
         <div class="shop-products-grid">
           <% vips.forEach((product) => { %>
-            <article class="product-card <%= product.highlight ? 'featured' : '' %>">
+            <article
+  class="product-card <%= product.highlight ? 'featured' : '' %>"
+  data-shop-card
+  data-shop-category="<%= product.category %>"
+  data-shop-search="<%= [product.name, product.type, product.description, ...(product.benefits || [])].join(' ') %>"
+>
               <% if (product.highlight) { %>
                 <div class="product-badge">Popular</div>
               <% } %>
@@ -275,7 +268,7 @@
 
               <div class="product-card-actions">
                 <button
-                    class="btn-secondary product-btn add-cart-btn"
+                    class="btn-primary product-btn add-cart-btn"
                     data-id="<%= product.id %>"
                     data-name="<%= product.name %>"
                     data-price="<%= product.priceCents %>"
@@ -295,7 +288,7 @@
       </div>
     </section>
 
-    <section class="shop-products-section" id="zcoins">
+    <section class="shop-products-section" id="zcoins" data-shop-section data-shop-category="zcoins">
       <div class="container">
 
         <div class="shop-section-header">
@@ -311,7 +304,12 @@
 
         <div class="shop-products-grid zcoins-grid">
           <% zcoins.forEach((product) => { %>
-            <article class="product-card <%= product.highlight ? 'featured' : '' %>">
+            <article
+  class="product-card <%= product.highlight ? 'featured' : '' %>"
+  data-shop-card
+  data-shop-category="<%= product.category %>"
+  data-shop-search="<%= [product.name, product.type, product.description, ...(product.benefits || [])].join(' ') %>"
+>
               <% if (product.highlight) { %>
                 <div class="product-badge">Custo-benefício</div>
               <% } %>
@@ -366,7 +364,7 @@
       </div>
     </section>
 
-    <section class="shop-products-section shop-alt-section" id="vehicles">
+    <section class="shop-products-section shop-alt-section" id="vehicles" data-shop-section data-shop-category="vehicles">
       <div class="container">
 
         <div class="shop-section-header">
@@ -382,7 +380,12 @@
 
         <div class="vehicle-products-grid">
           <% vehicles.forEach((product) => { %>
-            <article class="vehicle-card">
+            <article
+  class="vehicle-card"
+  data-shop-card
+  data-shop-category="<%= product.category %>"
+  data-shop-search="<%= [product.name, product.type, product.modelId, product.capacity, product.armor, product.collection].filter(Boolean).join(' ') %>"
+>
 
               <div class="vehicle-image-box">
                 <img
@@ -418,7 +421,7 @@
 
                 <div class="vehicle-card-actions">
                 <button
-                    class="btn-secondary vehicle-btn add-cart-btn"
+                    class="btn-primary vehicle-btn add-cart-btn"
                     data-id="<%= product.id %>"
                     data-name="<%= product.name %>"
                     data-price="<%= product.priceCents %>"
@@ -440,52 +443,17 @@
       </div>
     </section>
 
-    <section class="shop-info-section">
-      <div class="container shop-info-grid">
-
-        <div class="shop-info-box">
-          <h2>Como funciona a compra?</h2>
-
-          <div class="shop-step">
-            <span>1</span>
-            <p>Você adiciona os produtos ao carrinho temporário.</p>
-          </div>
-
-          <div class="shop-step">
-            <span>2</span>
-            <p>Aplica o cupom de primeira compra, se estiver disponível.</p>
-          </div>
-
-          <div class="shop-step">
-            <span>3</span>
-            <p>Preenche seus dados e envia o pedido para análise.</p>
-          </div>
-
-          <div class="shop-step">
-            <span>4</span>
-            <p>A gestão confirma o pagamento e libera os itens manualmente.</p>
-          </div>
-        </div>
-
-        <div class="shop-info-box">
-          <h2>Avisos do Beta</h2>
-
-          <ul class="shop-warning-list">
-            <li>O servidor estará em fase de testes.</li>
-            <li>Itens, veículos e moedas poderão ser resetados ao fim do Beta.</li>
-            <li>Compras não dão imunidade contra regras ou punições.</li>
-            <li>Todos os pedidos serão analisados manualmente pela gestão.</li>
-            <li>Valores e produtos poderão ser ajustados antes do lançamento oficial.</li>
-          </ul>
-        </div>
-
       </div>
-    </section>
+  </div>
+</section>
+
+    
   </main>
 
   <%- include("../partials/footer") %>
 
-  <script src="/js/cart.js"></script>
+  <script src="/js/shopFilter.js"></script>
+<script src="/js/cart.js"></script>
 
 </body>
 </html>

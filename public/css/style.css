@@ -4,6 +4,46 @@
   box-sizing: border-box;
 }
 
+/* Community roles */
+.role-sobrevivente,
+.sz-author-rank-sobrevivente,
+.team-role-sobrevivente,
+.role-player,
+.sz-author-rank-player,
+.team-role-player {
+  --role-bg: rgba(71, 85, 105, 0.38);
+  --role-border: rgba(148, 163, 184, 0.38);
+  --role-color: #cbd5e1;
+  --role-glow: rgba(148, 163, 184, 0.16);
+}
+
+.role-premium,
+.sz-author-rank-premium,
+.team-role-premium {
+  --role-bg: rgba(14, 116, 144, 0.36);
+  --role-border: rgba(34, 211, 238, 0.50);
+  --role-color: #67e8f9;
+  --role-glow: rgba(34, 211, 238, 0.30);
+}
+
+.role-beta_tester,
+.sz-author-rank-beta_tester,
+.team-role-beta_tester {
+  --role-bg: rgba(88, 28, 135, 0.36);
+  --role-border: rgba(216, 180, 254, 0.50);
+  --role-color: #d8b4fe;
+  --role-glow: rgba(216, 180, 254, 0.30);
+}
+
+.role-youtuber,
+.sz-author-rank-youtuber,
+.team-role-youtuber {
+  --role-bg: rgba(127, 29, 29, 0.40);
+  --role-border: rgba(248, 113, 113, 0.55);
+  --role-color: #fca5a5;
+  --role-glow: rgba(248, 113, 113, 0.32);
+}
+
 body {
   background-color: #090909;
   color: #f2f2f2;
@@ -795,5 +835,1152 @@ a {
   .navbar {
     max-height: calc(100vh - 86px);
     overflow-y: auto;
+  }
+}
+
+/* ================= HEADER PROFILE MENU ================= */
+
+.profile-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-menu-avatar {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #c40000;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: 0 0 16px rgba(255, 43, 43, 0.24);
+}
+
+.profile-menu-label {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-dropdown-menu {
+  right: 0;
+  left: auto;
+  transform: translateY(8px);
+}
+
+.profile-dropdown:hover .profile-dropdown-menu {
+  transform: translateY(0);
+}
+
+.success-hidden-copy-text,
+.copy-order-textarea {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .profile-menu-button {
+    justify-content: center;
+  }
+
+  .profile-menu-label {
+    max-width: none;
+  }
+}
+
+/* ================= SURVIVALZ HEADER UNIFICADO ================= */
+
+.sz-header-shell {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  position: relative;
+}
+
+.sz-header-logo {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.sz-header-logo img {
+  width: auto;
+  height: 50px;
+  max-width: 176px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 14px rgba(255, 43, 43, 0.18));
+}
+
+.sz-header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex: 1;
+}
+
+.sz-header-links,
+.sz-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sz-header-links a {
+  color: #d7d7d7;
+  font-size: 13px;
+  font-weight: 900;
+  border-radius: 999px;
+  padding: 9px 12px;
+  transition: 0.2s ease;
+}
+
+.sz-header-links a:hover {
+  color: #fff;
+  background: rgba(255, 43, 43, 0.12);
+}
+
+.sz-discord-btn {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sz-profile-dropdown {
+  position: relative;
+}
+
+.sz-profile-dropdown .profile-menu-button {
+  min-width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 43, 43, 0.32);
+  background: rgba(8, 8, 8, 0.8);
+  cursor: pointer;
+}
+
+.sz-profile-dropdown .profile-menu-button::after {
+  display: none;
+}
+
+.profile-menu-avatar.large {
+  width: 46px;
+  height: 46px;
+  font-size: 16px;
+}
+
+.profile-menu-avatar-img {
+  width: 34px;
+  height: 34px;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 43, 43, 0.36);
+  box-shadow: 0 0 16px rgba(255, 43, 43, 0.20);
+}
+
+.profile-menu-avatar-img.large {
+  width: 46px;
+  height: 46px;
+}
+
+.sz-profile-card {
+  min-width: 250px;
+  padding: 10px;
+  border-radius: 14px;
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.07), transparent 45%),
+    rgba(8, 8, 8, 0.98);
+}
+
+.sz-profile-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 8px;
+}
+
+.sz-profile-card-head strong,
+.sz-profile-card-head small {
+  display: block;
+}
+
+.sz-profile-card-head small {
+  color: #aaa;
+  font-size: 12px;
+}
+
+.sz-profile-card-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.sz-profile-card-stats span {
+  border-radius: 8px;
+  background: rgba(255, 43, 43, 0.08);
+  color: #ff7777;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 7px 8px;
+  text-align: center;
+}
+
+.sz-profile-card .logout-link {
+  color: #ff8080;
+}
+
+@media (max-width: 768px) {
+  .sz-header-shell {
+    min-height: 68px;
+  }
+
+  .sz-header-logo img {
+    height: 40px;
+    max-width: 150px;
+  }
+
+  .sz-header-nav {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    max-height: calc(100vh - 86px);
+    overflow-y: auto;
+    background: rgba(8, 8, 8, 0.98);
+    border: 1px solid rgba(255, 43, 43, 0.30);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.55);
+  }
+
+  .sz-header-nav.is-open {
+    display: flex;
+  }
+
+  .sz-header-links,
+  .sz-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .sz-header-links a,
+  .sz-discord-btn,
+  .sz-profile-dropdown .profile-menu-button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .sz-profile-dropdown .profile-menu-button {
+    border-radius: 12px;
+  }
+
+  .sz-profile-card {
+    position: static;
+    min-width: 100%;
+    width: 100%;
+    transform: none;
+  }
+}
+
+/* ================= HEADER PREMIUM SPRINT ================= */
+
+.sz-header {
+  background:
+    linear-gradient(180deg, rgba(14, 14, 14, 0.88), rgba(5, 5, 5, 0.76)),
+    rgba(5, 5, 5, 0.78);
+  border-bottom: 1px solid rgba(255, 43, 43, 0.24);
+  box-shadow: 0 14px 42px rgba(0, 0, 0, 0.48);
+}
+
+.sz-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 43, 43, 0.72), rgba(255, 174, 82, 0.40), transparent);
+  pointer-events: none;
+}
+
+.sz-header-shell {
+  min-height: 82px;
+}
+
+.sz-header-logo img {
+  height: 54px;
+  max-width: 188px;
+  filter: drop-shadow(0 0 18px rgba(255, 43, 43, 0.30));
+}
+
+.sz-header-nav {
+  gap: 18px;
+}
+
+.sz-header-links {
+  gap: 4px;
+}
+
+.sz-header-links a {
+  position: relative;
+  padding: 10px 12px;
+  color: #dcdcdc;
+  background: transparent;
+  overflow: hidden;
+}
+
+.sz-header-links a::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff2b2b, rgba(255, 174, 82, 0.86));
+  opacity: 0;
+  transform: scaleX(0.35);
+  transform-origin: center;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  box-shadow: 0 0 14px rgba(255, 43, 43, 0.46);
+}
+
+.sz-header-links a:hover {
+  color: #fff;
+  background: rgba(255, 43, 43, 0.08);
+  text-shadow: 0 0 16px rgba(255, 43, 43, 0.36);
+}
+
+.sz-header-links a:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.sz-header-actions {
+  gap: 10px;
+}
+
+.sz-discord-btn {
+  min-height: 42px;
+  gap: 9px;
+  padding: 10px 16px !important;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 43, 43, 0.24), rgba(120, 0, 0, 0.72)),
+    #0e0e0e !important;
+  border: 1px solid rgba(255, 80, 80, 0.52);
+  color: #fff !important;
+  letter-spacing: 0.2px;
+  box-shadow: 0 0 24px rgba(255, 43, 43, 0.18), inset 0 0 18px rgba(255, 255, 255, 0.035);
+}
+
+.sz-discord-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 130, 130, 0.82);
+  background:
+    linear-gradient(135deg, rgba(255, 43, 43, 0.42), rgba(120, 0, 0, 0.86)),
+    #121212 !important;
+  box-shadow: 0 0 34px rgba(255, 43, 43, 0.32), inset 0 0 18px rgba(255, 255, 255, 0.045);
+}
+
+.sz-discord-mark {
+  width: 21px;
+  height: 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.26);
+  color: #ffdbdb;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.sz-profile-dropdown {
+  padding: 0;
+}
+
+.sz-profile-dropdown .profile-menu-button {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 43, 43, 0.48);
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.16), rgba(9, 9, 9, 0.94)),
+    #0b0b0b;
+  box-shadow: 0 0 22px rgba(255, 43, 43, 0.17), inset 0 0 16px rgba(255, 255, 255, 0.035);
+  overflow: hidden;
+}
+
+.sz-profile-dropdown .profile-menu-button:hover {
+  border-color: rgba(255, 174, 82, 0.66);
+  box-shadow: 0 0 28px rgba(255, 43, 43, 0.28);
+  transform: translateY(-1px);
+}
+
+.sz-profile-dropdown .profile-menu-button::after {
+  display: none;
+}
+
+.sz-profile-dropdown .profile-menu-avatar,
+.sz-profile-dropdown .profile-menu-avatar-img {
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  line-height: 1;
+}
+
+.sz-profile-dropdown .profile-menu-avatar {
+  border: 1px solid rgba(255, 174, 82, 0.38);
+  background: radial-gradient(circle at 30% 20%, #ff4c4c, #790000);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.sz-profile-dropdown .profile-menu-avatar-img {
+  border: 1px solid rgba(255, 174, 82, 0.42);
+  box-shadow: none;
+}
+
+.sz-profile-dropdown .profile-menu-avatar.large,
+.sz-profile-dropdown .profile-menu-avatar-img.large {
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  flex-basis: 48px;
+}
+
+.sz-profile-card {
+  right: 0;
+  left: auto;
+  min-width: 258px;
+  padding: 10px;
+  border: 1px solid rgba(255, 43, 43, 0.34);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(255, 43, 43, 0.10), transparent 42%),
+    rgba(8, 8, 8, 0.98);
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.58), 0 0 28px rgba(255, 43, 43, 0.12);
+  transform: translateY(10px);
+}
+
+.sz-profile-dropdown:hover .sz-profile-card,
+.sz-profile-dropdown.open .sz-profile-card {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.sz-profile-card-head {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 43, 43, 0.16);
+}
+
+.sz-profile-card-head strong {
+  max-width: 164px;
+  overflow: hidden;
+  color: #fff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sz-profile-card-head small {
+  color: #ff9b72;
+  font-weight: 800;
+}
+
+.sz-profile-card a {
+  display: block;
+  padding: 11px 12px;
+  border-radius: 8px;
+  color: #e6e6e6;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.sz-profile-card a:hover {
+  color: #fff;
+  background: rgba(255, 43, 43, 0.12);
+}
+
+.sz-profile-card .logout-link {
+  margin-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ff7777 !important;
+}
+
+@media (max-width: 768px) {
+  .sz-header-shell {
+    min-height: 70px;
+  }
+
+  .sz-header-logo img {
+    height: 42px;
+    max-width: 152px;
+  }
+
+  .mobile-menu-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: rgba(12, 12, 12, 0.92);
+    box-shadow: 0 0 18px rgba(255, 43, 43, 0.16);
+  }
+
+  .sz-header-nav {
+    top: calc(100% + 10px);
+    border-radius: 8px;
+    background:
+      linear-gradient(145deg, rgba(255, 43, 43, 0.08), rgba(8, 0, 0, 0.10) 46%),
+      #050505;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .sz-header-links a,
+  .sz-discord-btn {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .sz-header-links a::after {
+    bottom: 5px;
+  }
+
+  .sz-profile-dropdown .profile-menu-button {
+    width: 100%;
+    height: 48px;
+    border-radius: 8px;
+  }
+
+  .sz-profile-card {
+    position: static;
+    width: 100%;
+    min-width: 100%;
+    margin-top: 8px;
+    transform: none;
+  }
+
+  .sz-profile-dropdown:hover .sz-profile-card {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .sz-profile-dropdown.open .sz-profile-card {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    max-height: 360px;
+  }
+}
+
+/* ==================================================
+   SURVIVALZ - CARGOS / HIERARQUIA
+   ================================================== */
+
+.admin-user-role,
+.profile-role,
+.team-role,
+.sz-author-rank,
+[class*="role-"] {
+  --role-bg: rgba(255, 255, 255, 0.06);
+  --role-border: rgba(255, 255, 255, 0.14);
+  --role-color: #e5e7eb;
+  --role-glow: transparent;
+}
+
+/* Badge padrão */
+.admin-user-role,
+.profile-role,
+.team-role,
+.role-player {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 6px 10px;
+  border: 1px solid var(--role-border);
+  border-radius: 999px;
+  background: var(--role-bg);
+  color: var(--role-color);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  box-shadow: 0 0 18px var(--role-glow);
+}
+
+/* Fórum - caixa do cargo no post */
+.sz-author-rank {
+  border: 1px solid var(--role-border);
+  background:
+    linear-gradient(135deg, var(--role-bg), rgba(255, 255, 255, 0.03));
+  box-shadow: 0 0 18px var(--role-glow);
+}
+
+.sz-author-rank-icon {
+  color: var(--role-color);
+  text-shadow: 0 0 12px var(--role-glow);
+}
+
+.sz-author-rank-text strong {
+  color: var(--role-color);
+}
+
+/* PLAYER */
+.role-player,
+.sz-author-rank-player,
+.team-role-player {
+  --role-bg: rgba(148, 163, 184, 0.10);
+  --role-border: rgba(148, 163, 184, 0.28);
+  --role-color: #cbd5e1;
+  --role-glow: rgba(148, 163, 184, 0.10);
+}
+
+/* SUPORTE */
+.role-suporte,
+.sz-author-rank-suporte,
+.team-role-suporte {
+  --role-bg: rgba(34, 197, 94, 0.12);
+  --role-border: rgba(34, 197, 94, 0.35);
+  --role-color: #86efac;
+  --role-glow: rgba(34, 197, 94, 0.18);
+}
+
+/* ESTAGIARIO */
+.role-estagiario,
+.sz-author-rank-estagiario,
+.team-role-estagiario {
+  --role-bg: rgba(45, 212, 191, 0.12);
+  --role-border: rgba(45, 212, 191, 0.35);
+  --role-color: #5eead4;
+  --role-glow: rgba(45, 212, 191, 0.18);
+}
+
+/* MODERADOR */
+.role-moderador,
+.sz-author-rank-moderador,
+.team-role-moderador {
+  --role-bg: rgba(59, 130, 246, 0.13);
+  --role-border: rgba(59, 130, 246, 0.38);
+  --role-color: #93c5fd;
+  --role-glow: rgba(59, 130, 246, 0.18);
+}
+
+/* ADMINISTRADOR */
+.role-administrador,
+.sz-author-rank-administrador,
+.team-role-administrador {
+  --role-bg: rgba(239, 68, 68, 0.13);
+  --role-border: rgba(239, 68, 68, 0.42);
+  --role-color: #fca5a5;
+  --role-glow: rgba(239, 68, 68, 0.20);
+}
+
+/* SUPERVISOR */
+.role-supervisor,
+.sz-author-rank-supervisor,
+.team-role-supervisor {
+  --role-bg: rgba(249, 115, 22, 0.13);
+  --role-border: rgba(249, 115, 22, 0.42);
+  --role-color: #fdba74;
+  --role-glow: rgba(249, 115, 22, 0.20);
+}
+
+/* COORDENADOR */
+.role-coordenador,
+.sz-author-rank-coordenador,
+.team-role-coordenador {
+  --role-bg: rgba(234, 179, 8, 0.13);
+  --role-border: rgba(234, 179, 8, 0.42);
+  --role-color: #fde047;
+  --role-glow: rgba(234, 179, 8, 0.20);
+}
+
+/* GERENTE */
+.role-gerente,
+.sz-author-rank-gerente,
+.team-role-gerente {
+  --role-bg: rgba(168, 85, 247, 0.14);
+  --role-border: rgba(168, 85, 247, 0.45);
+  --role-color: #d8b4fe;
+  --role-glow: rgba(168, 85, 247, 0.24);
+}
+
+/* SUB-DIRETOR */
+.role-sub_diretor,
+.sz-author-rank-sub_diretor,
+.team-role-sub_diretor {
+  --role-bg: rgba(236, 72, 153, 0.14);
+  --role-border: rgba(236, 72, 153, 0.45);
+  --role-color: #f9a8d4;
+  --role-glow: rgba(236, 72, 153, 0.24);
+}
+
+/* DIRETOR */
+.role-diretor,
+.sz-author-rank-diretor,
+.team-role-diretor {
+  --role-bg: rgba(250, 204, 21, 0.16);
+  --role-border: rgba(250, 204, 21, 0.52);
+  --role-color: #fef08a;
+  --role-glow: rgba(250, 204, 21, 0.28);
+}
+
+/* DESENVOLVEDOR */
+.role-desenvolvedor,
+.sz-author-rank-desenvolvedor,
+.team-role-desenvolvedor {
+  --role-bg: rgba(220, 38, 38, 0.18);
+  --role-border: rgba(248, 113, 113, 0.60);
+  --role-color: #fecaca;
+  --role-glow: rgba(248, 113, 113, 0.32);
+}
+
+/* Legado temporário */
+.role-staff,
+.sz-author-rank-staff,
+.team-role-staff {
+  --role-bg: rgba(34, 197, 94, 0.12);
+  --role-border: rgba(34, 197, 94, 0.35);
+  --role-color: #86efac;
+  --role-glow: rgba(34, 197, 94, 0.18);
+}
+
+.role-admin,
+.sz-author-rank-admin,
+.team-role-admin {
+  --role-bg: rgba(239, 68, 68, 0.13);
+  --role-border: rgba(239, 68, 68, 0.42);
+  --role-color: #fca5a5;
+  --role-glow: rgba(239, 68, 68, 0.20);
+}
+
+.role-owner,
+.sz-author-rank-owner,
+.team-role-owner {
+  --role-bg: rgba(220, 38, 38, 0.18);
+  --role-border: rgba(248, 113, 113, 0.60);
+  --role-color: #fecaca;
+  --role-glow: rgba(248, 113, 113, 0.32);
+}
+
+/* Ajuste mobile dos badges */
+@media (max-width: 600px) {
+  .admin-user-role,
+  .profile-role,
+  .team-role {
+    font-size: 0.68rem;
+    padding: 5px 8px;
+  }
+
+  .sz-author-rank-text strong {
+    font-size: 0.76rem;
+  }
+}
+
+/* ==================================================
+   SURVIVALZ - CARGOS V2 / BADGES PREMIUM
+   Cola abaixo do CSS antigo de cargos
+   ================================================== */
+
+.admin-user-role,
+.profile-role,
+.team-role {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  min-height: 30px;
+  padding: 7px 13px 7px 16px;
+
+  border-radius: 10px;
+  border: 1px solid var(--role-border);
+
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.10), transparent 45%),
+    linear-gradient(135deg, var(--role-bg), rgba(0,0,0,0.38));
+
+  color: var(--role-color);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 0 18px var(--role-glow),
+    0 8px 20px rgba(0,0,0,0.28);
+
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.admin-user-role::before,
+.profile-role::before,
+.team-role::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--role-color);
+  box-shadow: 0 0 16px var(--role-color);
+  z-index: -1;
+}
+
+.admin-user-role::after,
+.profile-role::after,
+.team-role::after {
+  content: "";
+  position: absolute;
+  top: -80%;
+  left: -35%;
+  width: 45%;
+  height: 260%;
+  transform: rotate(25deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.18),
+    transparent
+  );
+  opacity: 0.55;
+  z-index: -1;
+}
+
+/* ==================================================
+   FÓRUM - CARD DO CARGO DO AUTOR
+   ================================================== */
+
+.sz-author-rank {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid var(--role-border);
+
+  background:
+    radial-gradient(circle at top left, var(--role-glow), transparent 42%),
+    linear-gradient(135deg, rgba(255,255,255,0.10), transparent 40%),
+    linear-gradient(135deg, var(--role-bg), rgba(5,8,14,0.92));
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -1px 0 rgba(0,0,0,0.45),
+    0 0 24px var(--role-glow),
+    0 12px 26px rgba(0,0,0,0.35);
+}
+
+.sz-author-rank::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: var(--role-color);
+  box-shadow: 0 0 18px var(--role-color);
+  z-index: -1;
+}
+
+.sz-author-rank::after {
+  content: "";
+  position: absolute;
+  inset: -60% auto auto -30%;
+  width: 55%;
+  height: 220%;
+  transform: rotate(28deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.16),
+    transparent
+  );
+  z-index: -1;
+}
+
+.sz-author-rank-icon {
+  display: grid;
+  place-items: center;
+
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.24), transparent 55%),
+    rgba(0,0,0,0.34);
+
+  border: 1px solid var(--role-border);
+  color: var(--role-color);
+
+  font-size: 1.18rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 0 18px var(--role-glow);
+}
+
+.sz-author-rank-text span {
+  display: block;
+  margin-bottom: 2px;
+
+  color: rgba(255,255,255,0.52);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sz-author-rank-text strong {
+  color: var(--role-color);
+  font-size: 0.84rem;
+  font-weight: 950;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  text-shadow: 0 0 16px var(--role-glow);
+}
+
+/* ==================================================
+   CARGOS - PALETA MAIS FORTE
+   ================================================== */
+
+/* Player */
+.role-player,
+.sz-author-rank-player,
+.team-role-player {
+  --role-bg: rgba(71, 85, 105, 0.38);
+  --role-border: rgba(148, 163, 184, 0.38);
+  --role-color: #cbd5e1;
+  --role-glow: rgba(148, 163, 184, 0.16);
+}
+
+/* Suporte */
+.role-suporte,
+.sz-author-rank-suporte,
+.team-role-suporte {
+  --role-bg: rgba(21, 128, 61, 0.42);
+  --role-border: rgba(74, 222, 128, 0.46);
+  --role-color: #86efac;
+  --role-glow: rgba(34, 197, 94, 0.28);
+}
+
+/* Estagiário */
+.role-estagiario,
+.sz-author-rank-estagiario,
+.team-role-estagiario {
+  --role-bg: rgba(13, 148, 136, 0.42);
+  --role-border: rgba(45, 212, 191, 0.48);
+  --role-color: #5eead4;
+  --role-glow: rgba(45, 212, 191, 0.28);
+}
+
+/* Moderador */
+.role-moderador,
+.sz-author-rank-moderador,
+.team-role-moderador {
+  --role-bg: rgba(29, 78, 216, 0.46);
+  --role-border: rgba(96, 165, 250, 0.50);
+  --role-color: #93c5fd;
+  --role-glow: rgba(59, 130, 246, 0.30);
+}
+
+/* Administrador */
+.role-administrador,
+.sz-author-rank-administrador,
+.team-role-administrador {
+  --role-bg: rgba(185, 28, 28, 0.50);
+  --role-border: rgba(248, 113, 113, 0.55);
+  --role-color: #fca5a5;
+  --role-glow: rgba(239, 68, 68, 0.34);
+}
+
+/* Supervisor */
+.role-supervisor,
+.sz-author-rank-supervisor,
+.team-role-supervisor {
+  --role-bg: rgba(194, 65, 12, 0.50);
+  --role-border: rgba(251, 146, 60, 0.55);
+  --role-color: #fdba74;
+  --role-glow: rgba(249, 115, 22, 0.34);
+}
+
+/* Coordenador */
+.role-coordenador,
+.sz-author-rank-coordenador,
+.team-role-coordenador {
+  --role-bg: rgba(161, 98, 7, 0.50);
+  --role-border: rgba(250, 204, 21, 0.58);
+  --role-color: #fde047;
+  --role-glow: rgba(234, 179, 8, 0.36);
+}
+
+/* Gerente */
+.role-gerente,
+.sz-author-rank-gerente,
+.team-role-gerente {
+  --role-bg: rgba(107, 33, 168, 0.54);
+  --role-border: rgba(192, 132, 252, 0.60);
+  --role-color: #d8b4fe;
+  --role-glow: rgba(168, 85, 247, 0.38);
+}
+
+/* Sub-Diretor */
+.role-sub_diretor,
+.sz-author-rank-sub_diretor,
+.team-role-sub_diretor {
+  --role-bg: rgba(157, 23, 77, 0.56);
+  --role-border: rgba(244, 114, 182, 0.62);
+  --role-color: #f9a8d4;
+  --role-glow: rgba(236, 72, 153, 0.40);
+}
+
+/* Diretor */
+.role-diretor,
+.sz-author-rank-diretor,
+.team-role-diretor {
+  --role-bg: rgba(133, 77, 14, 0.58);
+  --role-border: rgba(253, 224, 71, 0.70);
+  --role-color: #fef08a;
+  --role-glow: rgba(250, 204, 21, 0.46);
+}
+
+/* Desenvolvedor */
+.role-desenvolvedor,
+.sz-author-rank-desenvolvedor,
+.team-role-desenvolvedor {
+  --role-bg: rgba(127, 29, 29, 0.66);
+  --role-border: rgba(248, 113, 113, 0.76);
+  --role-color: #fecaca;
+  --role-glow: rgba(248, 113, 113, 0.50);
+}
+
+/* Legado */
+.role-staff,
+.sz-author-rank-staff,
+.team-role-staff {
+  --role-bg: rgba(21, 128, 61, 0.42);
+  --role-border: rgba(74, 222, 128, 0.46);
+  --role-color: #86efac;
+  --role-glow: rgba(34, 197, 94, 0.28);
+}
+
+.role-admin,
+.sz-author-rank-admin,
+.team-role-admin {
+  --role-bg: rgba(185, 28, 28, 0.50);
+  --role-border: rgba(248, 113, 113, 0.55);
+  --role-color: #fca5a5;
+  --role-glow: rgba(239, 68, 68, 0.34);
+}
+
+.role-owner,
+.sz-author-rank-owner,
+.team-role-owner {
+  --role-bg: rgba(127, 29, 29, 0.66);
+  --role-border: rgba(248, 113, 113, 0.76);
+  --role-color: #fecaca;
+  --role-glow: rgba(248, 113, 113, 0.50);
+}
+
+/* ==================================================
+   CARGOS ALTOS - EFEITO MAIS FORTE
+   ================================================== */
+
+.role-desenvolvedor,
+.role-diretor,
+.role-sub_diretor,
+.role-gerente,
+.sz-author-rank-desenvolvedor,
+.sz-author-rank-diretor,
+.sz-author-rank-sub_diretor,
+.sz-author-rank-gerente {
+  border-width: 1px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.16),
+    0 0 26px var(--role-glow),
+    0 14px 30px rgba(0,0,0,0.42);
+}
+
+.sz-author-rank-desenvolvedor .sz-author-rank-icon,
+.sz-author-rank-diretor .sz-author-rank-icon,
+.sz-author-rank-sub_diretor .sz-author-rank-icon,
+.sz-author-rank-gerente .sz-author-rank-icon {
+  transform: scale(1.03);
+}
+
+/* Hover leve */
+.admin-user-card:hover .admin-user-role,
+.admin-roles-card:hover .admin-user-role,
+.sz-post:hover .sz-author-rank {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .admin-user-role,
+  .profile-role,
+  .team-role {
+    padding: 6px 10px 6px 13px;
+    font-size: 0.65rem;
+    border-radius: 9px;
+  }
+
+  .sz-author-rank {
+    grid-template-columns: 36px 1fr;
+    padding: 8px;
+  }
+
+  .sz-author-rank-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .sz-author-rank-text strong {
+    font-size: 0.72rem;
   }
 }

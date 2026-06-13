@@ -57,6 +57,11 @@
                 <span>Metodo</span>
                 <strong><%= order.paymentMethod === "pix" || !order.paymentMethod ? "Pix manual" : order.paymentMethod %></strong>
               </div>
+
+              <div>
+                <span>Termo de apoio</span>
+                <strong><%= order.donationTermsAccepted ? "Aceito" : "Pedido antigo" %></strong>
+              </div>
             </div>
           </article>
 
@@ -102,8 +107,10 @@
 
             <label class="sz-player-order-pix-copy">
               <span>Pix Copia e Cola</span>
-              <textarea readonly><%= pixInfo.pixCopyPaste %></textarea>
+              <textarea id="pixPayload" readonly><%= pixInfo.pixCopyPaste %></textarea>
             </label>
+
+            <button type="button" class="btn-primary success-copy-btn" id="copyPixButton">Copiar Pix</button>
 
             <% if (pixInfo.pixError) { %>
               <p class="sz-player-order-pix-warning"><%= pixInfo.pixError %></p>
@@ -148,11 +155,46 @@
           </div>
         </section>
 
+        <section class="sz-player-order-detail-card">
+          <div class="sz-player-order-detail-head">
+            <h2>Mensagem para Discord</h2>
+            <span>Sem e-mail publico</span>
+          </div>
+
+          <p class="sz-player-order-pix-warning">
+            Copie a mensagem e envie junto com o comprovante para a equipe conferir Pix e liberacao.
+          </p>
+
+          <button type="button" class="btn-secondary success-copy-btn" id="copyDiscordMessageButton">
+            Copiar mensagem para Discord
+          </button>
+        </section>
+
       </div>
     </section>
   </main>
 
+  <textarea id="discordMessageText" class="success-hidden-copy-text" readonly>
+PEDIDO SURVIVALZ - <%= order.code %>
+
+Nick: <%= order.customer.sampNick || order.customer.name || "Nao informado" %>
+Discord: <%= order.customer.discord || "Nao informado" %>
+
+Produtos:
+<% order.items.forEach((item) => { %>
+- <%= item.quantity %>x <%= item.name %> - <%= formatPrice(item.totalCents) %>
+<% }) %>
+
+Total: <%= formatPrice(order.total) %>
+Cupom: <%= order.coupon || "Nenhum" %>
+Status: <%= String(order.status || "pendente").replace(/_/g, " ") %>
+Pagamento: <%= order.paymentMethod === "pix" || !order.paymentMethod ? "Pix manual" : order.paymentMethod %>
+
+Aviso: favor conferir Pix, comprovante e dados do pedido antes de liberar os beneficios.
+  </textarea>
+
   <%- include("../partials/footer") %>
+  <script src="/js/pixCopy.js"></script>
 
 </body>
 </html>

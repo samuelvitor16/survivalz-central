@@ -9,11 +9,17 @@ const renderRegister = (req, res) => {
   });
 };
 
+const renderForgotPassword = (req, res) => {
+  res.render("pages/forgot-password", {
+    title: "Esqueci minha senha - SurvivalZ"
+  });
+};
+
 const registerPlayer = async (req, res) => {
   try {
-    const { name, email, password, discord, sampNick } = req.body;
+    const { email, password, discord, sampNick } = req.body;
 
-    if (!name || !email || !password || !discord || !sampNick) {
+    if (!email || !password || !discord || !sampNick) {
       return res.render("pages/player-register", {
         title: "Criar Conta - SurvivalZ",
         error: "Preencha todos os campos obrigatórios.",
@@ -53,7 +59,7 @@ const registerPlayer = async (req, res) => {
 
     const user = await prisma.user.create({
       data: {
-        name: name.trim(),
+        name: normalizedNick,
         email: normalizedEmail,
         passwordHash,
         discord: discord.trim(),
@@ -62,10 +68,11 @@ const registerPlayer = async (req, res) => {
     });
 
     req.session.playerId = user.id;
-    req.session.playerName = user.name;
+    req.session.playerName = user.sampNick || user.name;
     req.session.playerRole = user.role;
+    req.session.playerAvatarUrl = user.avatarUrl || null;
 
-    res.redirect("/painel");
+    res.redirect(`/perfil/${user.id}`);
   } catch (error) {
     console.log("Erro ao cadastrar jogador:", error);
 
@@ -125,10 +132,11 @@ const loginPlayer = async (req, res) => {
     }
 
     req.session.playerId = user.id;
-    req.session.playerName = user.name;
+    req.session.playerName = user.sampNick || user.name;
     req.session.playerRole = user.role;
+    req.session.playerAvatarUrl = user.avatarUrl || null;
 
-    res.redirect("/painel");
+    res.redirect(`/perfil/${user.id}`);
   } catch (error) {
     console.log("Erro ao logar jogador:", error);
 
@@ -143,6 +151,7 @@ const logoutPlayer = (req, res) => {
   req.session.playerId = null;
   req.session.playerName = null;
   req.session.playerRole = null;
+  req.session.playerAvatarUrl = null;
 
   res.redirect("/");
 };
@@ -151,6 +160,7 @@ module.exports = {
   renderRegister,
   registerPlayer,
   renderLogin,
+  renderForgotPassword,
   loginPlayer,
   logoutPlayer
 };

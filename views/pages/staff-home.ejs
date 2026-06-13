@@ -6,6 +6,7 @@
 
   <title><%= title %></title>
 
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pages/staff.css">
 </head>
@@ -17,161 +18,305 @@
     <section class="staff-home-section">
       <div class="container">
 
-        <div class="staff-home-header">
+        <header class="staff-home-header staff-home-hero">
           <div>
-            <span class="section-tag">Painel interno</span>
-
-            <h1>Central da Staff</h1>
-
+            <span class="section-tag">Central interna</span>
+            <h1>Central Staff</h1>
             <p>
-              Área reservada para organização interna da equipe SurvivalZ.
-              Aqui a staff poderá acompanhar denúncias, jogadores, atividades,
-              compras futuras e informações importantes do servidor.
+              Acompanhe denúncias, moderação do fórum, tópicos recentes e ferramentas internas da equipe SurvivalZ.
             </p>
+
+            <div class="staff-hero-actions">
+              <a href="#staff-reports">Denúncias</a>
+              <a href="#staff-moderation">Moderação</a>
+              <% if (isAdminStaff) { %>
+                <a href="#staff-admin">Administração</a>
+              <% } %>
+            </div>
           </div>
 
           <div class="staff-access-card">
             <span>Nível de acesso</span>
-            <strong>Staff</strong>
+            <strong><%= roleLabel(playerRole) %></strong>
+            <small>Permissões carregadas pelo cargo atual.</small>
           </div>
-        </div>
+        </header>
 
-        <section class="staff-overview-grid">
-          <div class="staff-overview-card">
+        <section class="staff-overview-grid compact">
+          <article class="staff-overview-card">
             <span>Denúncias abertas</span>
-            <strong>3</strong>
-            <p>Casos aguardando análise da equipe.</p>
-          </div>
+            <strong><%= overview.openReports %></strong>
+            <p>Casos aguardando análise.</p>
+          </article>
 
-          <div class="staff-overview-card">
-            <span>Em análise</span>
-            <strong>1</strong>
-            <p>Denúncias assumidas por membros da staff.</p>
-          </div>
+          <article class="staff-overview-card">
+            <span>Tópicos filtrados</span>
+            <strong><%= overview.filteredTopicsCount %></strong>
+            <p>Resultado do filtro atual.</p>
+          </article>
 
-          <div class="staff-overview-card">
-            <span>Jogadores monitorados</span>
-            <strong>0</strong>
-            <p>Área futura para acompanhamento de contas.</p>
-          </div>
+          <% if (isAdminStaff) { %>
+            <article class="staff-overview-card">
+              <span>Usuários</span>
+              <strong><%= overview.usersCount %></strong>
+              <p>Contas registradas na Central.</p>
+            </article>
 
-          <div class="staff-overview-card">
-            <span>Compras pendentes</span>
-            <strong>0</strong>
-            <p>Função planejada para a loja do servidor.</p>
-          </div>
+            <article class="staff-overview-card">
+              <span>Medalhas</span>
+              <strong><%= overview.medalsCount %></strong>
+              <p>Insígnias cadastradas.</p>
+            </article>
+          <% } %>
         </section>
 
-        <section class="staff-panel-grid">
-
-          <a href="/staff/denuncias" class="staff-panel-card">
-            <div class="staff-panel-icon">⚠</div>
-
+        <section class="staff-panel-grid staff-tools-grid">
+          <a href="#staff-reports" class="staff-panel-card">
+            <div class="staff-panel-icon">⚠️</div>
             <div>
-              <h2>Gerenciar denúncias</h2>
-              <p>
-                Ver denúncias abertas, analisar provas, responder jogadores
-                e fechar casos com transcript.
-              </p>
+              <h2>Denúncias</h2>
+              <p>Ver casos recentes, acusado, autor, status e evidências enviadas.</p>
             </div>
           </a>
 
-          <a href="#" class="staff-panel-card disabled">
-            <div class="staff-panel-icon">👥</div>
-
+          <a href="#staff-moderation" class="staff-panel-card">
+            <div class="staff-panel-icon">🛡️</div>
             <div>
-              <h2>Gerenciar jogadores</h2>
-              <p>
-                Futuramente, a staff poderá consultar informações básicas dos players,
-                histórico e status da conta.
-              </p>
+              <h2>Moderação</h2>
+              <p>Alterar status, revisar tópicos e acompanhar atividade recente sem sair da Staff.</p>
             </div>
           </a>
 
-          <a href="#" class="staff-panel-card disabled">
-            <div class="staff-panel-icon">🛒</div>
-
+          <a href="/forum" class="staff-panel-card">
+            <div class="staff-panel-icon">💬</div>
             <div>
-              <h2>Compras e loja</h2>
-              <p>
-                Área futura para acompanhar pedidos, entregas pendentes
-                e histórico de compras.
-              </p>
+              <h2>Fórum público</h2>
+              <p>Abrir categorias, avisos, dúvidas e publicações da comunidade.</p>
             </div>
           </a>
 
-          <a href="#" class="staff-panel-card disabled">
-            <div class="staff-panel-icon">📋</div>
-
+          <a href="/forum/categoria/denuncias" class="staff-panel-card">
+            <div class="staff-panel-icon">📁</div>
             <div>
-              <h2>Logs administrativos</h2>
-              <p>
-                Futuramente, ações importantes da staff e da gestão serão registradas
-                para segurança do servidor.
-              </p>
+              <h2>Área de denúncias</h2>
+              <p>Abrir a categoria protegida de denúncias dentro do fórum.</p>
             </div>
           </a>
-
-          <a href="#" class="staff-panel-card disabled">
-            <div class="staff-panel-icon">📢</div>
-
-            <div>
-              <h2>Avisos internos</h2>
-              <p>
-                Espaço planejado para comunicados, orientações e informações
-                importantes para a equipe.
-              </p>
-            </div>
-          </a>
-
-          <a href="#" class="staff-panel-card disabled">
-            <div class="staff-panel-icon">☣</div>
-
-            <div>
-              <h2>Configurações da central</h2>
-              <p>
-                Área futura para configurações avançadas, permissões e ajustes
-                internos da Central SurvivalZ.
-              </p>
-            </div>
-          </a>
-
         </section>
 
-        <section class="staff-activity-box">
+        <% if (isAdminStaff) { %>
+          <section class="staff-admin-box" id="staff-admin">
+            <div class="staff-activity-header">
+              <div>
+                <span>ADMINISTRAÇÃO</span>
+                <h2>Ferramentas administrativas</h2>
+              </div>
+            </div>
+
+            <div class="staff-panel-grid admin">
+              <a href="/forum/moderacao/medalhas" class="staff-panel-card">
+                <div class="staff-panel-icon">🏅</div>
+                <div>
+                  <h2>Medalhas</h2>
+                  <p>Conceder ou remover insígnias dos jogadores.</p>
+                </div>
+              </a>
+
+              <a href="/admin/pedidos" class="staff-panel-card">
+                <div class="staff-panel-icon">🛒</div>
+                <div>
+                  <h2>Pedidos</h2>
+                  <p>Acompanhar pedidos da Loja Beta.</p>
+                </div>
+              </a>
+
+              <a href="/admin/usuarios" class="staff-panel-card">
+                <div class="staff-panel-icon">👤</div>
+                <div>
+                  <h2>Usuários</h2>
+                  <p>Buscar contas, perfis e atividade dos jogadores.</p>
+                </div>
+              </a>
+
+              <a href="/admin/cargos" class="staff-panel-card">
+                <div class="staff-panel-icon">🔐</div>
+                <div>
+                  <h2>Cargos</h2>
+                  <p>Gerenciar permissões e funções internas.</p>
+                </div>
+              </a>
+            </div>
+          </section>
+        <% } %>
+
+        <section class="staff-activity-box" id="staff-reports">
           <div class="staff-activity-header">
-            <h2>Atividade recente</h2>
-            <span>Prévia visual</span>
+            <div>
+              <span>DENÚNCIAS</span>
+              <h2>Denúncias recentes</h2>
+              <small class="staff-list-counter">
+  Mostrando <%= reports.length %> de <%= pagination.reports.total %> denúncia(s)
+</small>
+            </div>
+
+            <a href="/forum/categoria/denuncias">Ver categoria</a>
           </div>
 
-          <div class="staff-activity-list">
-            <div class="staff-activity-item">
-              <span class="activity-dot"></span>
-
-              <div>
-                <strong>Denúncia #001 marcada como em análise</strong>
-                <p>Staff SurvivalZ • 01/06/2026 às 20:30</p>
+          <div class="staff-report-list">
+            <% if (reports.length === 0) { %>
+              <div class="staff-empty-card">
+                <strong>Nenhuma denúncia encontrada</strong>
+                <p>Quando houver denúncias abertas, elas aparecerão aqui.</p>
               </div>
-            </div>
+            <% } %>
 
-            <div class="staff-activity-item">
-              <span class="activity-dot"></span>
+            <% reports.forEach((report) => { %>
+              <article class="staff-report-card <%= ['OPEN', 'PINNED'].includes(report.status) ? 'needs-attention' : '' %>">
+                <div class="staff-report-main">
+                  <span class="staff-status-pill status-<%= report.status.toLowerCase() %>">
+                    <%= topicStatusLabel(report.status) %>
+                  </span>
 
-              <div>
-                <strong>Nova denúncia recebida</strong>
-                <p>Dybala_Survivor abriu uma denúncia contra Player_Suspeito.</p>
-              </div>
-            </div>
+                  <h3>
+                    <a href="/forum/topico/<%= report.id %>">
+                      Denúncia contra <%= report.reportAccusedNick || "acusado não informado" %>
+                    </a>
+                  </h3>
 
-            <div class="staff-activity-item">
-              <span class="activity-dot"></span>
+                  <div class="staff-report-meta">
+                    <span>Autor: <strong><%= displayUserName(report.author) %></strong></span>
+                    <span>Respostas: <strong><%= report._count.posts %></strong></span>
+                    <span>Atualizado: <strong><%= formatDate(report.updatedAt) %></strong></span>
+                  </div>
+                </div>
 
-              <div>
-                <strong>Sistema de loja planejado</strong>
-                <p>Área ainda em desenvolvimento para versões futuras da central.</p>
-              </div>
-            </div>
+                <form action="/forum/moderacao/topico/<%= report.id %>/status" method="POST" class="staff-inline-actions">
+                  <input type="hidden" name="redirectTo" value="/staff?status=<%= status %>#staff-reports">
+
+                  <select name="status">
+                    <option value="OPEN" <%= report.status === "OPEN" ? "selected" : "" %>>Aberta</option>
+                    <option value="CLOSED" <%= report.status === "CLOSED" ? "selected" : "" %>>Fechada</option>
+                    <option value="PINNED" <%= report.status === "PINNED" ? "selected" : "" %>>Fixada</option>
+                    <option value="ARCHIVED" <%= report.status === "ARCHIVED" ? "selected" : "" %>>Arquivada</option>
+                  </select>
+
+                  <button type="submit">Salvar</button>
+                  <a href="/forum/topico/<%= report.id %>">Abrir</a>
+                </form>
+              </article>
+            <% }) %>
           </div>
+          <% if (pagination.reports.totalPages > 1) { %>
+  <div class="staff-pagination">
+    <% if (pagination.reports.page > 1) { %>
+      <a href="/staff?status=<%= status %>&reportPage=<%= pagination.reports.page - 1 %>&topicPage=<%= pagination.topics.page %>#staff-reports">
+        Anterior
+      </a>
+    <% } %>
+
+    <span>
+      Página <%= pagination.reports.page %> de <%= pagination.reports.totalPages %>
+    </span>
+
+    <% if (pagination.reports.page < pagination.reports.totalPages) { %>
+      <a href="/staff?status=<%= status %>&reportPage=<%= pagination.reports.page + 1 %>&topicPage=<%= pagination.topics.page %>#staff-reports">
+        Próxima
+      </a>
+    <% } %>
+  </div>
+<% } %>
+        </section>
+
+        <section class="staff-activity-box" id="staff-moderation">
+          <div class="staff-activity-header">
+            <div>
+              <span>MODERAÇÃO</span>
+              <h2>Moderação do fórum</h2>
+              <small class="staff-list-counter">
+  Mostrando <%= topics.length %> de <%= pagination.topics.total %> tópico(s)
+</small>
+            </div>
+
+            <strong><%= topics.length %> tópico(s)</strong>
+          </div>
+
+          <nav class="staff-status-filters">
+            <a class="<%= status === 'ALL' ? 'active' : '' %>" href="/staff?status=ALL#staff-moderation">Todos</a>
+            <a class="<%= status === 'OPEN' ? 'active' : '' %>" href="/staff?status=OPEN#staff-moderation">Abertos</a>
+            <a class="<%= status === 'PINNED' ? 'active' : '' %>" href="/staff?status=PINNED#staff-moderation">Fixados</a>
+            <a class="<%= status === 'CLOSED' ? 'active' : '' %>" href="/staff?status=CLOSED#staff-moderation">Fechados</a>
+            <a class="<%= status === 'ARCHIVED' ? 'active' : '' %>" href="/staff?status=ARCHIVED#staff-moderation">Arquivados</a>
+          </nav>
+
+          <div class="staff-topic-list">
+            <% if (topics.length === 0) { %>
+              <div class="staff-empty-card">
+                <strong>Nenhum tópico encontrado</strong>
+                <p>Não há tópicos para este filtro.</p>
+              </div>
+            <% } %>
+
+            <% topics.forEach((topic) => { %>
+              <article class="staff-topic-card">
+                <div class="staff-topic-main">
+                  <div class="staff-topic-badges">
+                    <span class="staff-status-pill status-<%= topic.status.toLowerCase() %>">
+                      <%= topicStatusLabel(topic.status) %>
+                    </span>
+
+                    <span class="staff-category-pill">
+                      <%= topic.category.name %>
+                    </span>
+                  </div>
+
+                  <h3>
+                    <a href="/forum/topico/<%= topic.id %>">
+                      <%= topic.title %>
+                    </a>
+                  </h3>
+
+                  <p>
+                    Autor: <strong><%= displayUserName(topic.author) %></strong>
+                    • <%= topic._count.posts %> resposta(s)
+                    • <%= formatDate(topic.updatedAt) %>
+                  </p>
+                </div>
+
+                <form action="/forum/moderacao/topico/<%= topic.id %>/status" method="POST" class="staff-inline-actions">
+                  <input type="hidden" name="redirectTo" value="/staff?status=<%= status %>#staff-moderation">
+
+                  <select name="status">
+                    <option value="OPEN" <%= topic.status === "OPEN" ? "selected" : "" %>>Aberto</option>
+                    <option value="CLOSED" <%= topic.status === "CLOSED" ? "selected" : "" %>>Fechado</option>
+                    <option value="PINNED" <%= topic.status === "PINNED" ? "selected" : "" %>>Fixado</option>
+                    <option value="ARCHIVED" <%= topic.status === "ARCHIVED" ? "selected" : "" %>>Arquivado</option>
+                  </select>
+
+                  <button type="submit">Salvar</button>
+                  <a href="/forum/topico/<%= topic.id %>">Abrir</a>
+                </form>
+              </article>
+            <% }) %>
+          </div>
+          <% if (pagination.topics.totalPages > 1) { %>
+  <div class="staff-pagination">
+    <% if (pagination.topics.page > 1) { %>
+      <a href="/staff?status=<%= status %>&reportPage=<%= pagination.reports.page %>&topicPage=<%= pagination.topics.page - 1 %>#staff-moderation">
+        Anterior
+      </a>
+    <% } %>
+
+    <span>
+      Página <%= pagination.topics.page %> de <%= pagination.topics.totalPages %>
+    </span>
+
+    <% if (pagination.topics.page < pagination.topics.totalPages) { %>
+      <a href="/staff?status=<%= status %>&reportPage=<%= pagination.reports.page %>&topicPage=<%= pagination.topics.page + 1 %>#staff-moderation">
+        Próxima
+      </a>
+    <% } %>
+  </div>
+<% } %>
         </section>
 
       </div>

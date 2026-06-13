@@ -18,7 +18,26 @@
     <section class="player-dashboard-section">
       <div class="container">
 
-        <% const gameStats = getGameStats(user); %>
+        <%
+          const gameStats = getGameStats(user);
+          const dashboardRole = normalizeRole(user.role);
+          const dashboardRoleIcon = {
+            DESENVOLVEDOR: "💻",
+            DIRETOR: "👑",
+            SUB_DIRETOR: "⭐",
+            GERENTE: "💼",
+            COORDENADOR: "📌",
+            SUPERVISOR: "👁",
+            ADMINISTRADOR: "🛡️",
+            MODERADOR: "⚔️",
+            ESTAGIARIO: "🧪",
+            SUPORTE: "🎧",
+            YOUTUBER: "▶️",
+            BETA_TESTER: "🧪",
+            PREMIUM: "💎",
+            SOBREVIVENTE: "☣"
+          }[dashboardRole] || "☣";
+        %>
 
         <section class="sz-dashboard-hero">
 
@@ -28,39 +47,31 @@
               <% if (user.avatarUrl) { %>
                 <img
                   src="<%= user.avatarUrl %>"
-                  alt="Avatar de <%= user.name %>"
+                  alt="Avatar de <%= displayUserName(user) %>"
                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <span style="display:none;">
-                  <%= user.name.charAt(0).toUpperCase() %>
+                  <%= displayInitial(user) %>
                 </span>
               <% } else { %>
-                <span><%= user.name.charAt(0).toUpperCase() %></span>
+                <span><%= displayInitial(user) %></span>
               <% } %>
             </a>
 
             <div class="sz-dashboard-main-info">
               <span class="sz-dashboard-kicker">Meu painel</span>
 
-              <h1>Bem-vindo, <%= user.name %></h1>
+              <h1>Bem-vindo, <%= displayUserName(user) %></h1>
 
               <p>
                 Gerencie seu perfil, acompanhe suas atividades, veja suas medalhas
                 e acesse rapidamente as áreas principais da Central SurvivalZ.
               </p>
 
-              <div class="sz-dashboard-rank sz-dashboard-rank-<%= user.role.toLowerCase() %>">
+              <div class="sz-dashboard-rank sz-dashboard-rank-<%= roleClass(user.role) %>">
                 <div class="sz-dashboard-rank-icon">
-                  <% if (user.role === "OWNER") { %>
-                    👑
-                  <% } else if (user.role === "ADMIN") { %>
-                    🛡️
-                  <% } else if (user.role === "STAFF" || user.role === "MODERADOR") { %>
-                    ⚔️
-                  <% } else { %>
-                    ☣
-                  <% } %>
+                  <%= dashboardRoleIcon %>
                 </div>
 
                 <div>
@@ -87,9 +98,9 @@
         </section>
 
         <nav class="sz-dashboard-shortcuts">
-          <a href="/comunidade">
+          <a href="/servidor">
             <span>🌐</span>
-            Comunidade
+            Servidor
           </a>
 
           <a href="/forum">

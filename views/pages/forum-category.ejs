@@ -27,7 +27,6 @@
             <p><%= category.description || "Topicos da categoria." %></p>
           </div>
 
-          <% const staffRoles = ["STAFF", "ADMIN", "OWNER"]; %>
           <%
             const actionLabels = {
               "duvidas": "Criar duvida",
@@ -44,7 +43,7 @@
 
           <% if (!isPlayerLogged) { %>
             <a href="/entrar" class="btn-primary">Entrar para postar</a>
-          <% } else if (category.slug === "avisos-oficiais" && !staffRoles.includes(playerRole)) { %>
+          <% } else if (["avisos-oficiais", "changelog"].includes(category.slug) && rolePower(playerRole) < 4) { %>
             <span class="forum-locked-badge">Somente staff</span>
           <% } else if (category.isLocked) { %>
             <span class="forum-locked-badge">Categoria bloqueada</span>
@@ -119,12 +118,12 @@
     <div class="sz-topic-author-line">
       <a href="/perfil/<%= topic.author.id %>" class="sz-topic-author">
         <% if (topic.author.avatarUrl) { %>
-          <img src="<%= topic.author.avatarUrl %>" alt="Avatar de <%= topic.author.name %>">
+          <img src="<%= topic.author.avatarUrl %>" alt="Avatar de <%= displayUserName(topic.author) %>">
         <% } else { %>
-          <span><%= topic.author.name.charAt(0).toUpperCase() %></span>
+          <span><%= displayInitial(topic.author) %></span>
         <% } %>
 
-        <strong><%= topic.author.name %></strong>
+        <strong><%= displayUserName(topic.author) %></strong>
       </a>
 
       <small><%= formatDateTime(topic.createdAt) %></small>
@@ -156,7 +155,7 @@
 
       <% if (lastReply) { %>
         <a href="/perfil/<%= lastReply.author.id %>">
-          <%= lastReply.author.name %>
+          <%= displayUserName(lastReply.author) %>
         </a>
 
         <small><%= formatDateTime(lastReply.createdAt) %></small>

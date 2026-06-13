@@ -63,8 +63,8 @@
 
             <div class="admin-detail-list">
               <div>
-                <span>Nome</span>
-                <strong><%= order.customer.name %></strong>
+                <span>Nick</span>
+                <strong><%= order.customer.sampNick || order.customer.name || "Nao informado" %></strong>
               </div>
 
               <div>
@@ -127,6 +127,28 @@
 
           <div class="admin-order-detail-box">
             <div class="admin-box-header">
+              <h2>Termo de doacao/apoio</h2>
+              <span><%= order.donationTermsAccepted ? "Aceito" : "Pedido antigo" %></span>
+            </div>
+
+            <div class="admin-detail-list">
+              <div>
+                <span>Status</span>
+                <strong><%= order.donationTermsAccepted ? "Aceito pelo comprador" : "Nao registrado neste pedido" %></strong>
+              </div>
+              <div>
+                <span>Data</span>
+                <strong><%= order.donationTermsAcceptedAt ? new Date(order.donationTermsAcceptedAt).toLocaleString("pt-BR") : "Nao informado" %></strong>
+              </div>
+              <div>
+                <span>Versao</span>
+                <strong><%= order.donationTermsVersion || "Nao informado" %></strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-order-detail-box">
+            <div class="admin-box-header">
               <h2>Conta vinculada</h2>
               <span>Jogador</span>
             </div>
@@ -134,8 +156,8 @@
             <% if (order.userId) { %>
               <div class="admin-detail-list">
                 <div>
-                  <span>Nome da conta</span>
-                  <strong><%= order.userName || order.customer.name || "Nao informado" %></strong>
+                  <span>Nick da conta</span>
+                  <strong><%= order.userSampNick || order.userName || order.customer.sampNick || "Nao informado" %></strong>
                 </div>
 
                 <div>
@@ -336,7 +358,7 @@
     <textarea id="orderCopyText" class="copy-order-textarea" readonly>
     ☣️ PEDIDO SURVIVALZ - <%= order.code %>
 
-    👤 Cliente: <%= order.customer.name %>
+    Cliente/Nick: <%= order.customer.sampNick || order.customer.name || "Nao informado" %>
     💬 Discord: <%= order.customer.discord %>
     🎮 Nick: <%= order.customer.sampNick %>
     📧 E-mail: <%= order.customer.email %>
@@ -354,6 +376,8 @@
     📌 Status: <%= String(order.status || "pendente").replace(/_/g, " ") %>
     💳 Pagamento: <%= String(order.paymentStatus || "aguardando pagamento").replace(/_/g, " ") %>
     🚚 Entrega: <%= String(order.deliveryStatus || "pendente").replace(/_/g, " ") %>
+    Termo doacao/apoio: <%= order.donationTermsAccepted ? "Aceito" : "Pedido antigo/nao registrado" %>
+    Conferir Pix/pagamento antes de liberar beneficios.
     </textarea>
 
 <script src="/js/adminOrder.js"></script>

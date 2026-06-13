@@ -99,10 +99,10 @@ const renderForumModeration = async (req, res) => {
 const updateTopicStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, redirectTo } = req.body;
 
     if (!validStatuses.includes(status)) {
-      return res.redirect("/forum/moderacao");
+      return res.redirect("/staff#staff-moderation");
     }
 
     await prisma.forumTopic.update({
@@ -114,7 +114,12 @@ const updateTopicStatus = async (req, res) => {
       }
     });
 
-    res.redirect("/forum/moderacao");
+    const safeRedirect =
+      redirectTo && String(redirectTo).startsWith("/staff")
+        ? redirectTo
+        : "/forum/moderacao";
+
+    res.redirect(safeRedirect);
   } catch (error) {
     console.log("Erro ao atualizar status do tópico:", error);
     res.status(500).send("Erro ao atualizar status.");

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/servidor.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <%
+    const rawGuideLink = typeof guideLink === "string" ? guideLink.trim() : "";
+    const hasGuideLink = rawGuideLink && rawGuideLink !== "/servidor" && rawGuideLink !== "#";
+    const safeGuideLink = hasGuideLink ? rawGuideLink : "#";
+    const guideLabel = hasGuideLink ? "Ver guia" : "Guia em breve";
+    const guideTarget = hasGuideLink ? 'target="_blank" rel="noopener noreferrer"' : "";
+  %>
+
+  <main class="server-page">
+    <section class="server-hero">
+      <div class="container server-hero-grid">
+        <div class="server-hero-copy">
+          <span class="section-tag">Servidor oficial</span>
+          <h1>Servidor SurvivalZ</h1>
+          <p>
+            Uma experiência SA-MP survival em desenvolvimento, inspirada em DayZ,
+            com economia, exploração, veículos, riscos e comunidade.
+          </p>
+
+          <div class="server-badges">
+            <span>SA-MP</span>
+            <span>Survival</span>
+            <span>Beta</span>
+            <span>Beta em preparação</span>
+          </div>
+
+          <div class="server-actions">
+            <a href="<%= safeGuideLink %>" <%- guideTarget %> class="btn-primary"><%= guideLabel %></a>
+            <a href="<%= discordInvite %>" target="_blank" rel="noopener noreferrer" class="btn-secondary">Entrar no Discord</a>
+            <a href="/loja" class="btn-secondary">Loja Beta</a>
+          </div>
+        </div>
+
+        <aside class="server-hero-card">
+          <span>Status atual</span>
+          <strong>Beta em preparação</strong>
+          <p>Entrada/IP e whitelist serão divulgados pelos canais oficiais.</p>
+          <div>
+            <small>Acesso</small>
+            <b>Beta / Whitelist</b>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="server-block server-about-block">
+      <div class="container server-about-grid">
+        <div class="server-section-copy">
+          <span class="section-tag">Sobre</span>
+          <h2>O que é o SurvivalZ?</h2>
+          <p>
+            SurvivalZ é um servidor SA-MP com temática pós-apocalíptica, focado em
+            sobrevivência, progressão, exploração, economia e interação entre jogadores.
+          </p>
+        </div>
+
+        <div class="server-feature-grid">
+          <article><strong>Sobrevivência</strong><span>Recursos, risco e decisão em cada rota.</span></article>
+          <article><strong>Exploração</strong><span>Zonas, pontos de interesse e perigos.</span></article>
+          <article><strong>Economia</strong><span>Progressão, loja e recompensas do Beta.</span></article>
+          <article><strong>Veículos</strong><span>Mobilidade e estratégia pela zona.</span></article>
+          <article><strong>Comunidade</strong><span>Fórum, perfis, reputação e avisos.</span></article>
+          <article><strong>Staff</strong><span>Moderação e suporte para manter ordem.</span></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

@@ -1,7 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   const animatedItems = document.querySelectorAll(
-    ".home-v2-hero-content, .home-v2-status-card, .home-v2-feature-card, .home-v2-step, .home-v2-store-card, .home-v2-diff-card, .home-v2-final-box"
+    ".home-hero-copy, .home-survivor-card, .home-status-panel, .home-steps article, .home-systems-grid article, .home-final-box"
   );
+
+  if (!("IntersectionObserver" in window)) {
+    animatedItems.forEach((item) => item.classList.add("visible"));
+    return;
+  }
 
   animatedItems.forEach((item) => {
     item.classList.add("reveal-item");
@@ -20,7 +25,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-  animatedItems.forEach((item) => {
-    observer.observe(item);
-  });
+  animatedItems.forEach((item) => observer.observe(item));
 });

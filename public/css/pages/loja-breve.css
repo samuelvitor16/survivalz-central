@@ -1,0 +1,219 @@
+.store-soon-page {
+  min-height: 85vh;
+  background:
+    linear-gradient(rgba(0,0,0,0.90), rgba(0,0,0,0.97)),
+    radial-gradient(circle at 20% 0%, rgba(255, 43, 43, 0.22), transparent 34%),
+    radial-gradient(circle at 90% 20%, rgba(245, 185, 66, 0.10), transparent 30%);
+}
+
+.store-soon-hero {
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  padding: 80px 0;
+}
+
+.store-soon-container {
+  display: flex;
+  justify-content: center;
+}
+
+.store-soon-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  width: 100%;
+  max-width: 860px;
+
+  padding: 42px;
+  border-radius: 30px;
+
+  background:
+    radial-gradient(circle at top left, rgba(255, 43, 43, 0.22), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(245, 185, 66, 0.10), transparent 35%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(3, 6, 15, 0.98));
+
+  border: 1px solid rgba(255, 43, 43, 0.28);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 0 42px rgba(255, 43, 43, 0.10),
+    0 28px 80px rgba(0,0,0,0.52);
+
+  text-align: center;
+}
+
+.store-soon-card::before {
+  content: "";
+  position: absolute;
+  inset: 18px auto 18px 0;
+  width: 6px;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(180deg, #fff, #ff2b2b, transparent);
+  box-shadow:
+    0 0 22px #ff2b2b,
+    0 0 44px rgba(255, 43, 43, 0.65);
+  z-index: -1;
+}
+
+.store-soon-card::after {
+  content: "";
+  position: absolute;
+  top: -70%;
+  right: -35%;
+  width: 65%;
+  height: 230%;
+  transform: rotate(28deg);
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 43, 43, 0.12),
+      rgba(255,255,255,0.09),
+      transparent
+    );
+  pointer-events: none;
+  z-index: -1;
+}
+
+.store-soon-kicker {
+  display: inline-flex;
+  margin-bottom: 14px;
+
+  padding: 8px 13px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255, 43, 43, 0.35);
+  background: rgba(255, 43, 43, 0.10);
+
+  color: #ff7777;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.store-soon-card h1 {
+  margin: 0 0 16px;
+  font-size: clamp(2.8rem, 7vw, 5.4rem);
+  line-height: 0.92;
+  font-weight: 950;
+  letter-spacing: -0.06em;
+
+  color: #fff;
+  text-shadow:
+    0 0 22px rgba(255, 43, 43, 0.18),
+    0 2px 0 rgba(0,0,0,0.75);
+}
+
+.store-soon-card p {
+  max-width: 680px;
+  margin: 0 auto 24px;
+
+  color: rgba(255,255,255,0.72);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.store-soon-release {
+  display: inline-grid;
+  gap: 4px;
+
+  margin-bottom: 26px;
+  padding: 14px 20px;
+
+  border-radius: 18px;
+  border: 1px solid rgba(245, 185, 66, 0.22);
+  background: rgba(245, 185, 66, 0.08);
+}
+
+.store-soon-release span {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.store-soon-release strong {
+  color: #f5b942;
+  font-size: 1.25rem;
+  font-weight: 950;
+}
+
+.store-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+
+  max-width: 660px;
+  margin: 0 auto 26px;
+}
+
+.store-countdown div {
+  padding: 18px 12px;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 50%),
+    rgba(0,0,0,0.38);
+
+  border: 1px solid rgba(255,255,255,0.09);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 12px 26px rgba(0,0,0,0.28);
+}
+
+.store-countdown strong {
+  display: block;
+
+  color: #ff2b2b;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 950;
+  line-height: 1;
+
+  text-shadow: 0 0 20px rgba(255, 43, 43, 0.35);
+}
+
+.store-countdown span {
+  display: block;
+  margin-top: 7px;
+
+  color: rgba(255,255,255,0.55);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.store-soon-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.store-soon-note {
+  display: block;
+  color: rgba(255,255,255,0.48);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 720px) {
+  .store-soon-hero {
+    padding: 46px 0;
+  }
+
+  .store-soon-card {
+    padding: 28px 20px;
+    border-radius: 24px;
+  }
+
+  .store-countdown {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

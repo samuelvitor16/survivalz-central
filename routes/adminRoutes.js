@@ -26,6 +26,7 @@ const {
   renderAdminUsers,
   renderAdminUserDetails,
   updateAdminUserRole,
+  updateAdminUserTemporaryPassword,
   renderAdminRoles,
   updateAdminRoleQuick
 } = require("../controllers/adminUsersController");
@@ -47,6 +48,7 @@ router.post("/cargos", updateAdminRoleQuick);
 router.get("/usuarios", renderAdminUsers);
 router.get("/usuarios/:id", renderAdminUserDetails);
 router.post("/usuarios/:id/role", updateAdminUserRole);
+router.post("/usuarios/:id/password", updateAdminUserTemporaryPassword);
 router.get("/pedidos", renderAdminOrders);
 
 // Exportação precisa vir ANTES de /pedidos/:id

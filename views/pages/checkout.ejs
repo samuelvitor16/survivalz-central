@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title><%= title %></title>
-
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pages/shop.css">
 </head>
@@ -16,40 +15,27 @@
   <main>
     <section class="checkout-section">
       <div class="container checkout-grid">
-
         <div class="checkout-form-box">
           <span class="section-tag">Finalizar pedido</span>
-
           <h1>Dados do comprador</h1>
+          <p>Informe Discord, e-mail e nick para gerar o pedido e o Pix. A liberacao continua manual pela gestao.</p>
 
-          <p>
-            Preencha seus dados para enviar o pedido. A gestão do SurvivalZ irá analisar
-            as informações e orientar o pagamento manualmente.
-          </p>
           <% if (typeof checkoutUser !== "undefined" && checkoutUser) { %>
             <div class="checkout-account-link">
-              Pedido vinculado a conta <strong><%= checkoutUser.name %></strong>.
-              Os campos abaixo foram preenchidos automaticamente, mas voce pode ajustar antes de enviar.
+              Pedido vinculado a conta <strong><%= displayUserName(checkoutUser) %></strong>.
+              Os campos foram preenchidos automaticamente, mas voce pode ajustar antes de enviar.
             </div>
           <% } %>
 
           <div class="checkout-coupon-warning">
-            <strong>🎁 Cupom de primeira compra:</strong>
-            <span>
-                Use o cupom <b>BETA25</b> para receber 25% de desconto na sua primeira compra.
-                O cupom só poderá ser usado uma vez por comprador.
-            </span>
-            </div>
+            <strong>Cupom de primeira compra:</strong>
+            <span>Use o cupom <b>BETA25</b> para receber 25% de desconto na primeira compra elegivel.</span>
+          </div>
 
           <form action="#" method="POST" class="checkout-form">
             <div class="form-group">
-              <label for="name">Nome</label>
-              <input type="text" id="name" name="name" value="<%= typeof checkoutUser !== 'undefined' && checkoutUser ? checkoutUser.name : '' %>" placeholder="Seu nome">
-            </div>
-
-            <div class="form-group">
               <label for="discord">Discord</label>
-              <input type="text" id="discord" name="discord" value="<%= typeof checkoutUser !== 'undefined' && checkoutUser ? (checkoutUser.discord || '') : '' %>" placeholder="Ex: Dybala#0000 ou @dybala">
+              <input type="text" id="discord" name="discord" value="<%= typeof checkoutUser !== 'undefined' && checkoutUser ? (checkoutUser.discord || '') : '' %>" placeholder="Ex: @dybala">
             </div>
 
             <div class="form-group">
@@ -59,73 +45,59 @@
 
             <div class="form-group">
               <label for="sampNick">Nick no servidor</label>
-              <input type="text" id="sampNick" name="sampNick" value="<%= typeof checkoutUser !== 'undefined' && checkoutUser ? (checkoutUser.sampNick || '') : '' %>" placeholder="Ex: Dybala_Survivor">
+              <input type="text" id="sampNick" name="sampNick" value="<%= typeof checkoutUser !== 'undefined' && checkoutUser ? (checkoutUser.sampNick || '') : '' %>" placeholder="Seu_Nick">
             </div>
 
             <div class="form-group">
-              <label for="notes">Observação</label>
-              <textarea id="notes" name="notes" placeholder="Alguma observação sobre o pedido?"></textarea>
+              <label for="notes">Observacao</label>
+              <textarea id="notes" name="notes" placeholder="Alguma observacao sobre o pedido?"></textarea>
             </div>
 
             <label class="checkout-checkbox">
               <input type="checkbox" id="terms">
               <span>
-                Confirmo que li e entendi os <a href="/loja/termos" target="_blank">termos da Loja Beta</a>,
-incluindo entrega manual, pagamento via Pix e possível reset ao fim da fase de testes.
+                Declaro que estou realizando uma doacao voluntaria de apoio ao projeto SurvivalZ,
+                podendo receber recompensas digitais simbolicas vinculadas ao Beta. Estou ciente de
+                que, apos a confirmacao e/ou liberacao dos beneficios, nao havera reembolso, exceto
+                em casos de pagamento duplicado, falha tecnica, nao entrega do beneficio ou obrigacao
+                legal aplicavel.
               </span>
             </label>
-                <div class="checkout-payment-warning">
-  <strong>💳 Pagamento manual via Pix</strong>
 
-  <p>
-    Ao enviar o pedido, o site irá gerar um código de pedido, QR Code Pix e Pix Copia e Cola
-    com o valor total. Após pagar, envie o comprovante no Discord para a gestão confirmar
-    e liberar os produtos manualmente.
-  </p>
-</div>
+            <div class="checkout-payment-warning">
+              <strong>Pagamento manual via Pix</strong>
+              <p>
+                Ao enviar o pedido, o site gera codigo, QR Code Pix e Pix Copia e Cola.
+                Depois do pagamento, envie o comprovante no Discord para conferirem.
+              </p>
+            </div>
+
             <button type="button" class="btn-primary checkout-submit-btn" id="sendOrderButton">
-  Enviar pedido e gerar Pix
-</button>
+              Enviar pedido e gerar Pix
+            </button>
           </form>
         </div>
 
         <aside class="checkout-summary-box">
           <span class="section-tag">Resumo</span>
-
           <h2>Seu pedido</h2>
-
           <div id="checkoutItems" class="checkout-items"></div>
 
           <div class="checkout-total-box">
-            <div>
-              <span>Subtotal</span>
-              <strong id="checkoutSubtotal">R$ 0,00</strong>
-            </div>
-
-            <div>
-              <span>Desconto</span>
-              <strong id="checkoutDiscount">R$ 0,00</strong>
-            </div>
-
-            <div class="checkout-final-total">
-              <span>Total</span>
-              <strong id="checkoutTotal">R$ 0,00</strong>
-            </div>
+            <div><span>Subtotal</span><strong id="checkoutSubtotal">R$ 0,00</strong></div>
+            <div><span>Desconto</span><strong id="checkoutDiscount">R$ 0,00</strong></div>
+            <div class="checkout-final-total"><span>Total</span><strong id="checkoutTotal">R$ 0,00</strong></div>
           </div>
 
           <p class="checkout-note">
-            O pedido ainda não será pago automaticamente. A equipe entrará em contato
-            para confirmar o pagamento e liberar os produtos manualmente.
+            O pedido fica pendente ate a equipe conferir Pix, comprovante e liberacao dos beneficios.
           </p>
         </aside>
-
       </div>
     </section>
   </main>
 
   <%- include("../partials/footer") %>
-
   <script src="/js/checkout.js"></script>
-
 </body>
 </html>
