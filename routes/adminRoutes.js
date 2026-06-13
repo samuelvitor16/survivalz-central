@@ -31,14 +31,7 @@ const {
   updateAdminRoleQuick
 } = require("../controllers/adminUsersController");
 
-const {
-  renderAdminStoreProducts,
-  renderAdminStoreProductNew,
-  createAdminStoreProduct,
-  renderAdminStoreProductEdit,
-  updateAdminStoreProduct,
-  toggleAdminStoreProduct
-} = require("../controllers/staffStoreController");
+
 
 // Login admin
 router.get("/login", redirectIfAdminLogged, renderAdminLogin);
