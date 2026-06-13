@@ -1,8 +1,5 @@
-const {
-  getAvailableProducts,
-  getProductById,
-  formatPrice
-} = require("../data/products");
+const legacyProducts = require("../data/products");
+const { formatPrice } = legacyProducts;
 const {
   generatePixPayment,
   getPixInfoForOrder
@@ -15,6 +12,103 @@ const {
 const prisma = require("../config/prisma");
 
 const DONATION_TERMS_VERSION = "donation-beta-2026-06";
+
+const formatNumber = (value) => {
+  return Number(value || 0).toLocaleString("pt-BR");
+};
+
+const formatCurrency = (cents) => {
+  if (cents === null || cents === undefined) return "A definir";
+
+  return (cents / 100).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+};
+
+const normalizeStoreProduct = (product) => {
+  const benefits = Array.isArray(product.benefits) ? product.benefits : [];
+  const priceCents = product.referencePriceCents || 0;
+  const isZCoinsPack = product.category === "zcoins";
+
+  return {
+    id: product.code,
+    dbId: product.id,
+    name: product.name,
+    category: product.category,
+    type: product.type || product.category,
+    priceZCoins: product.priceZCoins,
+    referencePriceCents: product.referencePriceCents,
+    priceCents,
+    originalPriceCents: null,
+    betaDiscount: false,
+    stock: product.stock,
+    available: product.isActive,
+    highlight: product.isFeatured,
+    description: product.description || "Produto disponível na loja SurvivalZ.",
+    benefits,
+    imageUrl: product.imageUrl || "/images/products/default.png",
+    modelId: product.modelId,
+    capacity: product.capacityKg ? `${product.capacityKg}kg` : null,
+    armor: product.armorTier || null,
+    collection: product.collection || null,
+    priceLabel: isZCoinsPack
+      ? formatCurrency(product.referencePriceCents)
+      : product.priceZCoins
+        ? `${formatNumber(product.priceZCoins)} ZCoins`
+        : formatCurrency(product.referencePriceCents),
+    referencePriceLabel: isZCoinsPack
+      ? product.priceZCoins
+        ? `Recebe ${formatNumber(product.priceZCoins)} ZCoins`
+        : null
+      : product.referencePriceCents
+        ? `Equivalente aprox. ${formatCurrency(product.referencePriceCents)}`
+        : null
+  };
+};
+
+const getAvailableProducts = async () => {
+  if (!prisma.storeProduct) {
+    return legacyProducts.getAvailableProducts();
+  }
+
+  const dbProducts = await prisma.storeProduct.findMany({
+    where: {
+      isActive: true
+    },
+    orderBy: [
+      { position: "asc" },
+      { createdAt: "desc" }
+    ]
+  });
+
+  if (!dbProducts.length) {
+    return legacyProducts.getAvailableProducts();
+  }
+
+  return dbProducts.map(normalizeStoreProduct);
+};
+
+const getProductById = async (id) => {
+  if (prisma.storeProduct) {
+    const dbProduct = await prisma.storeProduct.findFirst({
+      where: {
+        OR: [
+          { code: id },
+          { id }
+        ],
+        isActive: true
+      }
+    });
+
+    if (dbProduct) {
+      return normalizeStoreProduct(dbProduct);
+    }
+  }
+
+  return legacyProducts.getProductById(id);
+};
+
 
 const getCheckoutUser = async (req) => {
   if (!req.session.playerId) return null;
@@ -33,8 +127,8 @@ const getCheckoutUser = async (req) => {
   });
 };
 
-const renderShop = (req, res) => {
-  const products = getAvailableProducts();
+const renderShop = async (req, res) => {
+  const products = await getAvailableProducts();
 
   const betaPackages = products.filter((product) => product.category === "beta");
   const vips = products.filter((product) => product.category === "vip");
@@ -57,8 +151,8 @@ const renderShop = (req, res) => {
   });
 };
 
-const renderProduct = (req, res) => {
-  const product = getProductById(req.params.id);
+const renderProduct = async (req, res) => {
+  const product = await getProductById(req.params.id);
 
   if (!product || !product.available) {
     return res.status(404).render("pages/404", {
@@ -74,7 +168,7 @@ const renderProduct = (req, res) => {
 };
 
 const renderCheckout = async (req, res) => {
-  const product = getProductById(req.params.id);
+  const product = await getProductById(req.params.id);
 
   if (!product || !product.available) {
     return res.status(404).render("pages/404", {
@@ -172,8 +266,7 @@ const customerAlreadyHasCategory = (category) => {
         return item.category === category;
       }
 
-      const oldProduct = getProductById(item.id);
-      return oldProduct && oldProduct.category === category;
+      return false;
     });
   });
 };
@@ -221,7 +314,7 @@ const restrictedCategoriesInCart = {
 const validatedItems = [];
 
 for (const productId of Object.keys(requestedItems)) {
-  const product = getProductById(productId);
+  const product = await getProductById(productId);
 
   if (!product || !product.available) {
     return res.status(400).json({

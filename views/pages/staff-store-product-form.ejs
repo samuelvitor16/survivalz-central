@@ -3,129 +3,211 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title><%= title %></title>
 
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pages/staff.css">
-  <link rel="stylesheet" href="/css/pages/admin.css">
+  <link rel="stylesheet" href="/css/pages/staff-store.css">
 </head>
 <body>
 
-<section class="admin-page">
-  <div class="admin-page-header">
-    <div>
-      <p class="admin-eyebrow">Loja</p>
-      <h1><%= product ? "Editar produto" : "Novo produto" %></h1>
-      <p>Preencha os dados do produto da loja.</p>
-    </div>
+  <%- include("../partials/header") %>
 
-    <a class="admin-btn" href="/staff/loja/produtos">Voltar</a>
-  </div>
+  <main class="staff-store-page">
+    <section class="staff-store-hero compact">
+      <div class="container staff-store-hero-grid">
+        <div>
+          <span class="section-tag">Painel da Loja</span>
+          <h1><%= mode === 'edit' ? 'Editar produto' : 'Novo produto' %></h1>
+          <p>
+            Preencha apenas o que aparece na loja. Código interno e slug são gerados automaticamente.
+          </p>
+        </div>
 
-  <form class="admin-card admin-form" method="POST" action="<%= action %>">
-    <label>
-      Código interno
-      <input name="code" value="<%= product ? product.code : "" %>" placeholder="vip-gold">
-    </label>
+        <div class="staff-store-actions right">
+          <a href="/staff/loja/produtos" class="staff-store-btn secondary">Voltar aos produtos</a>
+        </div>
+      </div>
+    </section>
 
-    <label>
-      Nome
-      <input name="name" required value="<%= product ? product.name : "" %>" placeholder="VIP Gold">
-    </label>
+    <section class="container staff-store-form-shell">
+      <form class="staff-store-form" method="POST" action="<%= action %>">
+        <div class="staff-store-form-main">
+          <div class="staff-store-form-card">
+            <div class="staff-store-form-card-head">
+              <span>1</span>
+              <div>
+                <h2>Informações principais</h2>
+                <p>Esses dados aparecem no card e na página do produto.</p>
+              </div>
+            </div>
 
-    <label>
-      Slug
-      <input name="slug" value="<%= product ? product.slug : "" %>" placeholder="vip-gold">
-    </label>
+            <div class="staff-store-form-grid">
+              <label class="wide">
+                Nome do produto
+                <input name="name" required value="<%= form.name %>" placeholder="Ex: VIP Gold, Infernus, Pacote Popular">
+              </label>
 
-    <label>
-      Categoria
-      <select name="category" required>
-        <% const categories = ["zcoins", "vip", "vehicles", "skins", "accessories", "season_pass", "special_packages", "crates", "beta"]; %>
-        <% categories.forEach((category) => { %>
-          <option value="<%= category %>" <%= product && product.category === category ? "selected" : "" %>>
-            <%= category %>
-          </option>
-        <% }) %>
-      </select>
-    </label>
+              <label>
+                Categoria
+                <select name="category" id="storeCategorySelect" required>
+                  <% categoryOptions.forEach((option) => { %>
+                    <option value="<%= option.value %>" <%= form.category === option.value ? 'selected' : '' %>>
+                      <%= option.label %>
+                    </option>
+                  <% }) %>
+                </select>
+                <small>Escolha onde esse produto vai aparecer no painel e na loja.</small>
+              </label>
 
-    <label>
-      Tipo/Subcategoria
-      <input name="type" value="<%= product && product.type ? product.type : "" %>" placeholder="VIP, Helicópteros, Coleção Ilha...">
-    </label>
+              <label>
+                Grupo visual
+                <input name="type" value="<%= form.type %>" placeholder="Ex: Helicópteros, Coleção Ilha, VIP">
+                <small>É só um nome bonito para agrupar ou identificar o item.</small>
+              </label>
 
-    <label>
-      Preço em ZCoins
-      <input type="number" name="priceZCoins" value="<%= product && product.priceZCoins ? product.priceZCoins : "" %>">
-    </label>
+              <label>
+                Preço em ZCoins
+                <input type="number" name="priceZCoins" value="<%= form.priceZCoins %>" placeholder="Ex: 4400">
+                <small>Para VIPs, veículos, skins e caixas. Em pacotes de ZCoins, use a quantidade recebida.</small>
+              </label>
 
-    <label>
-      Valor em reais aproximado em centavos
-      <input type="number" name="referencePriceCents" value="<%= product && product.referencePriceCents ? product.referencePriceCents : "" %>" placeholder="1499">
-      <small>Exemplo: R$ 14,99 = 1499</small>
-    </label>
+              <label>
+                Valor em R$ aproximado
+                <input name="referencePrice" value="<%= form.referencePrice %>" placeholder="Ex: 109,99">
+                <small>Digite normal, com vírgula. O sistema converte sozinho.</small>
+              </label>
 
-    <label>
-      Descrição
-      <textarea name="description" rows="4"><%= product && product.description ? product.description : "" %></textarea>
-    </label>
+              <label class="wide">
+                Descrição curta
+                <textarea name="description" rows="4" placeholder="Explique o produto de forma simples."><%= form.description %></textarea>
+              </label>
 
-    <label>
-      Benefícios, um por linha
-      <textarea name="benefits" rows="6"><%= benefitsText || "" %></textarea>
-    </label>
+              <label class="wide">
+                Benefícios / detalhes
+                <textarea name="benefits" rows="7" placeholder="Um benefício por linha. Ex:\nVIP por 30 dias\nEntrega manual após aprovação\nTag exclusiva"><%= form.benefits %></textarea>
+                <small>Escreva um item por linha. Não precisa usar vírgula.</small>
+              </label>
+            </div>
+          </div>
 
-    <label>
-      URL da imagem
-      <input name="imageUrl" value="<%= product && product.imageUrl ? product.imageUrl : "" %>">
-    </label>
+          <div class="staff-store-form-card" id="vehicleFieldsCard">
+            <div class="staff-store-form-card-head">
+              <span>2</span>
+              <div>
+                <h2>Dados de veículo</h2>
+                <p>Use essa parte apenas para carros, caminhões, helicópteros, aviões e barcos.</p>
+              </div>
+            </div>
 
-    <label>
-      ID do modelo
-      <input type="number" name="modelId" value="<%= product && product.modelId ? product.modelId : "" %>">
-    </label>
+            <div class="staff-store-form-grid four">
+              <label>
+                ID do veículo
+                <input type="number" name="modelId" value="<%= form.modelId %>" placeholder="Ex: 411">
+              </label>
 
-    <label>
-      Capacidade em KG
-      <input type="number" name="capacityKg" value="<%= product && product.capacityKg ? product.capacityKg : "" %>">
-    </label>
+              <label>
+                Capacidade em kg
+                <input type="number" name="capacityKg" value="<%= form.capacityKg %>" placeholder="Ex: 40">
+              </label>
 
-    <label>
-      Blindagem/Tier
-      <input name="armorTier" value="<%= product && product.armorTier ? product.armorTier : "" %>" placeholder="Tier 3">
-    </label>
+              <label>
+                Blindagem / Tier
+                <input name="armorTier" value="<%= form.armorTier %>" placeholder="Ex: Tier 3">
+              </label>
 
-    <label>
-      Coleção
-      <input name="collection" value="<%= product && product.collection ? product.collection : "" %>" placeholder="Coleção Polícia">
-    </label>
+              <label>
+                Coleção
+                <input name="collection" value="<%= form.collection %>" placeholder="Ex: Coleção Polícia">
+              </label>
+            </div>
+          </div>
 
-    <label>
-      Estoque
-      <input type="number" name="stock" value="<%= product && product.stock !== null && product.stock !== undefined ? product.stock : "" %>">
-    </label>
+          <div class="staff-store-form-card">
+            <div class="staff-store-form-card-head">
+              <span>3</span>
+              <div>
+                <h2>Imagem e publicação</h2>
+                <p>Controle visual, destaque e disponibilidade na loja.</p>
+              </div>
+            </div>
 
-    <label>
-      Posição
-      <input type="number" name="position" value="<%= product ? product.position : 0 %>">
-    </label>
+            <div class="staff-store-form-grid">
+              <label class="wide">
+                Imagem do produto
+                <input name="imageUrl" id="storeImageInput" value="<%= form.imageUrl %>" placeholder="/images/products/default.png ou URL https://...">
+                <small>Por enquanto cole o caminho da imagem. Ex: /images/products/infernus.png</small>
+              </label>
 
-    <label class="admin-checkbox">
-      <input type="checkbox" name="isActive" <%= !product || product.isActive ? "checked" : "" %>>
-      Produto ativo
-    </label>
+              <label>
+                Estoque / limite
+                <input type="number" name="stock" value="<%= form.stock %>" placeholder="Deixe vazio para ilimitado">
+              </label>
 
-    <label class="admin-checkbox">
-      <input type="checkbox" name="isFeatured" <%= product && product.isFeatured ? "checked" : "" %>>
-      Produto em destaque
-    </label>
+              <label>
+                Ordem na lista
+                <input type="number" name="position" value="<%= form.position %>">
+              </label>
 
-    <button class="admin-btn admin-btn-primary" type="submit">
-      Salvar produto
-    </button>
-  </form>
-</section>
+              <label class="staff-store-checkbox">
+                <input type="checkbox" name="isActive" <%= form.isActive ? 'checked' : '' %>>
+                <span>
+                  Produto ativo
+                  <small>Se desligar, ele não aparece na loja.</small>
+                </span>
+              </label>
 
+              <label class="staff-store-checkbox">
+                <input type="checkbox" name="isFeatured" <%= form.isFeatured ? 'checked' : '' %>>
+                <span>
+                  Marcar como destaque
+                  <small>Use para popular, melhor escolha ou item especial.</small>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <aside class="staff-store-preview-card">
+          <span>Prévia rápida</span>
+          <div class="staff-store-preview-image">
+            <img id="storeImagePreview" src="<%= form.imageUrl || '/images/products/default.png' %>" alt="Prévia do produto">
+          </div>
+          <strong><%= form.name || 'Nome do produto' %></strong>
+          <p>
+            Campos técnicos ficam escondidos. Você só edita o que importa para a loja.
+          </p>
+
+          <button type="submit" class="staff-store-btn primary full">Salvar produto</button>
+          <a href="/staff/loja/produtos" class="staff-store-btn secondary full">Cancelar</a>
+        </aside>
+      </form>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+  <script>
+    const categorySelect = document.getElementById("storeCategorySelect");
+    const vehicleCard = document.getElementById("vehicleFieldsCard");
+    const imageInput = document.getElementById("storeImageInput");
+    const imagePreview = document.getElementById("storeImagePreview");
+
+    function updateVehicleVisibility() {
+      if (!categorySelect || !vehicleCard) return;
+      vehicleCard.hidden = categorySelect.value !== "vehicles";
+    }
+
+    function updateImagePreview() {
+      if (!imageInput || !imagePreview) return;
+      imagePreview.src = imageInput.value.trim() || "/images/products/default.png";
+    }
+
+    categorySelect?.addEventListener("change", updateVehicleVisibility);
+    imageInput?.addEventListener("input", updateImagePreview);
+    updateVehicleVisibility();
+  </script>
 </body>
 </html>

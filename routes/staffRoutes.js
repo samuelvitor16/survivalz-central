@@ -21,6 +21,10 @@ const {
 
 router.get("/", requireForumStaff, renderStaffHome);
 
+router.get("/loja", requireOwnerRole, (req, res) => {
+  res.redirect("/staff/loja/produtos");
+});
+
 router.get("/moderacao", requireForumStaff, (req, res) => {
   res.redirect("/forum/moderacao");
 });

@@ -3,88 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title><%= title %></title>
 
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pages/staff.css">
-  <link rel="stylesheet" href="/css/pages/admin.css">
+  <link rel="stylesheet" href="/css/pages/staff-store.css">
 </head>
 <body>
 
-<section class="admin-page">
-  <div class="admin-page-header">
-    <div>
-      <p class="admin-eyebrow">Loja</p>
-      <h1>Produtos da Loja</h1>
-      <p>Gerencie os produtos exibidos na loja da Central SurvivalZ.</p>
-    </div>
+  <%- include("../partials/header") %>
 
-    <a class="admin-btn admin-btn-primary" href="/staff/loja/produtos/novo">
-      + Novo produto
-    </a>
-  </div>
+  <main class="staff-store-page">
+    <section class="staff-store-hero">
+      <div class="container staff-store-hero-grid">
+        <div>
+          <span class="section-tag">Painel da Loja</span>
+          <h1>Produtos da Loja</h1>
+          <p>
+            Edite preços, imagens, descrições e status dos itens da loja sem abrir código.
+            Esta área é restrita aos Desenvolvedores do SurvivalZ.
+          </p>
 
-  <div class="admin-card">
-    <% if (!products.length) { %>
-      <p>Nenhum produto cadastrado ainda.</p>
-    <% } else { %>
-      <div class="admin-table-wrapper">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Produto</th>
-              <th>Categoria</th>
-              <th>ZCoins</th>
-              <th>Referência</th>
-              <th>Status</th>
-              <th>Destaque</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
+          <div class="staff-store-actions">
+            <a href="/staff" class="staff-store-btn secondary">Voltar ao Staff</a>
+            <a href="/staff/loja/produtos/novo" class="staff-store-btn primary">+ Novo produto</a>
+          </div>
+        </div>
 
-          <tbody>
-            <% products.forEach((product) => { %>
-              <tr>
-                <td>
-                  <strong><%= product.name %></strong><br>
-                  <small><%= product.code %></small>
-                </td>
-
-                <td><%= product.category %></td>
-
-                <td>
-                  <%= product.priceZCoins ? product.priceZCoins.toLocaleString("pt-BR") + " ZCoins" : "A definir" %>
-                </td>
-
-                <td>
-                  <% if (product.referencePriceCents) { %>
-                    <%= (product.referencePriceCents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) %>
-                  <% } else { %>
-                    —
-                  <% } %>
-                </td>
-
-                <td><%= product.isActive ? "Ativo" : "Inativo" %></td>
-                <td><%= product.isFeatured ? "Sim" : "Não" %></td>
-
-                <td>
-                  <a class="admin-link" href="/staff/loja/produtos/<%= product.id %>/editar">
-                    Editar
-                  </a>
-
-                  <form method="POST" action="/staff/loja/produtos/<%= product.id %>/toggle" style="display:inline;">
-                    <button class="admin-link" type="submit">
-                      <%= product.isActive ? "Desativar" : "Ativar" %>
-                    </button>
-                  </form>
-                </td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
+        <div class="staff-store-stats">
+          <article>
+            <span>Total</span>
+            <strong><%= stats.total %></strong>
+          </article>
+          <article>
+            <span>Ativos</span>
+            <strong><%= stats.active %></strong>
+          </article>
+          <article>
+            <span>Destaques</span>
+            <strong><%= stats.featured %></strong>
+          </article>
+          <article>
+            <span>Inativos</span>
+            <strong><%= stats.inactive %></strong>
+          </article>
+        </div>
       </div>
-    <% } %>
-  </div>
-</section>
+    </section>
+
+    <section class="container staff-store-panel">
+      <form class="staff-store-filter" method="GET" action="/staff/loja/produtos">
+        <div class="staff-store-search">
+          <span>🔎</span>
+          <input type="search" name="q" value="<%= search %>" placeholder="Buscar produto, veículo, VIP, ID...">
+        </div>
+
+        <select name="category">
+          <option value="all" <%= category === "all" ? "selected" : "" %>>Todas as categorias</option>
+          <% categoryOptions.forEach((option) => { %>
+            <option value="<%= option.value %>" <%= category === option.value ? "selected" : "" %>>
+              <%= option.label %>
+            </option>
+          <% }) %>
+        </select>
+
+        <button type="submit">Filtrar</button>
+        <a href="/staff/loja/produtos">Limpar</a>
+      </form>
+
+      <% if (!products.length) { %>
+        <div class="staff-store-empty">
+          <strong>Nenhum produto encontrado</strong>
+          <p>
+            Use o botão “Novo produto” ou importe a base de preços para começar.
+          </p>
+          <a href="/staff/loja/produtos/novo" class="staff-store-btn primary">Criar produto</a>
+        </div>
+      <% } else { %>
+        <div class="staff-store-grid">
+          <% products.forEach((product) => { %>
+            <article class="staff-store-product-card <%= !product.isActive ? 'is-inactive' : '' %>">
+              <div class="staff-store-product-image">
+                <img src="<%= product.imageUrl || '/images/products/default.png' %>" alt="<%= product.name %>">
+                <span class="staff-store-status <%= product.isActive ? 'active' : 'inactive' %>">
+                  <%= product.isActive ? 'Ativo' : 'Inativo' %>
+                </span>
+              </div>
+
+              <div class="staff-store-product-body">
+                <div class="staff-store-product-tags">
+                  <span><%= product.categoryLabel %></span>
+                  <% if (product.isFeatured) { %>
+                    <strong>Destaque</strong>
+                  <% } %>
+                </div>
+
+                <h2><%= product.name %></h2>
+
+                <% if (product.description) { %>
+                  <p><%= product.description %></p>
+                <% } else { %>
+                  <p class="muted">Sem descrição cadastrada.</p>
+                <% } %>
+
+                <div class="staff-store-price-row">
+                  <div>
+                    <span>Preço principal</span>
+                    <strong><%= product.category === 'zcoins' ? product.referencePriceLabel : product.priceZCoinsLabel %></strong>
+                  </div>
+                  <div>
+                    <span><%= product.category === 'zcoins' ? 'Entrega' : 'Referência' %></span>
+                    <strong><%= product.category === 'zcoins' ? product.priceZCoinsLabel : product.referencePriceLabel %></strong>
+                  </div>
+                </div>
+
+                <% if (product.modelId || product.capacityKg || product.armorTier || product.collection) { %>
+                  <div class="staff-store-meta-list">
+                    <% if (product.modelId) { %><span>ID <%= product.modelId %></span><% } %>
+                    <% if (product.capacityKg) { %><span><%= product.capacityKg %>kg</span><% } %>
+                    <% if (product.armorTier) { %><span><%= product.armorTier %></span><% } %>
+                    <% if (product.collection) { %><span><%= product.collection %></span><% } %>
+                  </div>
+                <% } %>
+              </div>
+
+              <div class="staff-store-product-actions">
+                <a href="/staff/loja/produtos/<%= product.id %>/editar">Editar</a>
+
+                <form method="POST" action="/staff/loja/produtos/<%= product.id %>/toggle">
+                  <button type="submit"><%= product.isActive ? 'Desativar' : 'Ativar' %></button>
+                </form>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
 </body>
 </html>

@@ -158,7 +158,7 @@
 
               <div class="product-image-box">
                 <img
-                  src="/images/products/default.png"
+                  src="<%= product.imageUrl || '/images/products/default.png' %>"
                   alt="<%= product.name %>"
                 >
               </div>
@@ -177,7 +177,11 @@
 
               <div class="product-price">
                 <span>Valor</span>
-                <strong><%= formatPrice(product.priceCents) %></strong>
+                <strong><%= product.priceLabel || formatPrice(product.priceCents) %></strong>
+
+                <% if (product.referencePriceLabel) { %>
+                  <small><%= product.referencePriceLabel %></small>
+                <% } %>
 
                 <% if (product.stock !== null) { %>
                   <small><%= product.stock %> vagas disponíveis</small>
@@ -240,7 +244,7 @@
 
               <div class="product-image-box">
                 <img
-                  src="/images/products/default.png"
+                  src="<%= product.imageUrl || '/images/products/default.png' %>"
                   alt="<%= product.name %>"
                 >
               </div>
@@ -259,9 +263,11 @@
 
               <div class="product-price">
                 <span>Valor Beta</span>
-                <strong><%= formatPrice(product.priceCents) %></strong>
+                <strong><%= product.priceLabel || formatPrice(product.priceCents) %></strong>
 
-                <% if (product.originalPriceCents && product.originalPriceCents > product.priceCents) { %>
+                <% if (product.referencePriceLabel) { %>
+                  <small><%= product.referencePriceLabel %></small>
+                <% } else if (product.originalPriceCents && product.originalPriceCents > product.priceCents) { %>
                   <small>De <%= formatPrice(product.originalPriceCents) %></small>
                 <% } %>
               </div>
@@ -316,7 +322,7 @@
 
               <div class="product-image-box">
                 <img
-                  src="/images/products/default.png"
+                  src="<%= product.imageUrl || '/images/products/default.png' %>"
                   alt="<%= product.name %>"
                 >
               </div>
@@ -335,9 +341,11 @@
 
               <div class="product-price">
                 <span>Valor Beta</span>
-                <strong><%= formatPrice(product.priceCents) %></strong>
+                <strong><%= product.priceLabel || formatPrice(product.priceCents) %></strong>
 
-                <% if (product.originalPriceCents && product.originalPriceCents > product.priceCents) { %>
+                <% if (product.referencePriceLabel) { %>
+                  <small><%= product.referencePriceLabel %></small>
+                <% } else if (product.originalPriceCents && product.originalPriceCents > product.priceCents) { %>
                   <small>De <%= formatPrice(product.originalPriceCents) %></small>
                 <% } %>
               </div>
@@ -389,7 +397,7 @@
 
               <div class="vehicle-image-box">
                 <img
-                  src="/images/products/default.png"
+                  src="<%= product.imageUrl || '/images/products/default.png' %>"
                   alt="<%= product.name %>"
                 >
               </div>
@@ -416,7 +424,10 @@
               <div class="vehicle-card-bottom">
                 <div class="vehicle-price">
                   <span>Valor Beta</span>
-                  <strong><%= formatPrice(product.priceCents) %></strong>
+                  <strong><%= product.priceLabel || formatPrice(product.priceCents) %></strong>
+                  <% if (product.referencePriceLabel) { %>
+                    <small><%= product.referencePriceLabel %></small>
+                  <% } %>
                 </div>
 
                 <div class="vehicle-card-actions">
