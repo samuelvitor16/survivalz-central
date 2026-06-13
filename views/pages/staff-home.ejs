@@ -27,12 +27,17 @@
             </p>
 
             <div class="staff-hero-actions">
-              <a href="#staff-reports">Denúncias</a>
-              <a href="#staff-moderation">Moderação</a>
-              <% if (isAdminStaff) { %>
-                <a href="#staff-admin">Administração</a>
-              <% } %>
-            </div>
+  <a href="#staff-reports">Denúncias</a>
+  <a href="#staff-moderation">Moderação</a>
+
+  <% if (["DESENVOLVEDOR", "OWNER"].includes(playerRole)) { %>
+    <a href="/staff/loja">Loja</a>
+  <% } %>
+
+  <% if (isAdminStaff) { %>
+    <a href="#staff-admin">Administração</a>
+  <% } %>
+</div>
           </div>
 
           <div class="staff-access-card">
@@ -129,6 +134,16 @@
                   <p>Acompanhar pedidos da Loja Beta.</p>
                 </div>
               </a>
+             
+              <% if (["DESENVOLVEDOR", "OWNER"].includes(playerRole)) { %>
+  <a href="/staff/loja" class="staff-panel-card">
+    <div class="staff-panel-icon">🛒</div>
+    <div>
+      <h2>Loja</h2>
+      <p>Gerenciar produtos, preços, imagens, descrições e status da loja.</p>
+    </div>
+  </a>
+<% } %>
 
               <a href="/admin/usuarios" class="staff-panel-card">
                 <div class="staff-panel-icon">👤</div>
