@@ -38,7 +38,7 @@ const {
   renderAdminStoreProductEdit,
   updateAdminStoreProduct,
   toggleAdminStoreProduct
-} = require("../controllers/adminStoreController");
+} = require("../controllers/staffStoreController");
 
 // Login admin
 router.get("/login", redirectIfAdminLogged, renderAdminLogin);

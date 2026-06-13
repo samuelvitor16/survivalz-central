@@ -1,0 +1,115 @@
+<section class="admin-page">
+  <div class="admin-page-header">
+    <div>
+      <p class="admin-eyebrow">Loja</p>
+      <h1><%= product ? "Editar produto" : "Novo produto" %></h1>
+      <p>Preencha os dados do produto da loja.</p>
+    </div>
+
+    <a class="admin-btn" href="/staff/loja/produtos">Voltar</a>
+  </div>
+
+  <form class="admin-card admin-form" method="POST" action="<%= action %>">
+    <label>
+      Código interno
+      <input name="code" value="<%= product ? product.code : "" %>" placeholder="vip-gold">
+    </label>
+
+    <label>
+      Nome
+      <input name="name" required value="<%= product ? product.name : "" %>" placeholder="VIP Gold">
+    </label>
+
+    <label>
+      Slug
+      <input name="slug" value="<%= product ? product.slug : "" %>" placeholder="vip-gold">
+    </label>
+
+    <label>
+      Categoria
+      <select name="category" required>
+        <% const categories = ["zcoins", "vip", "vehicles", "skins", "accessories", "season_pass", "special_packages", "crates", "beta"]; %>
+        <% categories.forEach((category) => { %>
+          <option value="<%= category %>" <%= product && product.category === category ? "selected" : "" %>>
+            <%= category %>
+          </option>
+        <% }) %>
+      </select>
+    </label>
+
+    <label>
+      Tipo/Subcategoria
+      <input name="type" value="<%= product && product.type ? product.type : "" %>" placeholder="VIP, Helicópteros, Coleção Ilha...">
+    </label>
+
+    <label>
+      Preço em ZCoins
+      <input type="number" name="priceZCoins" value="<%= product && product.priceZCoins ? product.priceZCoins : "" %>">
+    </label>
+
+    <label>
+      Valor em reais aproximado em centavos
+      <input type="number" name="referencePriceCents" value="<%= product && product.referencePriceCents ? product.referencePriceCents : "" %>" placeholder="1499">
+      <small>Exemplo: R$ 14,99 = 1499</small>
+    </label>
+
+    <label>
+      Descrição
+      <textarea name="description" rows="4"><%= product && product.description ? product.description : "" %></textarea>
+    </label>
+
+    <label>
+      Benefícios, um por linha
+      <textarea name="benefits" rows="6"><%= benefitsText || "" %></textarea>
+    </label>
+
+    <label>
+      URL da imagem
+      <input name="imageUrl" value="<%= product && product.imageUrl ? product.imageUrl : "" %>">
+    </label>
+
+    <label>
+      ID do modelo
+      <input type="number" name="modelId" value="<%= product && product.modelId ? product.modelId : "" %>">
+    </label>
+
+    <label>
+      Capacidade em KG
+      <input type="number" name="capacityKg" value="<%= product && product.capacityKg ? product.capacityKg : "" %>">
+    </label>
+
+    <label>
+      Blindagem/Tier
+      <input name="armorTier" value="<%= product && product.armorTier ? product.armorTier : "" %>" placeholder="Tier 3">
+    </label>
+
+    <label>
+      Coleção
+      <input name="collection" value="<%= product && product.collection ? product.collection : "" %>" placeholder="Coleção Polícia">
+    </label>
+
+    <label>
+      Estoque
+      <input type="number" name="stock" value="<%= product && product.stock !== null && product.stock !== undefined ? product.stock : "" %>">
+    </label>
+
+    <label>
+      Posição
+      <input type="number" name="position" value="<%= product ? product.position : 0 %>">
+    </label>
+
+    <label class="admin-checkbox">
+      <input type="checkbox" name="isActive" <%= !product || product.isActive ? "checked" : "" %>>
+      Produto ativo
+    </label>
+
+    <label class="admin-checkbox">
+      <input type="checkbox" name="isFeatured" <%= product && product.isFeatured ? "checked" : "" %>>
+      Produto em destaque
+    </label>
+
+    <button class="admin-btn admin-btn-primary" type="submit">
+      Salvar produto
+    </button>
+  </form>
+</section>

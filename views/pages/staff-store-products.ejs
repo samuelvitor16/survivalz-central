@@ -6,7 +6,7 @@
       <p>Gerencie os produtos exibidos na loja da Central SurvivalZ.</p>
     </div>
 
-    <a class="admin-btn admin-btn-primary" href="/admin/loja/produtos/novo">
+    <a class="admin-btn admin-btn-primary" href="/staff/loja/produtos/novo">
       + Novo produto
     </a>
   </div>
@@ -55,11 +55,11 @@
                 <td><%= product.isFeatured ? "Sim" : "Não" %></td>
 
                 <td>
-                  <a class="admin-link" href="/admin/loja/produtos/<%= product.id %>/editar">
+                  <a class="admin-link" href="/staff/loja/produtos/<%= product.id %>/editar">
                     Editar
                   </a>
 
-                  <form method="POST" action="/admin/loja/produtos/<%= product.id %>/toggle" style="display:inline;">
+                  <form method="POST" action="/staff/loja/produtos/<%= product.id %>/toggle" style="display:inline;">
                     <button class="admin-link" type="submit">
                       <%= product.isActive ? "Desativar" : "Ativar" %>
                     </button>
