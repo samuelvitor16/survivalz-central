@@ -696,10 +696,12 @@ function applySize(editor, size) {
         throw new Error(data.error || "Falha ao enviar imagem.");
       }
 
+      const previewUrl = `${data.url}${String(data.url).includes("?") ? "&" : "?"}v=${Date.now()}`;
+
       insertHtml(
-  editor,
-  `<div style="text-align:center;"><img src="${data.url}" alt="Imagem enviada no fórum" class="bb-image"></div>`
-);
+        editor,
+        `<div style="text-align:center;"><img src="${previewUrl}" alt="Imagem enviada no fórum" class="bb-image"></div>`
+      );
     } catch (error) {
       alert(error.message || "Upload de imagem falhou.");
       console.error(error);

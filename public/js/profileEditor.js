@@ -45,16 +45,27 @@
     });
   };
 
+  const withCacheBuster = (url) => {
+    const value = String(url || "").trim();
+
+    if (!value || !value.startsWith("/uploads/")) {
+      return value;
+    }
+
+    return `${value}${value.includes("?") ? "&" : "?"}v=${Date.now()}`;
+  };
+
   const updateImagePreviews = (previewIds, fallbackIds, value) => {
     const trimmed = String(value || "").trim();
     const canPreview = isPreviewableUrl(trimmed);
+    const previewUrl = canPreview ? withCacheBuster(trimmed) : "";
 
     previewIds.forEach((id) => {
       const image = getById(id);
 
       if (!image) return;
 
-      image.src = canPreview ? trimmed : "";
+      image.src = previewUrl;
       image.style.display = canPreview ? "block" : "none";
     });
 

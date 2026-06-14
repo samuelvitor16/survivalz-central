@@ -1,0 +1,858 @@
+/* ==================================================
+   SurvivalZ Central — Mobile 3.0
+   Correção única para loja, perfil, fórum e editor.
+   Este arquivo é carregado depois dos CSS das páginas.
+================================================== */
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  body {
+    min-width: 0;
+  }
+
+  .container {
+    width: min(100% - 24px, 1150px) !important;
+    max-width: calc(100% - 24px) !important;
+    min-width: 0 !important;
+  }
+
+  .main-header,
+  .sz-header,
+  main,
+  section {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .sz-header-shell {
+    min-width: 0 !important;
+  }
+
+  .sz-header-logo img {
+    max-width: min(180px, 46vw) !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+}
+
+/* =========================
+   LOJA MOBILE
+========================= */
+@media (max-width: 768px) {
+  .shop-page,
+  .shop-promo-banner,
+  .shop-hero,
+  .shop-catalog-section,
+  .shop-products-section,
+  .shop-catalog-layout,
+  .shop-catalog-main,
+  .shop-catalog-main .container,
+  .shop-catalog-main .shop-products-section > .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: clip !important;
+  }
+
+  .shop-hero-grid,
+  .shop-catalog-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .shop-catalog-sidebar {
+    position: static !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .shop-catalog-card {
+    padding: 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .shop-search-wrap {
+    min-height: 40px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .shop-category-filters {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding-bottom: 6px !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .shop-category-filters::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .shop-category-filters button {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: max-content !important;
+    min-height: 36px !important;
+    padding: 0 12px !important;
+    font-size: 0.74rem !important;
+    text-align: center !important;
+    border-radius: 999px !important;
+  }
+
+  .shop-promo-inner,
+  .shop-hero-content,
+  .shop-status-card,
+  .shop-hero-warning,
+  .shop-limit-alert {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 14px !important;
+    border-radius: 16px !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .shop-promo-inner {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .shop-promo-inner code {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 44px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .shop-hero h1,
+  .shop-section-header h2 {
+    font-size: clamp(1.5rem, 8vw, 2.15rem) !important;
+    line-height: 1.04 !important;
+  }
+
+  .shop-section-header {
+    padding: 0 !important;
+    margin: 0 0 14px !important;
+  }
+
+  .shop-section-header p,
+  .shop-hero p,
+  .shop-limit-alert span,
+  .shop-hero-warning span {
+    font-size: 0.94rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .shop-catalog-main .shop-products-grid,
+  .shop-catalog-main .beta-packages-grid,
+  .shop-catalog-main .zcoins-grid,
+  .shop-catalog-main .vehicle-products-grid,
+  .shop-products-grid,
+  .beta-packages-grid,
+  .zcoins-grid,
+  .vehicle-products-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+  }
+
+  .product-card,
+  .shop-product-card,
+  .store-product-card,
+  .vehicle-card,
+  .shop-catalog-main .product-card,
+  .shop-catalog-main .vehicle-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 9px !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .product-image-box,
+  .vehicle-image-box,
+  .product-card .product-image-box,
+  .vehicle-card .vehicle-image-box {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: 16 / 9 !important;
+    border-radius: 12px !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .product-image-box img,
+  .vehicle-image-box img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  .product-card .product-type,
+  .vehicle-card .product-type,
+  .product-card p,
+  .vehicle-card p,
+  .product-card ul,
+  .vehicle-card ul,
+  .vehicle-specs {
+    display: none !important;
+  }
+
+  .product-card h3,
+  .vehicle-card h3 {
+    min-height: 0 !important;
+    margin: 2px 0 0 !important;
+    font-size: clamp(0.95rem, 4vw, 1.15rem) !important;
+    line-height: 1.12 !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+
+  .product-price,
+  .vehicle-price {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 9px !important;
+    border-radius: 12px !important;
+    min-width: 0 !important;
+  }
+
+  .product-price span,
+  .vehicle-price span {
+    font-size: 0.68rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .product-price strong,
+  .vehicle-price strong {
+    display: block !important;
+    font-size: clamp(1rem, 4.5vw, 1.25rem) !important;
+    line-height: 1.08 !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+
+  .product-price small,
+  .vehicle-price small {
+    display: block !important;
+    font-size: 0.66rem !important;
+    line-height: 1.15 !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .product-card-actions,
+  .vehicle-card-actions,
+  .shop-catalog-main .product-card-actions,
+  .shop-catalog-main .vehicle-card-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    margin-top: auto !important;
+  }
+
+  .product-card-actions .add-cart-btn,
+  .product-card-actions .product-details-btn,
+  .vehicle-card-actions .add-cart-btn,
+  .vehicle-card-actions .vehicle-details-btn,
+  .product-btn,
+  .vehicle-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    padding: 0 8px !important;
+    border-radius: 10px !important;
+    font-size: 0.76rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .cart-float {
+    left: 50% !important;
+    right: auto !important;
+    bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+    transform: translateX(-50%) !important;
+    width: min(340px, calc(100% - 28px)) !important;
+    max-width: calc(100% - 28px) !important;
+    height: 54px !important;
+    min-height: 54px !important;
+    padding: 0 14px !important;
+    border-radius: 18px !important;
+    font-size: 0.95rem !important;
+    z-index: 80 !important;
+  }
+
+  .cart-float span {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    font-size: 0.84rem !important;
+  }
+}
+
+@media (max-width: 350px) {
+  .shop-catalog-main .shop-products-grid,
+  .shop-catalog-main .beta-packages-grid,
+  .shop-catalog-main .zcoins-grid,
+  .shop-catalog-main .vehicle-products-grid,
+  .shop-products-grid,
+  .beta-packages-grid,
+  .zcoins-grid,
+  .vehicle-products-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =========================
+   PERFIL MOBILE
+========================= */
+@media (max-width: 768px) {
+  .sz-public-profile-section,
+  .sz-profile,
+  .sz-profile-layout,
+  .sz-profile-sidebar,
+  .sz-profile-main,
+  .sz-profile-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: clip !important;
+  }
+
+  .sz-public-profile-section {
+    padding-top: 30px !important;
+  }
+
+  .sz-profile-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    margin-top: 12px !important;
+  }
+
+  .sz-profile-hero {
+    min-height: 0 !important;
+    padding: 78px 12px 18px !important;
+    display: block !important;
+  }
+
+  .sz-profile-hero-content {
+    display: grid !important;
+    grid-template-columns: 96px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    align-items: center !important;
+    text-align: left !important;
+    padding: 0 !important;
+  }
+
+  .sz-profile-hero-avatar {
+    width: 92px !important;
+    height: 92px !important;
+    border-radius: 16px !important;
+    margin: 0 !important;
+  }
+
+  .sz-profile-hero-main h1 {
+    font-size: clamp(1.9rem, 9vw, 2.8rem) !important;
+    line-height: 1 !important;
+    margin: 6px 0 !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .sz-profile-hero-meta,
+  .sz-profile-featured-medals {
+    justify-content: flex-start !important;
+    gap: 6px !important;
+  }
+
+  .sz-profile-featured-medals {
+    width: auto !important;
+    max-width: 100% !important;
+    padding: 6px !important;
+  }
+
+  .sz-profile-mini-medal {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+  }
+
+  .sz-profile-hero-actions {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    padding-top: 4px !important;
+  }
+
+  .sz-profile-hero-actions a {
+    width: 100% !important;
+    min-height: 40px !important;
+  }
+
+  .sz-profile-statbar,
+  .sz-profile-side-stats,
+  .sz-profile-info-list {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .sz-profile-statbar {
+    padding: 10px !important;
+  }
+
+  .sz-profile-statbar div,
+  .sz-profile-side-stats div,
+  .sz-profile-info-list div,
+  .sz-profile-character-grid div {
+    min-width: 0 !important;
+    min-height: 66px !important;
+    padding: 10px !important;
+    border-radius: 14px !important;
+  }
+
+  .sz-profile-statbar span,
+  .sz-profile-side-stats span,
+  .sz-profile-info-list span,
+  .sz-profile-character-grid span {
+    font-size: 0.68rem !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0.03em !important;
+  }
+
+  .sz-profile-statbar strong,
+  .sz-profile-side-stats strong,
+  .sz-profile-info-list strong,
+  .sz-profile-character-grid strong {
+    font-size: clamp(0.98rem, 4.6vw, 1.22rem) !important;
+    line-height: 1.15 !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+
+  .sz-profile-panel {
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .sz-profile-side-user {
+    grid-template-columns: 56px minmax(0, 1fr) !important;
+    justify-items: start !important;
+    text-align: left !important;
+  }
+
+  .sz-profile-side-avatar {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  .sz-profile-side-user h2 {
+    font-size: 1.25rem !important;
+    margin-bottom: 5px !important;
+  }
+
+  .sz-profile-character {
+    display: block !important;
+  }
+
+  .sz-profile-character-portrait {
+    display: none !important;
+  }
+
+  .sz-profile-character-body {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .sz-profile-character-empty {
+    margin-bottom: 10px !important;
+    padding: 12px !important;
+    border-radius: 14px !important;
+  }
+
+  .sz-profile-character-empty strong {
+    font-size: 1rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .sz-profile-character-empty p {
+    font-size: 0.9rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .sz-profile-character-grid,
+  .sz-profile-character-grid-compact {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 0 !important;
+  }
+
+  .sz-profile-medal-list {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .sz-profile-hero-content {
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    text-align: center !important;
+  }
+
+  .sz-profile-hero-meta,
+  .sz-profile-featured-medals {
+    justify-content: center !important;
+  }
+}
+
+/* =========================
+   FÓRUM / TÓPICOS MOBILE
+========================= */
+@media (max-width: 768px) {
+  .forum-section,
+  .forum-container,
+  .forum-content,
+  .forum-topic-card,
+  .forum-recent-card,
+  .forum-category-card,
+  .forum-topic-layout,
+  .forum-topic-main,
+  .forum-post-card,
+  .sz-post,
+  .sz-post-main,
+  .sz-author-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: clip !important;
+  }
+
+  .forum-topic-card,
+  .forum-recent-card,
+  .forum-category-card {
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .forum-topic-card h2,
+  .forum-topic-card h3,
+  .forum-recent-card h2,
+  .forum-recent-card h3 {
+    font-size: clamp(1.1rem, 5.6vw, 1.45rem) !important;
+    line-height: 1.18 !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+
+  .forum-topic-meta,
+  .forum-topic-stats,
+  .forum-recent-meta {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px 12px !important;
+    align-items: center !important;
+    font-size: 0.78rem !important;
+  }
+
+  .forum-topic-badge,
+  .forum-status-badge,
+  .forum-pin-badge,
+  .forum-topic-card .badge,
+  .forum-recent-card .badge {
+    min-height: 28px !important;
+    padding: 5px 9px !important;
+    border-radius: 999px !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.03em !important;
+  }
+
+  .sz-post,
+  .forum-post-layout {
+    display: block !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  .sz-author-panel,
+  .forum-post-author-card {
+    display: grid !important;
+    grid-template-columns: 52px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    align-items: center !important;
+    padding: 12px !important;
+    border-bottom: 1px solid rgba(255, 43, 43, 0.18) !important;
+  }
+
+  .sz-author-avatar,
+  .forum-post-author-card img,
+  .forum-author-avatar {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 12px !important;
+  }
+
+  .sz-author-name,
+  .forum-author-name {
+    text-align: left !important;
+    font-size: 1rem !important;
+    margin: 0 !important;
+  }
+
+  .sz-author-stats,
+  .sz-author-info-list,
+  .sz-author-profile-link,
+  .sz-rank-topline,
+  .sz-rank-authority,
+  .sz-author-box-title {
+    display: none !important;
+  }
+
+  .sz-author-rank-v3 {
+    width: 100% !important;
+    min-height: 0 !important;
+    padding: 7px 9px !important;
+    border-radius: 12px !important;
+  }
+
+  .sz-rank-emblem {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .sz-rank-info small {
+    display: none !important;
+  }
+
+  .sz-rank-info strong {
+    font-size: 0.72rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .sz-author-insignias {
+    grid-column: 1 / -1 !important;
+    margin: 0 !important;
+  }
+
+  .sz-author-insignia-list {
+    display: flex !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .sz-author-insignia {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 0.92rem !important;
+  }
+
+  .sz-post-main,
+  .forum-post-body {
+    padding: 14px !important;
+  }
+
+  .sz-post-content,
+  .forum-post-content,
+  .bb-content,
+  .forum-text-content {
+    font-size: 1rem !important;
+    line-height: 1.65 !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+}
+
+/* =========================
+   EDITOR MOBILE
+========================= */
+@media (max-width: 768px) {
+  .sz-rich-editor,
+  .sz-editor-toolbar,
+  .sz-editor-surface,
+  .sz-editor-preview {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: clip !important;
+  }
+
+  .sz-rich-editor {
+    border-radius: 18px !important;
+  }
+
+  .sz-editor-topline {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    gap: 10px !important;
+    align-items: center !important;
+    padding: 14px !important;
+  }
+
+  .sz-editor-topline strong {
+    font-size: 1rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .sz-editor-topline span,
+  .sz-editor-help {
+    display: none !important;
+  }
+
+  .sz-editor-preview-btn {
+    min-height: 38px !important;
+    padding: 0 12px !important;
+    border-radius: 12px !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+  }
+
+  .sz-editor-toolbar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 7px !important;
+    padding: 10px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .sz-editor-toolbar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .sz-editor-toolgroup,
+  .sz-editor-color-picker {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    gap: 7px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    min-width: 0 !important;
+  }
+
+  .sz-editor-primary-tools { order: 1 !important; }
+  .sz-editor-insert-tools { order: 2 !important; }
+  .sz-editor-color-tools { order: 3 !important; }
+  .sz-editor-more-toggle { order: 4 !important; }
+  .sz-editor-advanced-tools { order: 8 !important; }
+
+  .sz-editor-toolbar button,
+  .sz-editor-select,
+  .sz-editor-more-toggle {
+    width: auto !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    padding: 0 10px !important;
+    border-radius: 12px !important;
+    font-size: 0.78rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  .sz-editor-insert-tools button[data-editor-insert="link"]::after { content: "Link"; }
+  .sz-editor-insert-tools button[data-editor-insert="image-upload"]::after { content: "Img"; }
+  .sz-editor-insert-tools button[data-editor-insert="youtube"]::after { content: "YT"; }
+  .sz-editor-insert-tools button[data-editor-insert="link"],
+  .sz-editor-insert-tools button[data-editor-insert="image-upload"],
+  .sz-editor-insert-tools button[data-editor-insert="youtube"] {
+    font-size: 0 !important;
+  }
+  .sz-editor-insert-tools button[data-editor-insert="link"]::after,
+  .sz-editor-insert-tools button[data-editor-insert="image-upload"]::after,
+  .sz-editor-insert-tools button[data-editor-insert="youtube"]::after {
+    font-size: 0.78rem !important;
+  }
+
+  .sz-rich-editor:not(.is-more-open) .sz-editor-advanced-tools,
+  .sz-rich-editor:not(.is-more-open) .sz-editor-insert-tools button[data-editor-insert="quote"],
+  .sz-rich-editor:not(.is-more-open) .sz-editor-insert-tools button[data-editor-insert="spoiler"],
+  .sz-rich-editor:not(.is-more-open) .sz-editor-insert-tools button[data-editor-insert="image-url"] {
+    display: none !important;
+  }
+
+  .sz-rich-editor.is-more-open .sz-editor-toolbar {
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+  }
+
+  .sz-rich-editor.is-more-open .sz-editor-advanced-tools,
+  .sz-rich-editor.is-more-open .sz-editor-insert-tools button[data-editor-insert="quote"],
+  .sz-rich-editor.is-more-open .sz-editor-insert-tools button[data-editor-insert="spoiler"],
+  .sz-rich-editor.is-more-open .sz-editor-insert-tools button[data-editor-insert="image-url"] {
+    display: flex !important;
+  }
+
+  .sz-editor-select {
+    max-width: 112px !important;
+  }
+
+  .sz-editor-surface {
+    min-height: 180px !important;
+    max-height: 46vh !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    font-size: 1rem !important;
+    line-height: 1.55 !important;
+    overflow-y: auto !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  .sz-editor-color-menu {
+    max-width: calc(100vw - 40px) !important;
+    grid-template-columns: repeat(5, 28px) !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .sz-editor-more-toggle {
+    display: none !important;
+  }
+}
