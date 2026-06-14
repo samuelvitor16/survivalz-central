@@ -766,6 +766,22 @@ function applySize(editor, size) {
   });
 
   document.addEventListener("click", function (event) {
+    const moreToggle = event.target.closest("[data-editor-more-toggle]");
+
+    if (moreToggle) {
+      event.preventDefault();
+
+      const editor = moreToggle.closest("[data-rich-editor]");
+
+      if (editor) {
+        const isOpen = editor.classList.toggle("is-more-open");
+        moreToggle.setAttribute("aria-expanded", String(isOpen));
+        moreToggle.textContent = isOpen ? "Menos" : "Mais";
+      }
+
+      return;
+    }
+
     const commandButton = event.target.closest("[data-editor-command]");
 
     if (commandButton) {

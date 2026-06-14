@@ -42,26 +42,26 @@
 
   <div class="sz-editor-toolbar">
 
-    <div class="sz-editor-toolgroup">
+    <div class="sz-editor-toolgroup sz-editor-primary-tools">
       <button type="button" data-editor-command="bold" title="Negrito"><b>B</b></button>
       <button type="button" data-editor-command="italic" title="Itálico"><i>I</i></button>
       <button type="button" data-editor-command="underline" title="Sublinhado"><u>U</u></button>
       <button type="button" data-editor-command="strikeThrough" title="Riscado"><s>S</s></button>
     </div>
 
-    <div class="sz-editor-toolgroup">
+    <div class="sz-editor-toolgroup sz-editor-align-tools sz-editor-advanced-tools">
       <button type="button" data-editor-command="justifyLeft" title="Alinhar à esquerda">☰</button>
       <button type="button" data-editor-command="justifyCenter" title="Centralizar">≡</button>
       <button type="button" data-editor-command="justifyRight" title="Alinhar à direita">☷</button>
     </div>
 
-    <div class="sz-editor-toolgroup">
+    <div class="sz-editor-toolgroup sz-editor-list-tools sz-editor-advanced-tools">
       <button type="button" data-editor-command="insertUnorderedList" title="Lista">• Lista</button>
       <button type="button" data-editor-command="insertOrderedList" title="Lista numerada">1. Lista</button>
       <button type="button" data-editor-insert="hr" title="Linha divisória">Linha</button>
     </div>
 
-    <div class="sz-editor-toolgroup">
+    <div class="sz-editor-toolgroup sz-editor-size-tools sz-editor-advanced-tools">
       <select class="sz-editor-select" data-editor-size title="Tamanho da letra">
         <option value="">Tamanho</option>
         <option value="12">Pequeno</option>
@@ -71,7 +71,7 @@
       </select>
     </div>
 
-    <div class="sz-editor-toolgroup">
+    <div class="sz-editor-toolgroup sz-editor-insert-tools">
       <button type="button" data-editor-insert="quote" title="Citação">Quote</button>
       <button type="button" data-editor-insert="spoiler" title="Spoiler">Spoiler</button>
       <button type="button" data-editor-insert="link" title="Link">Link</button>
@@ -80,7 +80,7 @@
       <button type="button" data-editor-insert="youtube" title="Vídeo do YouTube">YouTube</button>
     </div>
 
-    <div class="sz-editor-color-picker">
+    <div class="sz-editor-color-picker sz-editor-color-tools">
       <button type="button" data-color-trigger>Cor</button>
 
      <div class="sz-editor-color-menu" hidden>
@@ -112,7 +112,7 @@
     </div>
 
     <% if (canUseStaffEditor) { %>
-      <div class="sz-editor-toolgroup staff-tools">
+      <div class="sz-editor-toolgroup staff-tools sz-editor-advanced-tools">
         <button type="button" data-editor-insert="staff-note" title="Nota oficial">Nota Staff</button>
         <button type="button" data-editor-insert="box-alert" title="Caixa de alerta">Alerta</button>
         <button type="button" data-editor-insert="box-success" title="Caixa de sucesso">Sucesso</button>
@@ -122,6 +122,15 @@
         <button type="button" data-editor-insert="big-title" title="Título grande">Título</button>
       </div>
     <% } %>
+
+    <button
+      type="button"
+      class="sz-editor-more-toggle"
+      data-editor-more-toggle
+      aria-expanded="false"
+    >
+      Mais
+    </button>
   </div>
 
   <div class="sz-editor-help">
