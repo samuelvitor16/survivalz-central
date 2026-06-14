@@ -722,14 +722,46 @@ function applySize(editor, size) {
 
       if (source && source.form) {
         source.form.addEventListener("submit", function (event) {
+          if (source.form.dataset.editorSubmitting === "true") {
+            event.preventDefault();
+            return;
+          }
+
           syncEditor(editor);
 
           if (!source.value.trim()) {
             event.preventDefault();
             alert("Escreva uma mensagem antes de enviar.");
+            return;
           }
+
+          source.form.dataset.editorSubmitting = "true";
+
+          source.form.querySelectorAll("button[type='submit']").forEach((button) => {
+            button.disabled = true;
+
+            if (button.classList.contains("forum-submit-btn")) {
+              button.dataset.originalText = button.textContent.trim();
+              button.textContent = "Enviando...";
+            }
+          });
         });
       }
+    });
+  });
+
+  window.addEventListener("pageshow", function () {
+    document.querySelectorAll("form[data-editor-submitting='true']").forEach((form) => {
+      form.dataset.editorSubmitting = "false";
+
+      form.querySelectorAll("button[type='submit']").forEach((button) => {
+        button.disabled = false;
+
+        if (button.dataset.originalText) {
+          button.textContent = button.dataset.originalText;
+          delete button.dataset.originalText;
+        }
+      });
     });
   });
 

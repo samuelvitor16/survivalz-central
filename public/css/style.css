@@ -1,4 +1,6 @@
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -51,15 +53,29 @@ body {
   line-height: 1.6;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
 a {
   text-decoration: none;
   color: inherit;
 }
 
 .container {
-  width: 90%;
+  width: min(90%, 1150px);
   max-width: 1150px;
   margin: 0 auto;
+  min-width: 0;
 }
 
 /* ================= HEADER / NAVBAR V2 ================= */

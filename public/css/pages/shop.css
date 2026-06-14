@@ -1687,6 +1687,191 @@
   }
 }
 
+/* ================= MOBILE OVERFLOW FIX ================= */
+
+.shop-hero,
+.shop-products-section,
+.shop-info-section,
+.checkout-section,
+.consult-order-section,
+.order-success-section,
+.product-detail-section,
+.product-detail-info-section {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.shop-hero-grid,
+.shop-info-grid,
+.shop-products-grid,
+.beta-packages-grid,
+.zcoins-grid,
+.vehicle-products-grid,
+.checkout-grid,
+.consult-order-grid,
+.product-detail-grid,
+.product-detail-info-grid {
+  min-width: 0;
+}
+
+.product-card,
+.vehicle-card,
+.shop-status-card,
+.shop-hero-warning,
+.cart-box,
+.cart-item,
+.cart-coupon,
+.cart-total,
+.checkout-form-box,
+.checkout-summary-box,
+.consult-order-card,
+.product-detail-content,
+.product-detail-image {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.product-card h3,
+.vehicle-card h3,
+.product-card p,
+.vehicle-card p,
+.product-price strong,
+.vehicle-price strong,
+.cart-item strong,
+.cart-total strong,
+.checkout-item strong,
+.consult-order-item strong {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.cart-box {
+  width: min(430px, 100%);
+}
+
+@media (max-width: 650px) {
+  .shop-hero {
+    padding: 42px 0 34px !important;
+  }
+
+  .shop-hero-grid {
+    gap: 22px;
+  }
+
+  .shop-hero-content h1 {
+    font-size: clamp(30px, 9vw, 38px) !important;
+    overflow-wrap: anywhere;
+  }
+
+  .shop-hero-warning,
+  .shop-status-card,
+  .shop-info-box {
+    padding: 16px !important;
+    border-radius: 14px;
+  }
+
+  .shop-products-grid,
+  .beta-packages-grid,
+  .zcoins-grid,
+  .vehicle-products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 155px), 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .product-card,
+  .vehicle-card {
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .product-image-box,
+  .vehicle-image-box {
+    height: 84px !important;
+    border-radius: 10px !important;
+  }
+
+  .product-card h3,
+  .vehicle-card h3 {
+    min-height: auto;
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+  }
+
+  .product-price,
+  .vehicle-card-bottom {
+    padding: 10px !important;
+  }
+
+  .product-price strong,
+  .vehicle-price strong {
+    font-size: 17px !important;
+  }
+
+  .product-btn,
+  .vehicle-btn {
+    min-height: 42px;
+    padding: 10px 8px !important;
+    font-size: 12px !important;
+  }
+
+  .cart-float {
+    right: 12px !important;
+    bottom: 12px !important;
+    min-height: 42px;
+    padding: 9px 12px !important;
+    font-size: 12px !important;
+    gap: 6px;
+  }
+
+  .cart-float span {
+    min-width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+
+  .cart-box {
+    right: -100%;
+    width: 100%;
+    max-width: 100%;
+    padding: 18px 14px 86px !important;
+  }
+
+  .cart-top {
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cart-close {
+    flex: 0 0 40px;
+  }
+
+  .cart-coupon-row {
+    flex-direction: column;
+  }
+
+  .cart-coupon-row input,
+  .cart-coupon-row button {
+    width: 100%;
+  }
+
+  .cart-total div,
+  .checkout-total-box div,
+  .consult-order-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 380px) {
+  .shop-products-grid,
+  .beta-packages-grid,
+  .zcoins-grid,
+  .vehicle-products-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* ================= DETALHES DO PRODUTO ================= */
 
 .product-detail-section {
