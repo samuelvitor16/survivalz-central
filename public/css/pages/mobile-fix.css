@@ -1,0 +1,552 @@
+/* ==================================================
+   SurvivalZ Central — Mobile Fix pós Mobile 3
+   Corrige: menu de ações, editor, card do autor e perfil.
+   Carregar depois de mobile3.css.
+================================================== */
+
+@media (max-width: 768px) {
+  html,
+  body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ===============================
+     HEADER / DROPDOWNS
+  =============================== */
+  .sz-profile-dropdown {
+    position: relative !important;
+    width: 100% !important;
+  }
+
+  .sz-profile-card,
+  .profile-dropdown-menu {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    transform: none !important;
+  }
+
+  /* ===============================
+     MENU DE AÇÕES DO TÓPICO (...)
+     Não deixa abrir para fora da tela
+  =============================== */
+  .topic-header-v2,
+  .forum-topic-page-header,
+  .forum-topic-heading-row {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: visible !important;
+  }
+
+  .topic-header-v2 {
+    display: block !important;
+    position: relative !important;
+  }
+
+  .forum-topic-page-header h1,
+  .topic-header-v2 h1 {
+    max-width: 100% !important;
+    font-size: clamp(2.15rem, 13vw, 4rem) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -0.045em !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+
+  .forum-topic-meta-line,
+  .forum-topic-meta,
+  .topic-header-v2 p {
+    max-width: 100% !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .forum-topic-action-menu {
+    position: relative !important;
+    z-index: 90 !important;
+    margin-top: 12px !important;
+    width: max-content !important;
+    max-width: 100% !important;
+  }
+
+  .forum-topic-action-trigger {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+  }
+
+  .forum-topic-action-panel {
+    position: fixed !important;
+    left: 14px !important;
+    right: 14px !important;
+    top: calc(92px + env(safe-area-inset-top)) !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: 72vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    z-index: 10000 !important;
+    transform: none !important;
+    border-radius: 18px !important;
+    padding: 12px !important;
+  }
+
+  .forum-topic-action-panel button,
+  .forum-topic-action-panel select,
+  .forum-topic-action-panel .forum-action-link {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 42px !important;
+    font-size: 0.88rem !important;
+  }
+
+  /* ===============================
+     POSTS / AUTOR COMPACTO
+  =============================== */
+  .sz-post,
+  .sz-post-reply,
+  .forum-post-layout,
+  .forum-post-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .sz-author-panel,
+  .forum-post-author-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    transform: none !important;
+    overflow: hidden !important;
+  }
+
+  .sz-author-panel *,
+  .forum-post-author-card * {
+    min-width: 0 !important;
+  }
+
+  .sz-author-avatar,
+  .forum-post-avatar-link,
+  .forum-author-avatar {
+    position: static !important;
+    transform: none !important;
+    margin: 0 !important;
+    flex: 0 0 54px !important;
+    width: 54px !important;
+    height: 54px !important;
+    min-width: 54px !important;
+    border-radius: 14px !important;
+  }
+
+  .sz-author-avatar img,
+  .sz-author-avatar-fallback,
+  .forum-author-avatar img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: inherit !important;
+  }
+
+  .sz-author-name,
+  .forum-post-author-name,
+  .forum-author-name {
+    flex: 1 1 calc(100% - 70px) !important;
+    max-width: calc(100% - 70px) !important;
+    margin: 0 !important;
+    text-align: left !important;
+    font-size: 1.1rem !important;
+    line-height: 1.15 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .sz-author-rank-v3,
+  .sz-author-rank,
+  .forum-post-author-meta {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    transform: none !important;
+    padding: 8px 10px !important;
+    border-radius: 14px !important;
+  }
+
+  .sz-rank-topline,
+  .sz-rank-authority,
+  .sz-author-info-list,
+  .sz-author-stats,
+  .sz-author-profile-link,
+  .forum-post-author-stats,
+  .forum-post-author-info {
+    display: none !important;
+  }
+
+  .sz-rank-main {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .sz-rank-emblem {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+  }
+
+  .sz-rank-info {
+    min-width: 0 !important;
+  }
+
+  .sz-rank-info small {
+    display: none !important;
+  }
+
+  .sz-rank-info strong {
+    display: block !important;
+    font-size: 0.82rem !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .sz-author-insignias {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .sz-author-box-title {
+    display: none !important;
+  }
+
+  .sz-author-insignia-list {
+    display: flex !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 7px !important;
+  }
+
+  .sz-author-insignia {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    border-radius: 10px !important;
+    font-size: 1rem !important;
+  }
+
+  .sz-post-main,
+  .forum-post-body {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 14px !important;
+    overflow: hidden !important;
+  }
+
+  .sz-post-top {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .sz-post-actions {
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .sz-post-content,
+  .forum-post-content,
+  .bb-content,
+  .forum-text-content {
+    max-width: 100% !important;
+    font-size: 1rem !important;
+    line-height: 1.65 !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  /* ===============================
+     EDITOR MOBILE — LIMPO E COMPACTO
+  =============================== */
+  .forum-reply-form-card,
+  .forum-form,
+  .sz-rich-editor {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .sz-rich-editor {
+    border-radius: 18px !important;
+  }
+
+  .sz-editor-topline {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 10px !important;
+    align-items: center !important;
+    padding: 12px !important;
+  }
+
+  .sz-editor-topline strong {
+    font-size: 1rem !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .sz-editor-topline span,
+  .sz-editor-help {
+    display: none !important;
+  }
+
+  .sz-editor-preview-btn {
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 10px !important;
+    border-radius: 12px !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+  }
+
+  .sz-editor-toolbar {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px !important;
+    overflow: hidden !important;
+  }
+
+  .sz-editor-toolbar .sz-editor-toolgroup,
+  .sz-editor-toolbar .sz-editor-primary-tools,
+  .sz-editor-toolbar .sz-editor-insert-tools,
+  .sz-editor-toolbar .sz-editor-align-tools,
+  .sz-editor-toolbar .sz-editor-list-tools,
+  .sz-editor-toolbar .sz-editor-size-tools,
+  .sz-editor-toolbar .staff-tools {
+    display: contents !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  .sz-editor-color-picker {
+    position: relative !important;
+    flex: 0 0 auto !important;
+    display: block !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  .sz-editor-toolbar button,
+  .sz-editor-toolbar .sz-editor-select,
+  .sz-editor-more-toggle,
+  .sz-editor-color-picker > button {
+    flex: 0 0 auto !important;
+    width: 43px !important;
+    min-width: 43px !important;
+    max-width: 43px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .sz-editor-toolbar button::after,
+  .sz-editor-color-picker > button::after,
+  .sz-editor-more-toggle::after {
+    font-size: 0.78rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+  }
+
+  button[data-editor-command="bold"]::after { content: "B"; }
+  button[data-editor-command="italic"]::after { content: "I"; font-style: italic; }
+  button[data-editor-command="underline"]::after { content: "U"; text-decoration: underline; }
+  button[data-editor-command="strikeThrough"]::after { content: "S"; text-decoration: line-through; }
+  button[data-editor-command="justifyLeft"]::after { content: "Esq"; }
+  button[data-editor-command="justifyCenter"]::after { content: "Meio"; }
+  button[data-editor-command="justifyRight"]::after { content: "Dir"; }
+  button[data-editor-command="insertUnorderedList"]::after { content: "•"; }
+  button[data-editor-command="insertOrderedList"]::after { content: "1."; }
+  button[data-editor-insert="hr"]::after { content: "—"; }
+  button[data-editor-insert="quote"]::after { content: "Q"; }
+  button[data-editor-insert="spoiler"]::after { content: "Spoil"; font-size: 0.68rem !important; }
+  button[data-editor-insert="link"]::after { content: "Link"; font-size: 0.7rem !important; }
+  button[data-editor-insert="image-url"]::after { content: "URL"; }
+  button[data-editor-insert="image-upload"]::after { content: "Img"; }
+  button[data-editor-insert="youtube"]::after { content: "YT"; }
+  button[data-editor-insert="staff-note"]::after { content: "Nota"; font-size: 0.68rem !important; }
+  button[data-editor-insert="box-alert"]::after { content: "!"; }
+  button[data-editor-insert="box-success"]::after { content: "OK"; }
+  button[data-editor-insert="box-danger"]::after { content: "Pun"; font-size: 0.68rem !important; }
+  button[data-editor-insert="glow"]::after { content: "Glow"; font-size: 0.66rem !important; }
+  button[data-editor-insert="shadow"]::after { content: "Sbr"; }
+  button[data-editor-insert="big-title"]::after { content: "Tít"; }
+  .sz-editor-color-picker > button::after { content: "Cor"; }
+  .sz-editor-more-toggle::after { content: "Mais"; }
+  .sz-rich-editor.is-more-open .sz-editor-more-toggle::after { content: "Menos"; font-size: 0.68rem !important; }
+
+  .sz-rich-editor:not(.is-more-open) .sz-editor-advanced-tools,
+  .sz-rich-editor:not(.is-more-open) button[data-editor-insert="quote"],
+  .sz-rich-editor:not(.is-more-open) button[data-editor-insert="spoiler"],
+  .sz-rich-editor:not(.is-more-open) button[data-editor-insert="image-url"] {
+    display: none !important;
+  }
+
+  .sz-rich-editor.is-more-open .sz-editor-advanced-tools {
+    display: contents !important;
+  }
+
+  .sz-editor-select {
+    width: 88px !important;
+    min-width: 88px !important;
+    max-width: 88px !important;
+    padding: 0 8px !important;
+    font-size: 0.72rem !important;
+    color: #f2f2f2 !important;
+    background-position: right 8px center !important;
+  }
+
+  .sz-editor-color-menu {
+    position: absolute !important;
+    right: 0 !important;
+    left: auto !important;
+    top: calc(100% + 8px) !important;
+    width: min(260px, calc(100vw - 36px)) !important;
+    max-width: calc(100vw - 36px) !important;
+    grid-template-columns: repeat(5, 28px) !important;
+    gap: 8px !important;
+    z-index: 10001 !important;
+  }
+
+  .sz-editor-surface {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 190px !important;
+    max-height: 46vh !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    font-size: 1rem !important;
+    line-height: 1.55 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  .forum-reply-actions,
+  .forum-submit-row {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .forum-submit-btn {
+    width: 100% !important;
+    min-height: 46px !important;
+    border-radius: 14px !important;
+  }
+
+  /* ===============================
+     PERFIL — NÃO QUEBRAR TEXTO LETRA POR LETRA
+  =============================== */
+  .sz-profile-layout,
+  .sz-profile-main,
+  .sz-profile-sidebar,
+  .sz-profile-panel,
+  .sz-profile-character,
+  .sz-profile-character-body,
+  .sz-profile-character-grid,
+  .sz-profile-character-grid-compact {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  .sz-profile-statbar,
+  .sz-profile-side-stats,
+  .sz-profile-info-list {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .sz-profile-character-grid,
+  .sz-profile-character-grid-compact {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .sz-profile-character-grid > *,
+  .sz-profile-character-grid-compact > *,
+  .sz-profile-info-list > *,
+  .sz-profile-statbar > *,
+  .sz-profile-side-stats > * {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .sz-profile-character-grid span,
+  .sz-profile-character-grid strong,
+  .sz-profile-character-grid-compact span,
+  .sz-profile-character-grid-compact strong,
+  .sz-profile-info-list span,
+  .sz-profile-info-list strong,
+  .sz-profile-statbar span,
+  .sz-profile-statbar strong,
+  .sz-profile-side-stats span,
+  .sz-profile-side-stats strong {
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    hyphens: none !important;
+  }
+}
