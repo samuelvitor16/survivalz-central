@@ -236,6 +236,55 @@
   box-shadow: 0 0 34px rgba(255, 43, 43, 0.32);
 }
 
+.home-founder-event-section {
+  padding: 34px 0;
+  background:
+    radial-gradient(circle at 18% 50%, rgba(255, 43, 43, 0.18), transparent 32%),
+    linear-gradient(90deg, #070707, #140000 48%, #070707);
+  border-bottom: 1px solid rgba(255, 43, 43, 0.22);
+}
+
+.home-founder-event-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 26px;
+  border: 1px solid rgba(255, 43, 43, 0.34);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 43, 43, 0.14), rgba(255, 180, 80, 0.06)),
+    rgba(8, 8, 8, 0.86);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.34), 0 0 38px rgba(255, 43, 43, 0.10);
+}
+
+.home-founder-event-card h2 {
+  max-width: 720px;
+  margin: 10px 0 8px;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.05;
+}
+
+.home-founder-event-card p {
+  max-width: 680px;
+  margin: 0;
+  color: #d8d8d8;
+  line-height: 1.6;
+}
+
+.home-founder-event-card .btn-primary {
+  flex: 0 0 auto;
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 13px 22px;
+  background: linear-gradient(135deg, #9e0000, #ff2b2b 58%, #8c0000);
+  border: 1px solid rgba(255, 97, 97, 0.70);
+  box-shadow: 0 0 28px rgba(255, 43, 43, 0.24);
+}
+
 .home-status-panel {
   position: relative;
   width: 100%;
@@ -627,6 +676,11 @@
     grid-template-columns: 1fr;
   }
 
+  .home-founder-event-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .home-hero-stage {
     max-width: 640px;
     justify-self: center;
@@ -672,6 +726,18 @@
 
   .home-hero-copy p {
     font-size: 15px;
+  }
+
+  .home-founder-event-section {
+    padding: 24px 0;
+  }
+
+  .home-founder-event-card {
+    padding: 20px;
+  }
+
+  .home-founder-event-card .btn-primary {
+    width: 100%;
   }
 
   .home-hero-actions a,

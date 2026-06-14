@@ -11,6 +11,7 @@ const {
 
 const {
   renderRegister,
+  renderRegisterSuccess,
   registerPlayer,
   renderLogin,
   renderForgotPassword,
@@ -25,6 +26,7 @@ const {
 
 router.get("/cadastrar", redirectIfPlayerLogged, renderRegister);
 router.post("/cadastrar", redirectIfPlayerLogged, registerPlayer);
+router.get("/cadastrar/sucesso", requirePlayer, renderRegisterSuccess);
 
 router.get("/entrar", redirectIfPlayerLogged, renderLogin);
 router.post("/entrar", redirectIfPlayerLogged, loginPlayer);

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= title %></title>
+
+  <link rel="icon" type="image/png" href="/images/logo/favicon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pages/player.css">
+</head>
+<body>
+
+  <%- include("../partials/header") %>
+
+  <main>
+    <section class="player-auth-section">
+      <div class="container player-auth-container">
+
+        <div class="player-auth-card player-register-success-card">
+          <span class="section-tag">Evento de lançamento</span>
+
+          <h1>Conta criada com sucesso!</h1>
+
+          <% if (founderMedalEnabled) { %>
+            <p>
+              Você garantiu a medalha exclusiva: <strong>🌍 Primeira Geração</strong>
+            </p>
+
+            <div class="player-founder-medal-card">
+              <span class="player-founder-medal-icon">🌍</span>
+              <div>
+                <strong>🌍 Primeira Geração</strong>
+                <small>Criou sua conta durante o lançamento oficial da SurvivalZ Central.</small>
+              </div>
+            </div>
+          <% } else { %>
+            <p>
+              Seu perfil já está pronto para participar do fórum e acompanhar a comunidade.
+            </p>
+          <% } %>
+
+          <div class="player-register-success-actions">
+            <a href="/perfil/<%= currentPlayerId %>" class="btn-primary">Ver meu perfil</a>
+            <a href="/forum" class="btn-secondary">Ir para o fórum</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>

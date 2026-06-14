@@ -1,11 +1,60 @@
 const bcrypt = require("bcrypt");
 const prisma = require("../config/prisma");
 
+const FOUNDER_MEDAL = {
+  name: "Primeira Geração",
+  slug: "fundador",
+  description: "Criou sua conta durante o lançamento oficial da SurvivalZ Central.",
+  icon: "🏅",
+  color: "#ff2b2b",
+  rarity: "SPECIAL"
+};
+
+const isFounderMedalEnabled = () => {
+  return String(process.env.FOUNDER_MEDAL_ENABLED || "").toLowerCase() === "true";
+};
+
+const awardFounderMedal = async (userId) => {
+  if (!isFounderMedalEnabled()) return;
+
+  const medal = await prisma.medal.upsert({
+    where: {
+      slug: FOUNDER_MEDAL.slug
+    },
+    update: FOUNDER_MEDAL,
+    create: FOUNDER_MEDAL
+  });
+
+  await prisma.userMedal.upsert({
+    where: {
+      userId_medalId: {
+        userId,
+        medalId: medal.id
+      }
+    },
+    update: {
+      reason: "Conta criada durante o lançamento oficial da SurvivalZ Central."
+    },
+    create: {
+      userId,
+      medalId: medal.id,
+      reason: "Conta criada durante o lançamento oficial da SurvivalZ Central."
+    }
+  });
+};
+
 const renderRegister = (req, res) => {
   res.render("pages/player-register", {
     title: "Criar Conta - SurvivalZ",
     error: null,
     old: {}
+  });
+};
+
+const renderRegisterSuccess = (req, res) => {
+  res.render("pages/player-register-success", {
+    title: "Conta criada - SurvivalZ",
+    founderMedalEnabled: isFounderMedalEnabled()
   });
 };
 
@@ -72,7 +121,13 @@ const registerPlayer = async (req, res) => {
     req.session.playerRole = user.role;
     req.session.playerAvatarUrl = user.avatarUrl || null;
 
-    res.redirect(`/perfil/${user.id}`);
+    try {
+      await awardFounderMedal(user.id);
+    } catch (medalError) {
+      console.log("Erro ao conceder medalha fundador:", medalError);
+    }
+
+    res.redirect("/cadastrar/sucesso");
   } catch (error) {
     console.log("Erro ao cadastrar jogador:", error);
 
@@ -158,6 +213,7 @@ const logoutPlayer = (req, res) => {
 
 module.exports = {
   renderRegister,
+  renderRegisterSuccess,
   registerPlayer,
   renderLogin,
   renderForgotPassword,

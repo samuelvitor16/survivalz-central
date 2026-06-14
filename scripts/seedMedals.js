@@ -2,10 +2,10 @@ const prisma = require("../config/prisma");
 
 const medals = [
   {
-    name: "Fundador",
+    name: "Primeira Geração",
     slug: "fundador",
-    description: "Membro fundador da comunidade SurvivalZ.",
-    icon: "👑",
+    description: "Criou sua conta durante o lançamento oficial da SurvivalZ Central.",
+    icon: "🏅",
     color: "#ff2b2b",
     rarity: "SPECIAL"
   },

@@ -102,6 +102,64 @@
   font-weight: 900;
 }
 
+.player-register-success-card {
+  text-align: center;
+}
+
+.player-register-success-card h1 {
+  margin-bottom: 12px;
+}
+
+.player-register-success-card p strong {
+  color: #fff;
+}
+
+.player-founder-medal-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+  padding: 18px;
+  text-align: left;
+  border: 1px solid rgba(255, 43, 43, 0.34);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(255, 43, 43, 0.18), rgba(255, 180, 80, 0.08)),
+    rgba(12, 12, 12, 0.92);
+  box-shadow: 0 0 28px rgba(255, 43, 43, 0.12);
+}
+
+.player-founder-medal-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: rgba(255, 43, 43, 0.18);
+  border: 1px solid rgba(255, 43, 43, 0.36);
+  font-size: 30px;
+}
+
+.player-founder-medal-card strong {
+  display: block;
+  color: #fff;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.player-founder-medal-card small {
+  color: #d8d8d8;
+  line-height: 1.5;
+}
+
+.player-register-success-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 /* ================= DASHBOARD ================= */
 
 .player-dashboard-header {
